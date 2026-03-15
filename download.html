@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Download LINUS-AI v1.4.0 — Private AI, One Binary</title>
-  <meta name="description" content="Download LINUS-AI v1.4.0 for macOS, Linux, and Windows. Private AI inference with zero dependencies." />
+  <title>Download LINUS-AI — Private AI, One Binary</title>
+  <meta name="description" content="Download LINUS-AI for macOS, Linux, Windows, Android, and iOS. Private AI inference with zero dependencies. All builds on GitHub Releases." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,58 +19,15 @@
       padding: 120px 0 60px;
       text-align: center;
     }
-
     .download-hero h1 {
       font-size: clamp(2rem, 5vw, 3.4rem);
       font-weight: 800;
       letter-spacing: -1px;
       margin: 16px 0 12px;
     }
-
-    .install-tabs-container {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .install-tabs-container .tabs {
-      padding: 0 20px;
-      background: var(--surface2);
-      margin-bottom: 0;
-    }
-
-    .install-tabs-container .tab-panels {
-      padding: 24px;
-    }
-
-    .release-note {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 12px;
-    }
-
-    .release-note h4 {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .release-note p {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
     .platform-section {
-      margin-bottom: 32px;
+      margin-bottom: 40px;
     }
-
     .platform-section h4 {
       font-size: 13px;
       font-weight: 700;
@@ -81,6 +38,98 @@
       padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
+    .dl-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color .2s;
+    }
+    .dl-card:hover { border-color: var(--accent); }
+    .dl-card.detected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .dl-os { font-size: 28px; margin-bottom: 4px; }
+    .dl-name { font-weight: 700; font-size: 15px; }
+    .dl-arch { font-size: 12px; color: var(--text-muted); }
+    .dl-meta { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .dl-size { font-variant-numeric: tabular-nums; }
+    .dl-btn { margin-top: 10px; text-decoration: none; display: inline-block; text-align: center; }
+    .dl-btn[disabled] { opacity: .5; pointer-events: none; }
+    .checksum-row {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      word-break: break-all;
+      background: var(--surface2);
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-top: 6px;
+      display: none;
+    }
+    .checksum-row.visible { display: block; }
+    .toggle-sha { font-size: 11px; color: var(--accent); cursor: pointer; background: none; border: none; padding: 0; margin-top: 4px; }
+    .toggle-sha:hover { text-decoration: underline; }
+    .install-tabs-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .install-tabs-container .tabs {
+      padding: 0 20px;
+      background: var(--surface2);
+      margin-bottom: 0;
+    }
+    .install-tabs-container .tab-panels { padding: 24px; }
+    .release-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+    .release-note h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .release-note p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .loading-pulse {
+      display: inline-block;
+      width: 60px;
+      height: 14px;
+      background: var(--border);
+      border-radius: 4px;
+      animation: pulse 1.4s ease-in-out infinite;
+      vertical-align: middle;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .sha-file-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+    .sha-file-note a { color: var(--accent); }
   </style>
 </head>
 <body data-page="download">
@@ -92,7 +141,6 @@
         <a href="index.html" class="logo">
           LINUS<span style="color:var(--accent2)">-</span>AI
         </a>
-
         <ul class="nav-links" role="list">
           <li><a href="index.html">Home</a></li>
           <li><a href="index.html#features">Features</a></li>
@@ -101,18 +149,15 @@
           <li><a href="docs/index.html">Docs</a></li>
           <li><a href="activate.html">Activate</a></li>
         </ul>
-
         <div class="nav-cta">
           <a href="activate.html" class="btn btn-secondary btn-sm">Activate</a>
           <a href="index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
         </div>
-
         <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-
     <div class="mobile-menu" aria-hidden="true">
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -136,18 +181,23 @@
         <span class="dot" style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;"></span>
         Latest Release
       </div>
-      <h1>Download <span class="gradient-text">LINUS-AI</span> <span data-gh-version>v1.4.0</span></h1>
+      <h1>Download <span class="gradient-text">LINUS-AI</span> <span id="hero-version"><span class="loading-pulse"></span></span></h1>
       <p class="hero-sub" style="margin: 0 auto 32px;">
         Private AI. Zero dependencies. One binary.<br />
         Runs entirely on your hardware — no cloud, no API keys, no telemetry.
       </p>
-
       <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
         <span class="badge"><span class="badge-dot"></span> MIT / Commercial License</span>
         <span class="badge">🖥 macOS · Linux · Windows</span>
+        <span class="badge">📱 Android · iOS</span>
         <span class="badge">⚡ Single Binary</span>
         <span class="badge">🔒 100% Offline</span>
       </div>
+      <p style="font-size:13px; color:var(--text-muted);">
+        All binaries hosted on
+        <a href="https://github.com/LINUS-AI-PRO/linus-ai/releases" style="color:var(--accent);">GitHub Releases</a>
+        — not on this website.
+      </p>
     </div>
   </section>
 
@@ -161,7 +211,10 @@
         <h2>Choose Your Platform</h2>
         <p class="section-sub">
           All binaries are self-contained with no runtime dependencies.
-          Your platform may be auto-detected and highlighted below.
+          Download links and file sizes load live from GitHub Releases.
+          <span id="release-loaded-note" style="display:none;">
+            Showing release <strong id="release-tag-inline"></strong>.
+          </span>
         </p>
 
         <!-- macOS -->
@@ -169,57 +222,63 @@
           <h4>macOS</h4>
           <div class="download-grid">
 
-            <div class="dl-card" data-os="macos-arm64" data-dl-asset="linus-ai-macos-arm64">
+            <div class="dl-card" id="card-macos-arm64">
               <div class="dl-os">🍎</div>
-              <div class="dl-name">macOS Apple Silicon</div>
-              <div class="dl-arch">arm64 (M1/M2/M3/M4)</div>
+              <div class="dl-name">Apple Silicon</div>
+              <div class="dl-arch">arm64 — M1 / M2 / M3 / M4</div>
               <div class="dl-meta">
-                <span class="dl-size" data-dl-asset="linus-ai-macos-arm64">~42 MB</span>
-                &nbsp;·&nbsp; <span class="tag tag-green" style="font-size:10px;">Recommended</span>
+                <span class="dl-size" data-asset="linus-ai-macos-arm64">—</span>
+                <span class="tag tag-green" style="font-size:10px;">Recommended</span>
               </div>
-              <button
-                class="btn btn-primary btn-sm mt-12 dl-btn"
-                onclick="window.location='https://github.com/LINUS-AI-PRO/linus-ai/releases'"
-              >⬇ Download</button>
-              <div class="checksum" id="sha-macos-arm64" style="display:none;">
-                SHA256: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2
-              </div>
-              <button class="btn btn-ghost btn-sm" style="font-size:11px; padding:4px 0;" data-checksum-toggle="sha-macos-arm64">Show SHA256</button>
+              <a class="btn btn-primary btn-sm dl-btn"
+                 data-asset="linus-ai-macos-arm64"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
+              <button class="toggle-sha" data-sha="sha-macos-arm64">Show SHA256</button>
+              <div class="checksum-row" id="sha-macos-arm64"></div>
             </div>
 
-            <div class="dl-card" data-os="macos-x86" data-dl-asset="linus-ai-macos-x86_64">
+            <div class="dl-card" id="card-macos-x86">
               <div class="dl-os">🍎</div>
               <div class="dl-name">macOS Intel</div>
-              <div class="dl-arch">x86_64 (Core i5/i7/i9)</div>
+              <div class="dl-arch">x86_64 — Core i5 / i7 / i9</div>
               <div class="dl-meta">
-                <span class="dl-size" data-dl-asset="linus-ai-macos-x86_64">~44 MB</span>
+                <span class="dl-size" data-asset="linus-ai-macos-x86_64">—</span>
               </div>
-              <button
-                class="btn btn-secondary btn-sm mt-12 dl-btn"
-                onclick="window.location='https://github.com/LINUS-AI-PRO/linus-ai/releases'"
-              >⬇ Download</button>
-              <div class="checksum" id="sha-macos-x86" style="display:none;">
-                SHA256: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3
-              </div>
-              <button class="btn btn-ghost btn-sm" style="font-size:11px; padding:4px 0;" data-checksum-toggle="sha-macos-x86">Show SHA256</button>
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset="linus-ai-macos-x86_64"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
+              <button class="toggle-sha" data-sha="sha-macos-x86">Show SHA256</button>
+              <div class="checksum-row" id="sha-macos-x86"></div>
             </div>
 
-            <div class="dl-card" data-dl-asset="linus-ai-macos-universal">
+            <div class="dl-card" id="card-macos-universal">
               <div class="dl-os">🍎</div>
               <div class="dl-name">macOS Universal</div>
-              <div class="dl-arch">Universal (ARM64 + x86_64)</div>
+              <div class="dl-arch">ARM64 + x86_64 fat binary</div>
               <div class="dl-meta">
-                <span class="dl-size" data-dl-asset="linus-ai-macos-universal">~86 MB</span>
-                &nbsp;·&nbsp; <span class="tag" style="font-size:10px;">Both chips</span>
+                <span class="dl-size" data-asset="linus-ai-macos-universal">—</span>
+                <span class="tag" style="font-size:10px;">Both chips</span>
               </div>
-              <button
-                class="btn btn-secondary btn-sm mt-12 dl-btn"
-                onclick="window.location='https://github.com/LINUS-AI-PRO/linus-ai/releases'"
-              >⬇ Download</button>
-              <div class="checksum" id="sha-macos-uni" style="display:none;">
-                SHA256: c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset="linus-ai-macos-universal"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
+              <button class="toggle-sha" data-sha="sha-macos-uni">Show SHA256</button>
+              <div class="checksum-row" id="sha-macos-uni"></div>
+            </div>
+
+            <div class="dl-card" id="card-macos-dmg">
+              <div class="dl-os">💿</div>
+              <div class="dl-name">macOS DMG Installer</div>
+              <div class="dl-arch">Universal — drag &amp; drop install</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset="linus-ai-macos.dmg">—</span>
+                <span class="tag tag-green" style="font-size:10px;">Easiest</span>
               </div>
-              <button class="btn btn-ghost btn-sm" style="font-size:11px; padding:4px 0;" data-checksum-toggle="sha-macos-uni">Show SHA256</button>
+              <a class="btn btn-primary btn-sm dl-btn"
+                 data-asset="linus-ai-macos.dmg"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .dmg</a>
+              <button class="toggle-sha" data-sha="sha-macos-dmg">Show SHA256</button>
+              <div class="checksum-row" id="sha-macos-dmg"></div>
             </div>
 
           </div>
@@ -230,40 +289,91 @@
           <h4>Linux</h4>
           <div class="download-grid">
 
-            <div class="dl-card" data-os="linux-x86" data-dl-asset="linus-ai-linux-x86_64">
+            <div class="dl-card" id="card-linux-x86">
               <div class="dl-os">🐧</div>
               <div class="dl-name">Linux x86_64</div>
-              <div class="dl-arch">x86_64 (AMD64)</div>
+              <div class="dl-arch">x86_64 — AMD64 bare binary</div>
               <div class="dl-meta">
-                <span class="dl-size" data-dl-asset="linus-ai-linux-x86_64">~38 MB</span>
-                &nbsp;·&nbsp; <span class="tag tag-green" style="font-size:10px;">Most Common</span>
+                <span class="dl-size" data-asset="linus-ai-linux-x86_64">—</span>
+                <span class="tag tag-green" style="font-size:10px;">Most Common</span>
               </div>
-              <button
-                class="btn btn-secondary btn-sm mt-12 dl-btn"
-                onclick="window.location='https://github.com/LINUS-AI-PRO/linus-ai/releases'"
-              >⬇ Download</button>
-              <div class="checksum" id="sha-linux-x86" style="display:none;">
-                SHA256: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5
-              </div>
-              <button class="btn btn-ghost btn-sm" style="font-size:11px; padding:4px 0;" data-checksum-toggle="sha-linux-x86">Show SHA256</button>
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset="linus-ai-linux-x86_64"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
+              <button class="toggle-sha" data-sha="sha-linux-x86">Show SHA256</button>
+              <div class="checksum-row" id="sha-linux-x86"></div>
             </div>
 
-            <div class="dl-card" data-os="linux-arm64" data-dl-asset="linus-ai-linux-arm64">
+            <div class="dl-card" id="card-linux-arm64">
               <div class="dl-os">🐧</div>
               <div class="dl-name">Linux ARM64</div>
-              <div class="dl-arch">arm64 / aarch64</div>
+              <div class="dl-arch">aarch64 — Graviton · Pi · Ampere</div>
               <div class="dl-meta">
-                <span class="dl-size" data-dl-asset="linus-ai-linux-arm64">~36 MB</span>
-                &nbsp;·&nbsp; <span class="tag" style="font-size:10px;">Raspberry Pi · AWS Graviton</span>
+                <span class="dl-size" data-asset="linus-ai-linux-arm64">—</span>
               </div>
-              <button
-                class="btn btn-secondary btn-sm mt-12 dl-btn"
-                onclick="window.location='https://github.com/LINUS-AI-PRO/linus-ai/releases'"
-              >⬇ Download</button>
-              <div class="checksum" id="sha-linux-arm" style="display:none;">
-                SHA256: e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset="linus-ai-linux-arm64"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
+              <button class="toggle-sha" data-sha="sha-linux-arm64">Show SHA256</button>
+              <div class="checksum-row" id="sha-linux-arm64"></div>
+            </div>
+
+            <div class="dl-card" id="card-deb-amd64">
+              <div class="dl-os">📦</div>
+              <div class="dl-name">Linux .deb (amd64)</div>
+              <div class="dl-arch">Debian · Ubuntu · Mint · Pop!_OS</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset-suffix="_amd64.deb">—</span>
+                <span class="tag tag-green" style="font-size:10px;">dpkg install</span>
               </div>
-              <button class="btn btn-ghost btn-sm" style="font-size:11px; padding:4px 0;" data-checksum-toggle="sha-linux-arm">Show SHA256</button>
+              <a class="btn btn-primary btn-sm dl-btn"
+                 data-asset-suffix="_amd64.deb"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .deb</a>
+              <button class="toggle-sha" data-sha="sha-deb-amd64">Show SHA256</button>
+              <div class="checksum-row" id="sha-deb-amd64"></div>
+            </div>
+
+            <div class="dl-card" id="card-deb-arm64">
+              <div class="dl-os">📦</div>
+              <div class="dl-name">Linux .deb (arm64)</div>
+              <div class="dl-arch">Debian · Ubuntu ARM · Raspberry Pi OS</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset-suffix="_arm64.deb">—</span>
+              </div>
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset-suffix="_arm64.deb"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .deb</a>
+              <button class="toggle-sha" data-sha="sha-deb-arm64">Show SHA256</button>
+              <div class="checksum-row" id="sha-deb-arm64"></div>
+            </div>
+
+            <div class="dl-card" id="card-rpm-x86">
+              <div class="dl-os">📦</div>
+              <div class="dl-name">Linux .rpm (x86_64)</div>
+              <div class="dl-arch">RHEL · Fedora · CentOS · openSUSE</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset-suffix=".x86_64.rpm">—</span>
+                <span class="tag tag-green" style="font-size:10px;">rpm install</span>
+              </div>
+              <a class="btn btn-primary btn-sm dl-btn"
+                 data-asset-suffix=".x86_64.rpm"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .rpm</a>
+              <button class="toggle-sha" data-sha="sha-rpm-x86">Show SHA256</button>
+              <div class="checksum-row" id="sha-rpm-x86"></div>
+            </div>
+
+            <div class="dl-card" id="card-rpm-aarch64">
+              <div class="dl-os">📦</div>
+              <div class="dl-name">Linux .rpm (aarch64)</div>
+              <div class="dl-arch">RHEL · Fedora ARM · AWS Graviton</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset-suffix=".aarch64.rpm">—</span>
+              </div>
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset-suffix=".aarch64.rpm"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .rpm</a>
+              <button class="toggle-sha" data-sha="sha-rpm-aarch64">Show SHA256</button>
+              <div class="checksum-row" id="sha-rpm-aarch64"></div>
             </div>
 
           </div>
@@ -274,31 +384,96 @@
           <h4>Windows</h4>
           <div class="download-grid">
 
-            <div class="dl-card" data-os="windows-x86" data-dl-asset="linus-ai-windows-x86_64.exe">
+            <div class="dl-card" id="card-win-exe">
               <div class="dl-os">🪟</div>
               <div class="dl-name">Windows x86_64</div>
-              <div class="dl-arch">x86_64 (64-bit)</div>
+              <div class="dl-arch">64-bit bare executable</div>
               <div class="dl-meta">
-                <span class="dl-size" data-dl-asset="linus-ai-windows-x86_64.exe">~46 MB</span>
-                &nbsp;·&nbsp; <span class="tag" style="font-size:10px;">.exe</span>
+                <span class="dl-size" data-asset="linus-ai-windows-x86_64.exe">—</span>
+                <span class="tag" style="font-size:10px;">.exe</span>
               </div>
-              <button
-                class="btn btn-secondary btn-sm mt-12 dl-btn"
-                onclick="window.location='https://github.com/LINUS-AI-PRO/linus-ai/releases'"
-              >⬇ Download</button>
-              <div class="checksum" id="sha-win-x86" style="display:none;">
-                SHA256: f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset="linus-ai-windows-x86_64.exe"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .exe</a>
+              <button class="toggle-sha" data-sha="sha-win-exe">Show SHA256</button>
+              <div class="checksum-row" id="sha-win-exe"></div>
+            </div>
+
+            <div class="dl-card" id="card-win-msi">
+              <div class="dl-os">🪟</div>
+              <div class="dl-name">Windows MSI Installer</div>
+              <div class="dl-arch">x86_64 — adds linus-ai to PATH</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset="linus-ai-windows-x86_64.msi">—</span>
+                <span class="tag tag-green" style="font-size:10px;">Easiest</span>
               </div>
-              <button class="btn btn-ghost btn-sm" style="font-size:11px; padding:4px 0;" data-checksum-toggle="sha-win-x86">Show SHA256</button>
+              <a class="btn btn-primary btn-sm dl-btn"
+                 data-asset="linus-ai-windows-x86_64.msi"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .msi</a>
+              <button class="toggle-sha" data-sha="sha-win-msi">Show SHA256</button>
+              <div class="checksum-row" id="sha-win-msi"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Mobile / Embedded -->
+        <div class="platform-section">
+          <h4>Mobile &amp; Embedded</h4>
+          <p style="font-size:13px; color:var(--text-muted); margin:-4px 0 14px;">
+            Library-style binaries for integration into native apps. Not standalone app-store apps.
+          </p>
+          <div class="download-grid">
+
+            <div class="dl-card" id="card-android">
+              <div class="dl-os">🤖</div>
+              <div class="dl-name">Android arm64</div>
+              <div class="dl-arch">aarch64 · API 26+ (Android 8.0+)</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset="linus-ai-android-arm64">—</span>
+              </div>
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset="linus-ai-android-arm64"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
+              <button class="toggle-sha" data-sha="sha-android">Show SHA256</button>
+              <div class="checksum-row" id="sha-android"></div>
+            </div>
+
+            <div class="dl-card" id="card-ios">
+              <div class="dl-os">📱</div>
+              <div class="dl-name">iOS arm64 (Device)</div>
+              <div class="dl-arch">aarch64-apple-ios · iOS 16+</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset="linus-ai-ios-arm64">—</span>
+              </div>
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset="linus-ai-ios-arm64"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
+              <button class="toggle-sha" data-sha="sha-ios">Show SHA256</button>
+              <div class="checksum-row" id="sha-ios"></div>
+            </div>
+
+            <div class="dl-card" id="card-ios-sim">
+              <div class="dl-os">🖥</div>
+              <div class="dl-name">iOS Simulator</div>
+              <div class="dl-arch">aarch64-apple-ios-sim · Apple Silicon</div>
+              <div class="dl-meta">
+                <span class="dl-size" data-asset="linus-ai-ios-sim">—</span>
+              </div>
+              <a class="btn btn-secondary btn-sm dl-btn"
+                 data-asset="linus-ai-ios-sim"
+                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
+              <button class="toggle-sha" data-sha="sha-ios-sim">Show SHA256</button>
+              <div class="checksum-row" id="sha-ios-sim"></div>
             </div>
 
           </div>
         </div>
 
         <div class="alert alert-info">
-          <strong>Looking for a specific version?</strong>
-          All releases including older versions are available on the
-          <a href="https://github.com/LINUS-AI-PRO/linus-ai/releases" style="color:inherit; font-weight:600;">GitHub Releases page</a>.
+          <strong>All releases including older versions</strong> are available on the
+          <a href="https://github.com/LINUS-AI-PRO/linus-ai/releases" style="color:inherit; font-weight:600;">GitHub Releases page →</a>
+          Checksums for every file are in <code>SHA256SUMS.txt</code> attached to each release.
         </div>
       </section>
 
@@ -311,7 +486,9 @@
         <div class="install-tabs-container">
           <div class="tabs" id="install-tabs">
             <button class="tab-btn active" data-panel="tab-macos">macOS</button>
-            <button class="tab-btn" data-panel="tab-linux">Linux</button>
+            <button class="tab-btn" data-panel="tab-linux-bin">Linux (binary)</button>
+            <button class="tab-btn" data-panel="tab-linux-deb">Linux (.deb)</button>
+            <button class="tab-btn" data-panel="tab-linux-rpm">Linux (.rpm)</button>
             <button class="tab-btn" data-panel="tab-windows">Windows</button>
           </div>
 
@@ -329,40 +506,87 @@
                 <div><span class="prompt">$ </span><span class="cmd">cd ~/Downloads</span></div>
                 <div><span class="prompt">$ </span><span class="cmd">chmod +x linus-ai-macos-arm64</span></div>
                 <div><span class="prompt">$ </span><span class="cmd">./linus-ai-macos-arm64 --version</span></div>
-                <div class="out-accent">LINUS-AI v1.4.0 (darwin-arm64)</div>
+                <div class="out-accent">LINUS-AI <span class="term-version">v2.0.1</span> (darwin-arm64)</div>
                 <div>&nbsp;</div>
                 <div class="out"># Move to PATH for global access:</div>
                 <div><span class="prompt">$ </span><span class="cmd">sudo mv linus-ai-macos-arm64 /usr/local/bin/linus-ai</span></div>
                 <div><span class="prompt">$ </span><span class="cmd">linus-ai --chat "Hello, Linus!"</span></div>
+                <div>&nbsp;</div>
+                <div class="out"># Or use the DMG installer (drag &amp; drop):</div>
+                <div><span class="prompt">$ </span><span class="cmd">open linus-ai-macos.dmg</span></div>
               </div>
-
               <div class="alert alert-warning" style="margin-top:16px;">
-                <strong>Gatekeeper Notice:</strong> On first launch, macOS may show a security warning.
-                Right-click the binary → Open, then click "Open" in the dialog. This only needs to be done once.
-                Alternatively: <code>xattr -dr com.apple.quarantine linus-ai-macos-arm64</code>
+                <strong>Gatekeeper Notice:</strong> On first launch macOS may show a security warning.
+                Right-click the binary → Open → click "Open". Alternatively:
+                <code>xattr -dr com.apple.quarantine linus-ai-macos-arm64</code>
               </div>
             </div>
 
-            <!-- Linux -->
-            <div class="tab-panel" id="tab-linux">
+            <!-- Linux binary -->
+            <div class="tab-panel" id="tab-linux-bin">
               <div class="terminal">
                 <div class="terminal-bar">
                   <span class="terminal-dot dot-red"></span>
                   <span class="terminal-dot dot-yellow"></span>
                   <span class="terminal-dot dot-green"></span>
-                  <span class="terminal-title">Linux — bash</span>
+                  <span class="terminal-title">Linux — bash (bare binary)</span>
                 </div>
                 <div><span class="prompt">$ </span><span class="cmd">chmod +x linus-ai-linux-x86_64</span></div>
                 <div><span class="prompt">$ </span><span class="cmd">./linus-ai-linux-x86_64 --version</span></div>
-                <div class="out-accent">LINUS-AI v1.4.0 (linux-x86_64)</div>
+                <div class="out-accent">LINUS-AI <span class="term-version">v2.0.1</span> (linux-x86_64)</div>
                 <div>&nbsp;</div>
                 <div class="out"># Install system-wide:</div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo mv linus-ai-linux-x86_64 /usr/local/bin/linus-ai</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo chmod +x /usr/local/bin/linus-ai</span></div>
-                <div>&nbsp;</div>
-                <div class="out"># Verify and start:</div>
+                <div><span class="prompt">$ </span><span class="cmd">sudo install -m 755 linus-ai-linux-x86_64 /usr/local/bin/linus-ai</span></div>
                 <div><span class="prompt">$ </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span></div>
                 <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve   # Start API server on :8080</span></div>
+              </div>
+            </div>
+
+            <!-- Linux deb -->
+            <div class="tab-panel" id="tab-linux-deb">
+              <div class="terminal">
+                <div class="terminal-bar">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                  <span class="terminal-title">Debian / Ubuntu / Mint — bash</span>
+                </div>
+                <div class="out"># Install via dpkg (replaces prior version automatically):</div>
+                <div><span class="prompt">$ </span><span class="cmd">sudo dpkg -i linus-ai_<span class="term-version">2.0.1</span>_amd64.deb</span></div>
+                <div class="out-accent">Setting up linus-ai (<span class="term-version">2.0.1</span>) ...</div>
+                <div>&nbsp;</div>
+                <div><span class="prompt">$ </span><span class="cmd">linus-ai --version</span></div>
+                <div class="out-accent">LINUS-AI <span class="term-version">v2.0.1</span> (linux-x86_64)</div>
+                <div>&nbsp;</div>
+                <div><span class="prompt">$ </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span></div>
+                <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve</span></div>
+                <div>&nbsp;</div>
+                <div class="out"># Uninstall:</div>
+                <div><span class="prompt">$ </span><span class="cmd">sudo dpkg -r linus-ai</span></div>
+              </div>
+            </div>
+
+            <!-- Linux rpm -->
+            <div class="tab-panel" id="tab-linux-rpm">
+              <div class="terminal">
+                <div class="terminal-bar">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                  <span class="terminal-title">RHEL / Fedora / CentOS / openSUSE — bash</span>
+                </div>
+                <div class="out"># Fedora / RHEL 8+:</div>
+                <div><span class="prompt">$ </span><span class="cmd">sudo rpm -i linus-ai-<span class="term-version">2.0.1</span>-1.x86_64.rpm</span></div>
+                <div>&nbsp;</div>
+                <div class="out"># Or with dnf (handles deps):</div>
+                <div><span class="prompt">$ </span><span class="cmd">sudo dnf install ./linus-ai-<span class="term-version">2.0.1</span>-1.x86_64.rpm</span></div>
+                <div class="out-accent">Installed: linus-ai-<span class="term-version">2.0.1</span>-1.x86_64</div>
+                <div>&nbsp;</div>
+                <div><span class="prompt">$ </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span></div>
+                <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve</span></div>
+                <div>&nbsp;</div>
+                <div class="out"># Uninstall:</div>
+                <div><span class="prompt">$ </span><span class="cmd">sudo rpm -e linus-ai</span></div>
               </div>
             </div>
 
@@ -375,21 +599,22 @@
                   <span class="terminal-dot dot-green"></span>
                   <span class="terminal-title">Windows — PowerShell</span>
                 </div>
-                <div class="out"># Double-click the .exe to run, OR use PowerShell:</div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">.\linus-ai-windows-x86_64.exe --version</span></div>
-                <div class="out-accent">LINUS-AI v1.4.0 (windows-x86_64)</div>
+                <div class="out"># Option A: MSI installer (recommended — adds to PATH automatically):</div>
+                <div class="out">  Double-click linus-ai-windows-x86_64.msi → Next → Install → Finish</div>
                 <div>&nbsp;</div>
-                <div class="out"># Add to PATH (run as Administrator):</div>
+                <div class="out"># Option B: bare .exe via PowerShell:</div>
+                <div><span class="prompt">PS&gt; </span><span class="cmd">.\linus-ai-windows-x86_64.exe --version</span></div>
+                <div class="out-accent">LINUS-AI <span class="term-version">v2.0.1</span> (windows-x86_64)</div>
+                <div>&nbsp;</div>
+                <div class="out"># Add to PATH manually (run as Administrator):</div>
                 <div><span class="prompt">PS&gt; </span><span class="cmd">Move-Item .\linus-ai-windows-x86_64.exe C:\Windows\System32\linus-ai.exe</span></div>
                 <div>&nbsp;</div>
-                <div class="out"># Activate and start:</div>
                 <div><span class="prompt">PS&gt; </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span></div>
                 <div><span class="prompt">PS&gt; </span><span class="cmd">linus-ai --chat "Hello!"</span></div>
               </div>
-
               <div class="alert alert-warning" style="margin-top:16px;">
                 <strong>Windows Defender:</strong> SmartScreen may flag the binary on first run.
-                Click "More info" → "Run anyway". The binary is unsigned; checksums are provided above for verification.
+                Click "More info" → "Run anyway". Verify the SHA256 checksum shown on each card above.
               </div>
             </div>
 
@@ -402,7 +627,8 @@
         <div class="section-tag">Security</div>
         <h2>Verify Your Download</h2>
         <p class="section-sub">
-          Always verify the SHA256 checksum of downloaded binaries before executing them.
+          Always verify the SHA256 checksum of downloaded binaries.
+          The complete <code>SHA256SUMS.txt</code> is attached to every release.
         </p>
 
         <div class="terminal">
@@ -412,159 +638,25 @@
             <span class="terminal-dot dot-green"></span>
             <span class="terminal-title">Checksum verification</span>
           </div>
-          <div class="out"># Linux / macOS:</div>
+          <div class="out"># Linux / macOS — verify a single file:</div>
           <div><span class="prompt">$ </span><span class="cmd">sha256sum linus-ai-linux-x86_64</span></div>
-          <div class="out">d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5  linus-ai-linux-x86_64</div>
           <div>&nbsp;</div>
           <div class="out"># macOS (shasum):</div>
           <div><span class="prompt">$ </span><span class="cmd">shasum -a 256 linus-ai-macos-arm64</span></div>
           <div>&nbsp;</div>
+          <div class="out"># Batch verify all downloaded files against SHA256SUMS.txt:</div>
+          <div><span class="prompt">$ </span><span class="cmd">sha256sum --check SHA256SUMS.txt</span></div>
+          <div class="out-accent">linus-ai-linux-x86_64: OK</div>
+          <div class="out-accent">linus-ai-macos-arm64: OK</div>
+          <div class="out-accent">...</div>
+          <div>&nbsp;</div>
           <div class="out"># Windows PowerShell:</div>
-          <div><span class="prompt">PS&gt; </span><span class="cmd">Get-FileHash .\linus-ai-windows-x86_64.exe -Algorithm SHA256 | Select Hash</span></div>
+          <div><span class="prompt">PS&gt; </span><span class="cmd">Get-FileHash .\linus-ai-windows-x86_64.msi -Algorithm SHA256 | Select Hash</span></div>
         </div>
-      </section>
-
-      <!-- ── Docker ─────────────────────────────────────────── -->
-      <section class="section">
-        <div class="section-tag">Docker</div>
-        <h2>Docker Image</h2>
-        <p class="section-sub">
-          Run LINUS-AI in an isolated container. The official image is under 60 MB and includes the binary and default model configs.
-        </p>
-
-        <div class="terminal">
-          <div class="terminal-bar">
-            <span class="terminal-dot dot-red"></span>
-            <span class="terminal-dot dot-yellow"></span>
-            <span class="terminal-dot dot-green"></span>
-            <span class="terminal-title">Docker</span>
-          </div>
-          <div class="out"># Pull the latest image:</div>
-          <div><span class="prompt">$ </span><span class="cmd">docker pull linusai/linus-ai:1.4.0</span></div>
-          <div>&nbsp;</div>
-          <div class="out"># Run the API server:</div>
-          <div><span class="prompt">$ </span><span class="cmd">docker run -d \</span></div>
-          <div style="padding-left:16px;"><span class="cmd">  --name linus-ai \</span></div>
-          <div style="padding-left:16px;"><span class="cmd">  -p 8080:8080 \</span></div>
-          <div style="padding-left:16px;"><span class="cmd">  -v ~/.linus_ai:/root/.linus_ai \</span></div>
-          <div style="padding-left:16px;"><span class="cmd">  -e LINUS_AI_LICENSE=LNAI-XXXX-XXXX-XXXX-XXXX \</span></div>
-          <div style="padding-left:16px;"><span class="cmd">  linusai/linus-ai:1.4.0 --serve</span></div>
-          <div>&nbsp;</div>
-          <div class="out"># GPU passthrough (NVIDIA):</div>
-          <div><span class="prompt">$ </span><span class="cmd">docker run --gpus all -p 8080:8080 linusai/linus-ai:1.4.0 --serve --gpu</span></div>
-        </div>
-
-        <div class="alert alert-info" style="margin-top:16px;">
-          The Docker image does not include model weights. Mount your model directory with
-          <code>-v /path/to/models:/root/.linus_ai/models</code> or use
-          <code>linus-ai --pull-model llama3.2</code> on first run.
-        </div>
-      </section>
-
-      <!-- ── PyPI ───────────────────────────────────────────── -->
-      <section class="section">
-        <div class="section-tag">Python</div>
-        <h2>Python Package <span class="tag tag-yellow" style="vertical-align:middle;">Coming Soon</span></h2>
-        <p class="section-sub">
-          The PyPI package wraps the binary and provides a Python SDK for embedding LINUS-AI into your applications.
-        </p>
-
-        <div class="terminal">
-          <div class="terminal-bar">
-            <span class="terminal-dot dot-red"></span>
-            <span class="terminal-dot dot-yellow"></span>
-            <span class="terminal-dot dot-green"></span>
-            <span class="terminal-title">pip</span>
-          </div>
-          <div class="out"># Available Q2 2025:</div>
-          <div><span class="prompt">$ </span><span class="cmd">pip install linus-ai</span></div>
-          <div>&nbsp;</div>
-          <div class="out"># Python usage:</div>
-          <div><span class="cmd">from linus_ai import LinusAI</span></div>
-          <div><span class="cmd">ai = LinusAI(license="LNAI-XXXX-XXXX-XXXX-XXXX")</span></div>
-          <div><span class="cmd">response = ai.chat("Explain tensor parallelism")</span></div>
-        </div>
-      </section>
-
-      <!-- ── Build from Source ──────────────────────────────── -->
-      <section class="section">
-        <div class="section-tag">Source</div>
-        <h2>Build from Source</h2>
-        <p class="section-sub">
-          LINUS-AI is open-source for the core engine. Build from source for custom patches, unsupported platforms, or development.
-        </p>
-
-        <div class="alert alert-warning" style="margin-bottom:20px;">
-          <strong>⚠ Compile on Target</strong> — Pre-built binaries are provided only for the last tested release (v1.4.0).
-          The <code>main</code> branch is development-in-progress and <strong>must be compiled directly on the target platform</strong>
-          from the matching release tag. Cross-compilation is not guaranteed to produce a working binary.
-          Always check out a release tag (e.g. <code>git checkout v1.4.0</code>) for stable builds.
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-q">
-            Build instructions — macOS / Linux (click to expand)
-            <span class="acc-icon">▼</span>
-          </div>
-          <div class="accordion-body">
-            <div class="accordion-body-inner">
-              <div class="terminal">
-                <div class="terminal-bar">
-                  <span class="terminal-dot dot-red"></span>
-                  <span class="terminal-dot dot-yellow"></span>
-                  <span class="terminal-dot dot-green"></span>
-                  <span class="terminal-title">build on target — macOS / Linux</span>
-                </div>
-                <div class="out"># Prerequisites: Rust 1.78+, Python 3.10+, cargo, cmake</div>
-                <div><span class="prompt">$ </span><span class="cmd">git clone https://github.com/LINUS-AI-PRO/linus-ai.git</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">cd linus-ai</span></div>
-                <div class="out"># Check out last tested release — do NOT build from main for production</div>
-                <div><span class="prompt">$ </span><span class="cmd">git checkout v1.4.0</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">pip install -r requirements.txt</span></div>
-                <div class="out"># macOS Apple Silicon (arm64)</div>
-                <div><span class="prompt">$ </span><span class="cmd">cargo build --release --target aarch64-apple-darwin</span></div>
-                <div class="out"># macOS Intel (x86_64)</div>
-                <div><span class="prompt">$ </span><span class="cmd">cargo build --release --target x86_64-apple-darwin</span></div>
-                <div class="out"># Linux x86_64</div>
-                <div><span class="prompt">$ </span><span class="cmd">cargo build --release --target x86_64-unknown-linux-gnu</span></div>
-                <div class="out"># Linux ARM64 (Graviton / Raspberry Pi 4+)</div>
-                <div><span class="prompt">$ </span><span class="cmd">cargo build --release --target aarch64-unknown-linux-gnu</span></div>
-                <div>&nbsp;</div>
-                <div class="out-accent">✓ Binary output: dist/linus-ai  (symlinked from target/&lt;triple&gt;/release/linus-ai)</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item" style="margin-top:8px;">
-          <div class="accordion-q">
-            Build instructions — Windows (click to expand)
-            <span class="acc-icon">▼</span>
-          </div>
-          <div class="accordion-body">
-            <div class="accordion-body-inner">
-              <div class="terminal">
-                <div class="terminal-bar">
-                  <span class="terminal-dot dot-red"></span>
-                  <span class="terminal-dot dot-yellow"></span>
-                  <span class="terminal-dot dot-green"></span>
-                  <span class="terminal-title">build on target — Windows x86_64</span>
-                </div>
-                <div class="out"># Prerequisites: Rust 1.78+, Python 3.10+, MSVC Build Tools 2022, cmake</div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">git clone https://github.com/LINUS-AI-PRO/linus-ai.git; cd linus-ai</span></div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">git checkout v1.4.0</span></div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">pip install -r requirements.txt</span></div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">cargo build --release --target x86_64-pc-windows-msvc</span></div>
-                <div class="out-accent">✓ Binary output: dist\linus-ai.exe  (from target\x86_64-pc-windows-msvc\release\linus-ai.exe)</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <p style="margin-top:16px; font-size:13px; color:var(--text-muted);">
-          See the full
-          <a href="https://github.com/LINUS-AI-PRO/linus-ai/blob/main/BUILD.md" style="color:var(--accent);">BUILD.md on GitHub</a>
-          for GPU-specific flags (CUDA, Metal, ROCm), cross-compilation notes, and CI configuration.
+        <p class="sha-file-note">
+          SHA256SUMS.txt is attached to every release at
+          <a href="https://github.com/LINUS-AI-PRO/linus-ai/releases">github.com/LINUS-AI-PRO/linus-ai/releases</a>.
+          Individual checksums are also shown on each download card above (click "Show SHA256").
         </p>
       </section>
 
@@ -587,7 +679,7 @@
             <tbody>
               <tr>
                 <td><strong>Operating System</strong></td>
-                <td>macOS 12, Ubuntu 20.04, Windows 10</td>
+                <td>macOS 12, Ubuntu 20.04, Windows 10, Android 8.0</td>
                 <td>macOS 14+, Ubuntu 22.04+, Windows 11</td>
                 <td>ARM64 Linux requires kernel 5.4+</td>
               </tr>
@@ -595,31 +687,31 @@
                 <td><strong>CPU</strong></td>
                 <td>4 cores, 2.0 GHz</td>
                 <td>8+ cores, 3.0+ GHz (AVX2)</td>
-                <td>AVX2/AVX-512 for faster CPU inference</td>
+                <td>AVX2 / AVX-512 for faster CPU inference</td>
               </tr>
               <tr>
                 <td><strong>RAM</strong></td>
                 <td>8 GB</td>
                 <td>32 GB+</td>
-                <td>Larger models require more RAM (70B ≈ 48 GB @ Q4)</td>
+                <td>70B model ≈ 48 GB @ Q4; 7B model ≈ 6 GB @ Q4</td>
               </tr>
               <tr>
                 <td><strong>Storage</strong></td>
                 <td>2 GB (binary only)</td>
                 <td>50–200 GB (models)</td>
-                <td>SSD strongly recommended for model loading speed</td>
+                <td>SSD strongly recommended for model load speed</td>
               </tr>
               <tr>
                 <td><strong>GPU (Optional)</strong></td>
                 <td>NVIDIA GTX 1060 6 GB</td>
                 <td>NVIDIA RTX 3090 / A100</td>
-                <td>CUDA 11.8+. AMD ROCm support in beta. Apple Metal via Core ML.</td>
+                <td>CUDA 11.8+. AMD ROCm (beta). Apple Metal via Core ML.</td>
               </tr>
               <tr>
                 <td><strong>Internet</strong></td>
                 <td>None (offline)</td>
                 <td>None (offline)</td>
-                <td>Required only for initial license activation and model downloads</td>
+                <td>Required only for initial license activation and model pulls</td>
               </tr>
             </tbody>
           </table>
@@ -628,20 +720,37 @@
 
       <!-- ── Release Notes ──────────────────────────────────── -->
       <section class="section">
-        <div class="section-tag">v1.4.0</div>
+        <div class="section-tag" id="rel-tag">v2.0.1</div>
         <h2>Release Highlights</h2>
-        <p class="section-sub">What's new in LINUS-AI 1.4.0 — released March 2025.</p>
+        <p class="section-sub">What's new in LINUS-AI 2.0.1.</p>
 
         <div class="release-note">
-          <h4>⚡ Tensor Parallelism Across Multiple GPUs <span class="tag tag-green">New</span></h4>
+          <h4>📦 Native Installers — DMG, MSI, .deb, .rpm <span class="tag tag-green">New</span></h4>
           <p>
-            Split large models across up to 8 GPUs with automatic tensor sharding.
-            70B parameter models now run in real-time on 4× RTX 3090s.
+            Install LINUS-AI like any native app. macOS DMG (drag &amp; drop),
+            Windows MSI (adds to PATH automatically), Debian/Ubuntu .deb (dpkg/apt),
+            and RHEL/Fedora .rpm (rpm/dnf) packages — all architectures, all distros.
           </p>
         </div>
 
         <div class="release-note">
-          <h4>🕸 Mesh Networking Mode <span class="tag tag-green">New</span></h4>
+          <h4>📱 Android &amp; iOS Builds <span class="tag tag-green">New</span></h4>
+          <p>
+            Official native binaries for Android arm64 (API 26+) and iOS arm64 / Simulator.
+            Embed the LINUS-AI inference engine directly in your mobile app.
+          </p>
+        </div>
+
+        <div class="release-note">
+          <h4>⚡ Tensor Parallelism Across Multiple GPUs <span class="tag">v1.4</span></h4>
+          <p>
+            Split large models across up to 8 GPUs with automatic tensor sharding.
+            70B parameter models run in real-time on 4× RTX 3090s.
+          </p>
+        </div>
+
+        <div class="release-note">
+          <h4>🕸 Mesh Networking Mode <span class="tag">v1.4</span></h4>
           <p>
             Distribute inference across multiple machines on your private network.
             Nodes auto-discover each other using mDNS. No Kubernetes required.
@@ -649,34 +758,10 @@
         </div>
 
         <div class="release-note">
-          <h4>🔐 Vault — Encrypted Memory Layer <span class="tag tag-green">New</span></h4>
+          <h4>🔐 Vault — Encrypted Memory Layer <span class="tag">v1.4</span></h4>
           <p>
-            All conversation history and embeddings are stored AES-256-GCM encrypted at rest.
+            All conversation history and embeddings stored AES-256-GCM encrypted at rest.
             The vault key never leaves your machine.
-          </p>
-        </div>
-
-        <div class="release-note">
-          <h4>📦 Single Binary Consolidation <span class="tag">Improved</span></h4>
-          <p>
-            All inference backends (CPU, CUDA, Metal, ROCm) are now compiled into a single binary.
-            No more separate GPU builds — the binary auto-detects and uses the best available backend.
-          </p>
-        </div>
-
-        <div class="release-note">
-          <h4>🦙 Llama 3.3, Mistral 3, Phi-4 Support <span class="tag">Improved</span></h4>
-          <p>
-            Native support for the latest open-weight models with optimized GGUF quantization profiles
-            (Q2_K through Q8_0). Custom model loading via TOML config.
-          </p>
-        </div>
-
-        <div class="release-note">
-          <h4>🐛 Bug Fixes &amp; Stability</h4>
-          <p>
-            Fixed Windows named pipe hang on long responses. Resolved macOS Metal memory leak on M3 Ultra.
-            Linux NUMA node pinning now correctly isolates model threads. 23 additional issues resolved.
           </p>
         </div>
 
@@ -706,7 +791,6 @@
             <a href="https://discord.gg/linusai" aria-label="Discord">◈</a>
           </div>
         </div>
-
         <div class="footer-col">
           <h4>Product</h4>
           <ul class="footer-links">
@@ -717,30 +801,27 @@
             <li><a href="index.html#changelog">Changelog</a></li>
           </ul>
         </div>
-
         <div class="footer-col">
           <h4>Resources</h4>
           <ul class="footer-links">
             <li><a href="docs/index.html">Documentation</a></li>
-            <li><a href="docs/index.html#api">API Reference</a></li>
+            <li><a href="docs/endpoints.html">API Reference</a></li>
             <li><a href="https://github.com/LINUS-AI-PRO/linus-ai">GitHub</a></li>
             <li><a href="https://github.com/LINUS-AI-PRO/linus-ai/issues">Issues</a></li>
             <li><a href="https://discord.gg/linusai">Community</a></li>
           </ul>
         </div>
-
         <div class="footer-col">
           <h4>Company</h4>
           <ul class="footer-links">
             <li><a href="index.html#features">About</a></li>
             <li><a href="mailto:support@linus-ai.com">Support</a></li>
             <li><a href="mailto:sales@linus-ai.com">Sales</a></li>
-            <li><a href="https://github.com/LINUS-AI-PRO/linus-ai">Privacy Policy</a></li>
+            <li><a href="https://github.com/LINUS-AI-PRO/linus-ai/blob/main/LICENSE.md">Privacy Policy</a></li>
             <li><a href="https://github.com/LINUS-AI-PRO/linus-ai/blob/main/LICENSE.md">Terms of Service</a></li>
           </ul>
         </div>
       </div>
-
       <div class="footer-bottom">
         <span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span>
         <span>
@@ -755,23 +836,153 @@
 
   <script src="js/main.js"></script>
   <script>
-    // Tab switching for installation instructions
+    // ── Tab switching ──────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
       const tabContainer = document.getElementById('install-tabs');
-      if (!tabContainer) return;
+      if (tabContainer) {
+        tabContainer.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            tabContainer.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(btn.dataset.panel);
+            if (target) target.classList.add('active');
+          });
+        });
+      }
 
-      const buttons = tabContainer.querySelectorAll('.tab-btn');
-      buttons.forEach(btn => {
+      // ── SHA toggle buttons ───────────────────────────────────────────────
+      document.querySelectorAll('.toggle-sha').forEach(btn => {
         btn.addEventListener('click', () => {
-          buttons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-
-          document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-          const target = document.getElementById(btn.dataset.panel);
-          if (target) target.classList.add('active');
+          const row = document.getElementById(btn.dataset.sha);
+          if (!row) return;
+          row.classList.toggle('visible');
+          btn.textContent = row.classList.contains('visible') ? 'Hide SHA256' : 'Show SHA256';
         });
       });
+
+      // ── Auto-detect platform ─────────────────────────────────────────────
+      const ua = navigator.userAgent;
+      let detectedCard = null;
+      if (/iPhone|iPad/.test(ua))           detectedCard = 'card-ios';
+      else if (/Android/.test(ua))          detectedCard = 'card-android';
+      else if (/Mac/.test(ua) && /ARM/.test(ua)) detectedCard = 'card-macos-arm64';
+      else if (/Mac/.test(ua))              detectedCard = 'card-macos-x86';
+      else if (/Win/.test(ua))              detectedCard = 'card-win-msi';
+      else if (/Linux/.test(ua))            detectedCard = 'card-linux-x86';
+      if (detectedCard) {
+        const el = document.getElementById(detectedCard);
+        if (el) {
+          el.classList.add('detected');
+          const btn = el.querySelector('.dl-btn');
+          if (btn) btn.classList.replace('btn-secondary', 'btn-primary');
+        }
+      }
     });
+
+    // ── Live release data from GitHub API ─────────────────────────────────
+    (async () => {
+      const REPO = 'LINUS-AI-PRO/linus-ai';
+      const RELEASES_URL = `https://github.com/${REPO}/releases`;
+
+      function fmtBytes(n) {
+        if (n < 1024 * 1024) return (n / 1024).toFixed(0) + ' KB';
+        return (n / (1024 * 1024)).toFixed(0) + ' MB';
+      }
+
+      let release, assetMap = {}, checksums = {};
+
+      try {
+        const resp = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+          headers: { Accept: 'application/vnd.github+json' }
+        });
+        if (!resp.ok) throw new Error('API error');
+        release = await resp.json();
+      } catch (_) {
+        // API unavailable — leave buttons pointing to releases page
+        return;
+      }
+
+      const tag = release.tag_name;            // e.g. "v2.0.1"
+      const ver = tag.replace(/^v/, '');       // e.g. "2.0.1"
+
+      // Build asset map: exact name → {url, size}, suffix → same
+      release.assets.forEach(a => {
+        assetMap[a.name] = { url: a.browser_download_url, size: fmtBytes(a.size) };
+      });
+
+      // Update version displays
+      document.getElementById('hero-version').textContent = tag;
+      document.getElementById('release-tag-inline').textContent = tag;
+      document.getElementById('release-loaded-note').style.display = '';
+      document.getElementById('rel-tag').textContent = tag;
+      document.querySelectorAll('.term-version').forEach(el => { el.textContent = ver; });
+
+      // Update exact-name asset links + sizes
+      document.querySelectorAll('[data-asset]').forEach(el => {
+        const name = el.dataset.asset;
+        const info = assetMap[name];
+        if (!info) return;
+        if (el.tagName === 'A') el.href = info.url;
+        if (el.classList.contains('dl-size')) el.textContent = info.size;
+      });
+
+      // Update suffix-matched asset links + sizes
+      document.querySelectorAll('[data-asset-suffix]').forEach(el => {
+        const suffix = el.dataset.assetSuffix;
+        const match = Object.entries(assetMap).find(([k]) => k.endsWith(suffix));
+        if (!match) return;
+        const [, info] = match;
+        if (el.tagName === 'A') el.href = info.url;
+        if (el.classList.contains('dl-size')) el.textContent = info.size;
+      });
+
+      // Fetch SHA256SUMS.txt and populate checksum rows
+      const sumsAsset = assetMap['SHA256SUMS.txt'];
+      if (sumsAsset) {
+        try {
+          const txt = await (await fetch(sumsAsset.url)).text();
+          txt.trim().split('\n').forEach(line => {
+            const [hash, ...nameParts] = line.trim().split(/\s+/);
+            const name = nameParts.join(' ');
+            checksums[name] = hash;
+          });
+        } catch (_) {}
+      }
+
+      // Map asset names → checksum div IDs
+      const shaMap = {
+        'linus-ai-macos-arm64':          'sha-macos-arm64',
+        'linus-ai-macos-x86_64':         'sha-macos-x86',
+        'linus-ai-macos-universal':      'sha-macos-uni',
+        'linus-ai-macos.dmg':            'sha-macos-dmg',
+        'linus-ai-linux-x86_64':         'sha-linux-x86',
+        'linus-ai-linux-arm64':          'sha-linux-arm64',
+        'linus-ai-windows-x86_64.exe':   'sha-win-exe',
+        'linus-ai-windows-x86_64.msi':   'sha-win-msi',
+        'linus-ai-android-arm64':        'sha-android',
+        'linus-ai-ios-arm64':            'sha-ios',
+        'linus-ai-ios-sim':              'sha-ios-sim',
+      };
+      // suffix-matched
+      const shaSuffixMap = [
+        ['_amd64.deb',   'sha-deb-amd64'],
+        ['_arm64.deb',   'sha-deb-arm64'],
+        ['.x86_64.rpm',  'sha-rpm-x86'],
+        ['.aarch64.rpm', 'sha-rpm-aarch64'],
+      ];
+
+      Object.entries(shaMap).forEach(([name, divId]) => {
+        const hash = checksums[name];
+        const el = document.getElementById(divId);
+        if (hash && el) el.textContent = hash + '  ' + name;
+      });
+      shaSuffixMap.forEach(([suffix, divId]) => {
+        const name = Object.keys(checksums).find(k => k.endsWith(suffix));
+        const el = document.getElementById(divId);
+        if (name && el) el.textContent = checksums[name] + '  ' + name;
+      });
+    })();
   </script>
 </body>
 </html>
