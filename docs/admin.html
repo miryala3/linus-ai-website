@@ -284,8 +284,34 @@
       white-space: nowrap;
     }
 
-    .method-get  { background: rgba(52, 211, 153, 0.15); color: var(--green); }
-    .method-post { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+    .method-get    { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+    .method-post   { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+    .method-put    { background: rgba(251, 191, 36, 0.15); color: var(--yellow); }
+    .method-delete { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+
+    .api-endpoint {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 13px;
+      transition: border-color 0.2s;
+    }
+
+    .api-endpoint:hover { border-color: var(--accent); }
+    .api-path { font-family: var(--font-mono); font-size: 13px; color: var(--text); }
+    .api-desc { font-size: 12px; color: var(--text-muted); text-align: right; }
+
+    @media (max-width: 600px) {
+      .api-endpoint { grid-template-columns: auto 1fr; }
+      .api-desc { display: none; }
+    }
 
     /* ── mt helpers ───────────────────────────────────────── */
     .mt-24 { margin-top: 24px; }
@@ -415,6 +441,10 @@
           <a href="#troubleshooting" class="ql-item">
             <span class="ql-icon">🛠</span>
             Troubleshooting
+          </a>
+          <a href="#compliance-audit" class="ql-item">
+            <span class="ql-icon">🔏</span>
+            Compliance &amp; Audit
           </a>
         </div>
       </section>
@@ -1870,6 +1900,219 @@
         <div class="callout">
           <strong>Still stuck?</strong> Collect a support bundle with <code>linus-ai --support-bundle</code> — this generates a redacted archive of logs, config (secrets masked), and system info. Attach it when contacting
           <a href="mailto:support@linus-ai.com" style="color:var(--accent);">support@linus-ai.com</a>.
+        </div>
+      </section>
+
+      <hr class="admin-divider" />
+
+      <!-- ══════════════════════════════════════════════════════
+           SECTION 12 — COMPLIANCE & AUDIT CONFIGURATION
+      ═══════════════════════════════════════════════════════ -->
+      <section class="admin-section" id="compliance-audit">
+        <div class="section-tag">Section 12 · New in v1.4.0</div>
+        <h2>Compliance &amp; Audit Configuration</h2>
+        <p class="section-sub">
+          LINUS-AI v1.4.0 introduces a fully integrated compliance layer with tamper-evident audit logging,
+          regulated-profile consent management, and fine-grained RAG document access control.
+        </p>
+
+        <!-- ── Audit Directory Override ─────────────────────── -->
+        <h3>Audit Log Storage</h3>
+        <p>
+          By default, all audit logs are written to <code>~/.linus-ai/audit/</code>. Two environment variables
+          let administrators redirect or replicate logs to any path — ideal for network mounts, WORM drives,
+          or encrypted partitions.
+        </p>
+
+        <div class="admin-card-grid">
+          <div class="admin-card">
+            <div class="admin-card-icon">📁</div>
+            <h4>Primary Directory Override</h4>
+            <p>Set <code>LINUS_AI_AUDIT_DIR</code> to redirect all audit logs to an admin-specified path. Useful for network mounts, WORM drives, or encrypted partitions. Default: <code>~/.linus-ai/audit/</code></p>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-icon">📤</div>
+            <h4>Export Propagation</h4>
+            <p>Set <code>LINUS_AI_AUDIT_EXPORT_DIRS</code> to a colon-separated list of secondary directories. Every audit record is written to <em>all</em> listed directories in real time — for syslog forwarding, SIEM integration, or offsite backup.</p>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-icon">🔒</div>
+            <h4>Immutability Sealing</h4>
+            <p>Completed monthly log files are automatically sealed: <code>chmod 0o400</code> (read-only), macOS <code>UF_IMMUTABLE</code> chflag, and Linux <code>chattr +i</code> (root required). No modification is possible without first clearing the flag.</p>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-icon">🔗</div>
+            <h4>HMAC Chain Verification</h4>
+            <p>Every audit record is HMAC-linked to the previous record. Tamper detection is available via <code>GET /compliance/status</code> — the response includes <code>chain_ok: true/false</code> plus monthly statistics.</p>
+          </div>
+        </div>
+
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Audit log environment variables</span>
+          </div>
+          <div class="out"># Redirect audit logs to a network-mounted WORM drive</div>
+          <div><span class="prompt">$ </span><span class="cmd">export LINUS_AI_AUDIT_DIR=/mnt/worm/linus-ai-audit</span></div>
+          <div>&nbsp;</div>
+          <div class="out"># Also mirror every record to a SIEM drop-folder and an offsite backup</div>
+          <div><span class="prompt">$ </span><span class="cmd">export LINUS_AI_AUDIT_EXPORT_DIRS=/var/log/siem/linus-ai:/backup/audit</span></div>
+          <div>&nbsp;</div>
+          <div class="out"># Verify audit chain integrity</div>
+          <div><span class="prompt">$ </span><span class="cmd">curl http://localhost:8080/compliance/status | jq '.chain_ok'</span></div>
+          <div class="out-accent">true</div>
+        </div>
+
+        <!-- ── Compliance API Endpoints ──────────────────────── -->
+        <h3>Compliance API Endpoints</h3>
+        <div style="margin-bottom:24px;">
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/compliance/profiles</span><span class="api-desc">All 14 profile compliance configs (level, regulations, PII scan flag, disclaimer)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/compliance/status</span><span class="api-desc">Audit chain integrity status + monthly statistics</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/compliance/consents</span><span class="api-desc">Consents granted on this machine (?machine_id=…)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/compliance/audit</span><span class="api-desc">Query HMAC-chained audit log (?profile_id, ?blocked_only, ?pii_only, ?since, ?limit)</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/compliance/consent</span><span class="api-desc">Grant or revoke consent — body: {profile_id, action:"grant"|"revoke", machine_id}</span></div>
+        </div>
+
+        <!-- ── RAG Document Access Control ──────────────────── -->
+        <h3>RAG Document Access Control</h3>
+        <p>
+          Register documents with a classification level and ACL, then use the decision engine to
+          enforce access based on principal clearance and explicit allow/deny rules.
+        </p>
+
+        <div style="margin-bottom:24px;">
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/rag/documents</span><span class="api-desc">List documents (?user_id filters to accessible subset; ?all=true for full registry)</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/rag/documents/register</span><span class="api-desc">Register a document with classification and ACL</span></div>
+          <div class="api-endpoint"><span class="method method-put">PUT</span><span class="api-path">/rag/documents/{id}/acl</span><span class="api-desc">Replace ACL for a document (allow/deny at user/dept/division/company/role scope)</span></div>
+          <div class="api-endpoint"><span class="method method-put">PUT</span><span class="api-path">/rag/documents/{id}/classification</span><span class="api-desc">Update classification level (0=PUBLIC … 4=TOP_SECRET)</span></div>
+          <div class="api-endpoint"><span class="method method-delete">DELETE</span><span class="api-path">/rag/documents/{id}</span><span class="api-desc">Remove document from registry</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/rag/access-check</span><span class="api-desc">Test access decision for a principal + document (returns PERMIT/DENY + rule)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/rag/audit</span><span class="api-desc">Query RAG access audit log (?doc_id, ?principal_id, ?decision, ?denied_only, ?stats=true)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/rag/principals</span><span class="api-desc">List all registered principals</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/rag/principals</span><span class="api-desc">Register or update a principal (user_id, company, division, department, roles, clearance)</span></div>
+          <div class="api-endpoint"><span class="method method-delete">DELETE</span><span class="api-path">/rag/principals/{id}</span><span class="api-desc">Remove a principal</span></div>
+        </div>
+
+        <div class="admin-card-grid" style="margin-bottom:24px;">
+          <div class="admin-card">
+            <div class="admin-card-icon">🏷</div>
+            <h4>Classification Levels</h4>
+            <p>
+              <code>0</code> PUBLIC &nbsp;·&nbsp;
+              <code>1</code> INTERNAL &nbsp;·&nbsp;
+              <code>2</code> CONFIDENTIAL &nbsp;·&nbsp;
+              <code>3</code> RESTRICTED &nbsp;·&nbsp;
+              <code>4</code> TOP_SECRET
+            </p>
+            <p style="margin-top:8px;">Each principal has a <code>clearance</code> integer; access requires clearance ≥ document classification.</p>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-icon">⚖</div>
+            <h4>ACL Scopes</h4>
+            <p>Allow or deny at five scopes: <strong>user</strong>, <strong>company</strong>, <strong>division</strong>, <strong>department</strong>, and <strong>role</strong>. Deny rules always take precedence over allow rules at the same scope.</p>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-icon">🧮</div>
+            <h4>Decision Algorithm</h4>
+            <p>
+              Owner override → explicit DENY → PUBLIC bypass → clearance gate →
+              TOP_SECRET explicit list → ACL permit (company → division → dept → role → user) → default DENY.
+            </p>
+          </div>
+        </div>
+
+        <!-- ── 14 Compliance Profiles ────────────────────────── -->
+        <h3>14 Compliance Profiles</h3>
+        <p>
+          Every agent profile ships with a pre-configured compliance tier. Regulated profiles require
+          explicit user consent before a session begins; consent is stored locally and audited.
+        </p>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Profile</th>
+                <th>Level</th>
+                <th>Regulations</th>
+                <th>Consent Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>general</code>, <code>creative</code>, <code>reasoning</code></td>
+                <td><code>OPEN</code></td>
+                <td>—</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><code>code</code>, <code>engineering</code></td>
+                <td><code>OPEN</code></td>
+                <td>—</td>
+                <td>No (injection check enabled)</td>
+              </tr>
+              <tr>
+                <td><code>education</code></td>
+                <td><code>AUDIT</code></td>
+                <td>FERPA, COPPA</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><code>support</code></td>
+                <td><code>AUDIT</code></td>
+                <td>—</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><code>sales</code></td>
+                <td><code>AUDIT</code></td>
+                <td>GDPR, CAN-SPAM</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><code>data_science</code></td>
+                <td><code>AUDIT</code></td>
+                <td>GDPR, CCPA</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><code>medical</code></td>
+                <td><code>REGULATED</code></td>
+                <td>HIPAA, GDPR</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td><code>legal</code></td>
+                <td><code>REGULATED</code></td>
+                <td>Attorney-Client Privilege, GDPR, CCPA</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td><code>finance</code></td>
+                <td><code>REGULATED</code></td>
+                <td>SOX, PCI-DSS, FINRA, GDPR</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td><code>hr</code></td>
+                <td><code>REGULATED</code></td>
+                <td>EEOC, GDPR, CCPA, FCRA</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td><code>security</code></td>
+                <td><code>RESTRICTED</code></td>
+                <td>SOC2, ISO 27001, NIST SP 800-53, CFAA</td>
+                <td>Yes (Professional+ licence required)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>Tip:</strong> Use <code>GET /compliance/profiles</code> to retrieve the full machine-readable config for all 14 profiles, including PII scan flags and per-profile disclaimer text injected at session start.
         </div>
       </section>
 

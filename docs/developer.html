@@ -449,6 +449,12 @@
           <a href="#local-dev" class="ql-item">
             <span class="ql-icon">🛠</span>Local Development
           </a>
+          <a href="#api-overview" class="ql-item">
+            <span class="ql-icon">🔏</span>Compliance &amp; Security API
+          </a>
+          <a href="#api-overview" class="ql-item">
+            <span class="ql-icon">📂</span>RAG Document Access Control
+          </a>
         </div>
       </section>
 
@@ -512,6 +518,29 @@
           <div class="api-endpoint"><span class="method method-ws">WS</span><span class="api-path">ws://localhost:8080/v1/stream</span><span class="api-desc">WebSocket streaming interface</span></div>
           <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/health</span><span class="api-desc">Health check and version info</span></div>
           <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/metrics</span><span class="api-desc">Prometheus-compatible metrics</span></div>
+        </div>
+
+        <h3 style="font-size:1.1rem; font-weight:700; margin:32px 0 16px;">Compliance &amp; Security API</h3>
+        <div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/compliance/profiles</span><span class="api-desc">All 14 profile compliance configs (level, regulations, PII scan flag, disclaimer)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/compliance/status</span><span class="api-desc">Audit chain integrity status + monthly statistics</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/compliance/consents</span><span class="api-desc">Consents granted on this machine (?machine_id=…)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/compliance/audit</span><span class="api-desc">Query HMAC-chained audit log (?profile_id, ?blocked_only, ?pii_only, ?since, ?limit)</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/compliance/consent</span><span class="api-desc">Grant or revoke consent for a regulated profile — body: {profile_id, action:"grant"|"revoke", machine_id}</span></div>
+        </div>
+
+        <h3 style="font-size:1.1rem; font-weight:700; margin:32px 0 16px;">RAG Document Access Control API</h3>
+        <div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/rag/documents</span><span class="api-desc">List documents (?user_id filters to accessible subset; ?all=true for full registry)</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/rag/documents/register</span><span class="api-desc">Register a document with classification and ACL</span></div>
+          <div class="api-endpoint"><span class="method method-put">PUT</span><span class="api-path">/rag/documents/{id}/acl</span><span class="api-desc">Replace ACL for a document (allow/deny at user/dept/division/company/role scope)</span></div>
+          <div class="api-endpoint"><span class="method method-put">PUT</span><span class="api-path">/rag/documents/{id}/classification</span><span class="api-desc">Update classification level (0=PUBLIC … 4=TOP_SECRET)</span></div>
+          <div class="api-endpoint"><span class="method method-delete">DELETE</span><span class="api-path">/rag/documents/{id}</span><span class="api-desc">Remove document from registry</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/rag/access-check</span><span class="api-desc">Test access decision for a principal + document (returns PERMIT/DENY + rule)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/rag/audit</span><span class="api-desc">Query RAG access audit log (?doc_id, ?principal_id, ?decision, ?denied_only, ?stats=true)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/rag/principals</span><span class="api-desc">List all registered principals</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/rag/principals</span><span class="api-desc">Register or update a principal (user_id, company, division, department, roles, clearance)</span></div>
+          <div class="api-endpoint"><span class="method method-delete">DELETE</span><span class="api-path">/rag/principals/{id}</span><span class="api-desc">Remove a principal</span></div>
         </div>
       </section>
 

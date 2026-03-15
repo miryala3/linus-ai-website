@@ -619,6 +619,16 @@
               </a>
             </li>
             <li>
+              <a href="#compliance-consent">
+                <span class="toc-icon">🔏</span>Compliance &amp; Consent
+              </a>
+            </li>
+            <li>
+              <a href="#rag-access-control">
+                <span class="toc-icon">📂</span>RAG Access Control
+              </a>
+            </li>
+            <li>
               <a href="#custom-prompts">
                 <span class="toc-icon">✏</span>Custom System Prompts
               </a>
@@ -668,6 +678,12 @@
               </a>
               <a href="#profiles" class="ql-item">
                 <span class="ql-icon">◈</span>AI Profiles
+              </a>
+              <a href="#compliance-consent" class="ql-item">
+                <span class="ql-icon">🔏</span>Compliance &amp; Consent
+              </a>
+              <a href="#rag-access-control" class="ql-item">
+                <span class="ql-icon">📂</span>RAG Access Control
               </a>
               <a href="#custom-prompts" class="ql-item">
                 <span class="ql-icon">✏</span>Custom Prompts
@@ -1369,99 +1385,136 @@
 
             <h3>Available Profiles</h3>
 
+            <p>
+              Each profile operates under one of four compliance tiers that govern PII handling,
+              consent requirements, and audit logging. The tier is displayed alongside the profile
+              in the GUI and CLI.
+            </p>
+
             <div class="ug-table-wrap">
               <table class="ug-table">
                 <thead>
                   <tr>
                     <th>Profile ID</th>
                     <th>Display Name</th>
+                    <th>Compliance Tier</th>
                     <th>Description</th>
                     <th>Availability</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <!-- ── OPEN tier ── -->
+                  <tr>
+                    <td colspan="5" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">OPEN — No restrictions</td>
+                  </tr>
                   <tr>
                     <td>general</td>
                     <td>General Assistant</td>
+                    <td><span class="badge badge-blue">OPEN</span></td>
                     <td>Balanced, helpful assistant suitable for any task. Default profile.</td>
-                    <td><span class="badge badge-blue">All plans</span></td>
-                  </tr>
-                  <tr>
-                    <td>support</td>
-                    <td>Customer Support</td>
-                    <td>Empathetic, concise responses tuned for help-desk and customer-facing interactions.</td>
                     <td><span class="badge badge-blue">All plans</span></td>
                   </tr>
                   <tr>
                     <td>creative</td>
                     <td>Creative Writing</td>
+                    <td><span class="badge badge-blue">OPEN</span></td>
                     <td>Higher temperature, narrative-focused. Ideal for copywriting, stories, and marketing.</td>
                     <td><span class="badge badge-blue">All plans</span></td>
                   </tr>
                   <tr>
-                    <td>education</td>
-                    <td>Education &amp; Tutoring</td>
-                    <td>Socratic method, scaffolded explanations, avoids giving direct answers to homework.</td>
-                    <td><span class="badge badge-blue">All plans</span></td>
-                  </tr>
-                  <tr>
-                    <td>hr</td>
-                    <td>Human Resources</td>
-                    <td>Policy-aware tone. Handles onboarding, policy queries, and HR documentation.</td>
-                    <td><span class="badge badge-blue">All plans</span></td>
-                  </tr>
-                  <tr>
-                    <td>sales</td>
-                    <td>Sales &amp; CRM</td>
-                    <td>Persuasive, goal-oriented. Assists with outreach drafts, objection handling, and pipeline notes.</td>
-                    <td><span class="badge badge-blue">All plans</span></td>
-                  </tr>
-                  <tr>
-                    <td>medical</td>
-                    <td>Medical &amp; Clinical</td>
-                    <td>Conservative, evidence-based. Follows clinical terminology. Always disclaims professional advice.</td>
-                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
-                  </tr>
-                  <tr>
-                    <td>legal</td>
-                    <td>Legal Research</td>
-                    <td>Formal language, citation-aware. Suited for contract review, case research, and legal drafting.</td>
-                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
-                  </tr>
-                  <tr>
-                    <td>finance</td>
-                    <td>Finance &amp; Accounting</td>
-                    <td>Precise numeric reasoning, regulatory awareness, financial terminology.</td>
-                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
-                  </tr>
-                  <tr>
-                    <td>security</td>
-                    <td>Cybersecurity</td>
-                    <td>Technical depth in threat analysis, CVE research, security architecture. Responsible-disclosure framing.</td>
-                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
-                  </tr>
-                  <tr>
-                    <td>engineering</td>
-                    <td>Systems Engineering</td>
-                    <td>Precise, spec-driven. Covers distributed systems, hardware, embedded, and infrastructure.</td>
-                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
-                  </tr>
-                  <tr>
-                    <td>data_science</td>
-                    <td>Data Science &amp; ML</td>
-                    <td>Statistical reasoning, experiment design, model evaluation, Python/R code assistance.</td>
+                    <td>reasoning</td>
+                    <td>Deep Reasoning</td>
+                    <td><span class="badge badge-blue">OPEN</span></td>
+                    <td>Chain-of-thought prompting, step-by-step analysis. Best with larger models (32B+).</td>
                     <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
                   </tr>
                   <tr>
                     <td>code</td>
                     <td>Software Development</td>
-                    <td>Code-first responses, test-driven suggestions, multi-language support, documentation generation.</td>
+                    <td><span class="badge badge-blue">OPEN</span> <span class="badge badge-yellow">injection detection</span></td>
+                    <td>Code-first responses, test-driven suggestions, multi-language support, documentation generation. Prompt injection attempts are detected and flagged.</td>
                     <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
                   </tr>
                   <tr>
-                    <td>reasoning</td>
-                    <td>Deep Reasoning</td>
-                    <td>Chain-of-thought prompting, step-by-step analysis. Best with larger models (32B+).</td>
+                    <td>engineering</td>
+                    <td>Systems Engineering</td>
+                    <td><span class="badge badge-blue">OPEN</span> <span class="badge badge-yellow">injection detection</span></td>
+                    <td>Precise, spec-driven. Covers distributed systems, hardware, embedded, and infrastructure. Prompt injection attempts are detected and flagged.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <!-- ── AUDIT tier ── -->
+                  <tr>
+                    <td colspan="5" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">AUDIT — PII scanned &amp; activity logged</td>
+                  </tr>
+                  <tr>
+                    <td>education</td>
+                    <td>Education &amp; Tutoring</td>
+                    <td><span class="badge badge-yellow">AUDIT</span> <span style="font-size:10px; color:var(--text-dim);">FERPA / COPPA</span></td>
+                    <td>Socratic method, scaffolded explanations, avoids giving direct answers to homework. PII is scanned and all activity is logged.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>support</td>
+                    <td>Customer Support</td>
+                    <td><span class="badge badge-yellow">AUDIT</span></td>
+                    <td>Empathetic, concise responses tuned for help-desk and customer-facing interactions. PII is scanned and all activity is logged.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>sales</td>
+                    <td>Sales &amp; CRM</td>
+                    <td><span class="badge badge-yellow">AUDIT</span> <span style="font-size:10px; color:var(--text-dim);">GDPR / CAN-SPAM</span></td>
+                    <td>Persuasive, goal-oriented. Assists with outreach drafts, objection handling, and pipeline notes. PII is scanned and all activity is logged.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>data_science</td>
+                    <td>Data Science &amp; ML</td>
+                    <td><span class="badge badge-yellow">AUDIT</span> <span style="font-size:10px; color:var(--text-dim);">GDPR / CCPA</span></td>
+                    <td>Statistical reasoning, experiment design, model evaluation, Python/R code assistance. PII is scanned and all activity is logged.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <!-- ── REGULATED tier ── -->
+                  <tr>
+                    <td colspan="5" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">REGULATED — One-time consent required · PII blocked</td>
+                  </tr>
+                  <tr>
+                    <td>medical</td>
+                    <td>Medical &amp; Clinical</td>
+                    <td><span class="badge badge-red">REGULATED</span> <span style="font-size:10px; color:var(--text-dim);">HIPAA</span></td>
+                    <td>Conservative, evidence-based. Follows clinical terminology. Always disclaims professional advice. Blocking PII (SSNs, MRNs) is rejected before reaching the model.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>legal</td>
+                    <td>Legal Research</td>
+                    <td><span class="badge badge-red">REGULATED</span> <span style="font-size:10px; color:var(--text-dim);">Attorney-Client Privilege</span></td>
+                    <td>Formal language, citation-aware. Suited for contract review, case research, and legal drafting. Blocking PII is rejected before reaching the model.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>finance</td>
+                    <td>Finance &amp; Accounting</td>
+                    <td><span class="badge badge-red">REGULATED</span> <span style="font-size:10px; color:var(--text-dim);">SOX / PCI-DSS / FINRA</span></td>
+                    <td>Precise numeric reasoning, regulatory awareness, financial terminology. Credit card numbers and CVVs are blocked before reaching the model.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>hr</td>
+                    <td>Human Resources</td>
+                    <td><span class="badge badge-red">REGULATED</span> <span style="font-size:10px; color:var(--text-dim);">EEOC / GDPR / CCPA / FCRA</span></td>
+                    <td>Policy-aware tone. Handles onboarding, policy queries, and HR documentation. Blocking PII is rejected before reaching the model.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <!-- ── RESTRICTED tier ── -->
+                  <tr>
+                    <td colspan="5" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">RESTRICTED — Professional licence required</td>
+                  </tr>
+                  <tr>
+                    <td>security</td>
+                    <td>Cybersecurity</td>
+                    <td><span class="badge badge-purple">RESTRICTED</span> <span style="font-size:10px; color:var(--text-dim);">SOC2 / ISO27001 / NIST / CFAA</span></td>
+                    <td>Technical depth in threat analysis, CVE research, security architecture. Responsible-disclosure framing. Prompt injection causes immediate request block.</td>
                     <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
                   </tr>
                 </tbody>
@@ -1470,7 +1523,137 @@
 
             <div class="callout">
               <span class="callout-icon">◈</span>
-              <div><strong>Community licence</strong> includes 6 profiles: <code>general</code>, <code>support</code>, <code>creative</code>, <code>education</code>, <code>hr</code>, and <code>sales</code>. Upgrade to Professional, Team, or Enterprise to unlock all 14.</div>
+              <div><strong>Community licence</strong> includes the OPEN profiles (<code>general</code>, <code>creative</code>) and the AUDIT profiles (<code>support</code>, <code>education</code>, <code>sales</code>), plus the REGULATED <code>hr</code> profile. Upgrade to Professional, Team, or Enterprise to unlock all 14 profiles including <code>reasoning</code>, <code>code</code>, <code>engineering</code>, <code>data_science</code>, <code>medical</code>, <code>legal</code>, <code>finance</code>, and <code>security</code>.</div>
+            </div>
+
+            <!-- ══ Compliance & Consent subsection ══ -->
+            <h3 id="compliance-consent">Compliance &amp; Consent</h3>
+            <p>
+              Profiles in the <strong>REGULATED</strong> and <strong>RESTRICTED</strong> tiers
+              require a one-time acknowledgement before first use on each machine. When you first
+              activate one of these profiles, a consent dialog appears with the full legal
+              disclaimer specific to that profile's regulatory context. You must scroll through
+              and explicitly accept before proceeding. Your acceptance is stored locally
+              per-machine per-profile in <code>~/.linus_ai/consents/</code> — you will not be
+              prompted again on the same machine unless the disclaimer is updated.
+            </p>
+
+            <h4 style="font-size:14px; font-weight:700; margin:20px 0 8px; color:var(--text);">PII Detection &amp; Handling</h4>
+            <p>
+              All prompts in AUDIT, REGULATED, and RESTRICTED profiles are scanned for
+              personally identifiable information before being sent to the model. PII is classified
+              into two categories:
+            </p>
+            <div class="ug-table-wrap">
+              <table class="ug-table">
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Examples</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge badge-red">Blocking</span></td>
+                    <td>SSN, credit card numbers, CVVs, medical record numbers (MRNs), passport numbers</td>
+                    <td>Request is <strong>rejected</strong> before it reaches the model. An error is returned to the caller and the attempt is logged.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge badge-yellow">Non-blocking</span></td>
+                    <td>Email addresses, phone numbers, postal addresses</td>
+                    <td>Automatically <strong>redacted</strong> in the prompt before inference. The redacted prompt is used; the original is not logged.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h4 style="font-size:14px; font-weight:700; margin:20px 0 8px; color:var(--text);">Prompt Injection Detection</h4>
+            <p>
+              LINUS-AI scans all incoming prompts for injection patterns — attempts to override
+              system instructions, exfiltrate context, or manipulate the model's role. Detected
+              attempts are flagged and recorded in the audit log. On the
+              <strong>Security</strong> (<code>security</code>) profile, a detected injection
+              attempt causes the request to be immediately blocked and the session to be
+              suspended pending review.
+            </p>
+
+            <h4 style="font-size:14px; font-weight:700; margin:20px 0 8px; color:var(--text);">Audit Logging</h4>
+            <p>
+              All activity in AUDIT, REGULATED, and RESTRICTED profiles is written to a
+              tamper-evident audit log at <code>~/.linus_ai/audit/</code>. Each log entry is
+              HMAC-chained to the previous entry — any modification, deletion, or reordering
+              of records breaks the chain and is detected on next verification. Log entries
+              include timestamp, user identity, profile, model, PII scan results, consent
+              status, and (for non-blocking PII) the redaction map.
+            </p>
+
+            <div class="callout callout-tip">
+              <span class="callout-icon">🔏</span>
+              <div><strong>Verify audit log integrity</strong> at any time with <code>linus-ai --audit-verify</code>. The command checks the full HMAC chain and reports the first broken link if tampering is detected.</div>
+            </div>
+
+            <!-- ══ Document Access Control (RAG) subsection ══ -->
+            <h3 id="rag-access-control">Document Access Control (RAG)</h3>
+            <p>
+              When you upload documents for Retrieval-Augmented Generation (RAG), each document
+              is automatically registered in the RAG registry with a classification level. Access
+              decisions are enforced per-user at query time — you only receive content from
+              documents you are authorised to access.
+            </p>
+
+            <h4 style="font-size:14px; font-weight:700; margin:20px 0 8px; color:var(--text);">Document Classification Levels</h4>
+            <div class="ug-table-wrap">
+              <table class="ug-table">
+                <thead>
+                  <tr>
+                    <th>Classification</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge badge-blue">PUBLIC</span></td>
+                    <td>Accessible to all authenticated users within the organisation.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge badge-green">INTERNAL</span></td>
+                    <td>Accessible to employees of the owning company or division.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge badge-yellow">CONFIDENTIAL</span></td>
+                    <td>Restricted to authorised departments or specific roles.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge badge-red">RESTRICTED</span></td>
+                    <td>Restricted to named individuals or explicit role grants.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge badge-purple">TOP_SECRET</span></td>
+                    <td>Highest classification. Requires explicit clearance level on the user record.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h4 style="font-size:14px; font-weight:700; margin:20px 0 8px; color:var(--text);">Access Decision Factors</h4>
+            <p>
+              Each RAG retrieval call performs a per-document access check against the requesting
+              user's identity attributes: <strong>department</strong>, <strong>division</strong>,
+              <strong>company</strong>, <strong>roles</strong>, and <strong>clearance level</strong>.
+              Documents that the user is not authorised to access are silently withheld from the
+              retrieved context — the response is generated only from documents the user can see.
+              No indication is given to the user that additional documents exist but were withheld.
+            </p>
+            <p>
+              All access decisions — both grants and denials — are recorded in the RAG audit
+              trail at <code>~/.linus_ai/audit/rag/</code>. This trail is also HMAC-chained for
+              tamper-evidence and can be verified with <code>linus-ai --rag-audit-verify</code>.
+            </p>
+
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <div><strong>Document classification is set at upload time.</strong> Use the <code>--doc-class</code> flag or the GUI Setup tab when uploading documents. If no classification is specified, documents default to <code>INTERNAL</code>. Classification can only be changed by an administrator.</div>
             </div>
 
             <h3>Selecting a Profile</h3>
