@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LINUS-AI — System Architecture & Flow Diagrams</title>
+<style>
+:root {
+  --bg:      #0f1117;
+  --surface: #1a1d27;
+  --surface2:#21253a;
+  --border:  #2a2d3e;
+  --accent:  #7c3aed;
+  --accent2: #06b6d4;
+  --accent3: #10b981;
+  --warn:    #f59e0b;
+  --danger:  #ef4444;
+  --text:    #e2e8f0;
+  --muted:   #64748b;
+  --font:    'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:    'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);padding:2rem;padding-top:1rem;min-height:100vh}
+h1{font-size:1.9rem;font-weight:700;margin-bottom:.2rem}
+h1 span{color:var(--accent)}
+.subtitle{color:var(--muted);margin-bottom:2rem;font-size:.95rem}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:.4rem;margin-bottom:2rem;border-bottom:1px solid var(--border);padding-bottom:0;flex-wrap:wrap}
+.tab{padding:.55rem 1.3rem;border-radius:7px 7px 0 0;cursor:pointer;font-size:.88rem;font-weight:500;color:var(--muted);border:1px solid transparent;border-bottom:none;transition:all .15s;user-select:none}
+.tab:hover{color:var(--text);background:var(--surface)}
+.tab.active{color:var(--accent);background:var(--surface);border-color:var(--border);border-bottom:1px solid var(--surface);margin-bottom:-1px}
+.pane{display:none;animation:fadeIn .2s}
+.pane.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Section titles ── */
+.section-title{font-size:1.1rem;font-weight:700;margin-bottom:.8rem;color:var(--text)}
+.section-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.4rem;line-height:1.6}
+
+/* ── Flow layout ── */
+.flow{display:flex;align-items:flex-start;gap:0;flex-wrap:wrap;margin-bottom:2rem}
+.flow-col{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.arr-h{color:var(--accent);font-size:1.5rem;display:flex;align-items:center;padding:0 .3rem;margin-top:1.4rem;flex-shrink:0}
+.arr-v{color:var(--accent);font-size:1.2rem;text-align:center;line-height:1}
+
+/* ── Nodes ── */
+.node{border:1px solid var(--border);border-radius:10px;padding:.75rem 1.1rem;background:var(--surface);min-width:140px;max-width:200px;text-align:center;cursor:default;transition:border-color .15s,box-shadow .15s;position:relative}
+.node:hover{border-color:var(--accent);box-shadow:0 0 0 2px rgba(124,58,237,.15)}
+.node .lbl{font-size:.85rem;font-weight:600}
+.node .sub{font-size:.7rem;color:var(--muted);margin-top:.25rem;line-height:1.4}
+.node .badge{position:absolute;top:-8px;right:8px;font-size:.62rem;background:var(--accent);color:#fff;border-radius:4px;padding:1px 5px;font-weight:600}
+/* colours */
+.node.src  {border-color:var(--accent)}
+.node.proc {border-color:var(--accent2)}
+.node.out  {border-color:var(--accent3)}
+.node.warn {border-color:var(--warn)}
+.node.danger{border-color:var(--danger)}
+.node.info {border-color:#3b82f6}
+.node.free {border-color:var(--accent3);background:#0d1f18}
+.node.paid {border-color:var(--warn);background:#1f1700}
+
+/* ── Swimlane ── */
+.lane-wrap{display:flex;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.lane{flex:1;min-width:220px;border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;background:var(--surface)}
+.lane-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:.8rem}
+
+/* ── Legend ── */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.8rem}
+.leg-item{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--muted)}
+.leg-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+
+/* ── Code blocks ── */
+.code{background:#101320;border:1px solid var(--border);border-radius:8px;padding:.9rem 1rem;font-family:var(--mono);font-size:.78rem;line-height:1.7;color:#c9d1d9;overflow-x:auto;margin-bottom:1rem}
+.code .cm{color:var(--muted)}
+.code .kw{color:#c678dd}
+.code .st{color:var(--accent3)}
+.code .nu{color:#d19a66}
+.code .fn{color:#61afef}
+
+/* ── Info grid ── */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem}
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.info-card .ic-title{font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem}
+.info-card .ic-val{font-size:1.3rem;font-weight:700;color:var(--text)}
+.info-card .ic-sub{font-size:.72rem;color:var(--muted);margin-top:.2rem}
+
+/* ── Table ── */
+.tbl{width:100%;border-collapse:collapse;font-size:.83rem;margin-bottom:1.5rem}
+.tbl th{background:var(--surface2);color:var(--muted);font-weight:600;text-align:left;padding:.55rem .8rem;border-bottom:1px solid var(--border)}
+.tbl td{padding:.5rem .8rem;border-bottom:1px solid var(--border)}
+.tbl tr:last-child td{border:none}
+.tbl code{font-family:var(--mono);background:#101320;padding:1px 5px;border-radius:3px;font-size:.78rem}
+.pill{display:inline-block;padding:1px 7px;border-radius:4px;font-size:.7rem;font-weight:600}
+.pill-green{background:#0d3321;color:var(--accent3)}
+.pill-blue{background:#0d1f3c;color:#60a5fa}
+.pill-yellow{background:#2a1c00;color:var(--warn)}
+.pill-red{background:#2a0d0d;color:var(--danger)}
+</style>
+</head>
+<body>
+
+<!-- ── Site Nav ── -->
+<nav style="position:sticky;top:0;z-index:999;background:rgba(15,17,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid #2a2d3e;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <a href="../index.html" style="font-size:1.05rem;font-weight:800;color:#e2e8f0;text-decoration:none;letter-spacing:-0.5px;">LINUS<span style="color:#06b6d4">-</span>AI</a>
+  <div style="display:flex;gap:1.5rem;align-items:center;font-size:.875rem;">
+    <a href="../index.html" style="color:#64748b;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#e2e8f0'" onmouseout="this.style.color='#64748b'">Home</a>
+    <a href="index.html" style="color:#64748b;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#e2e8f0'" onmouseout="this.style.color='#64748b'">Docs</a>
+    <a href="readme.html" style="color:#64748b;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#e2e8f0'" onmouseout="this.style.color='#64748b'">README</a>
+    <a href="spec.html" style="color:#64748b;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#e2e8f0'" onmouseout="this.style.color='#64748b'">Spec</a>
+    <a href="endpoints.html" style="color:#64748b;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#e2e8f0'" onmouseout="this.style.color='#64748b'">API</a>
+    <a href="../download.html" style="color:#e2e8f0;text-decoration:none;background:#7c3aed;padding:.35rem .9rem;border-radius:7px;font-weight:600;font-size:.82rem;">Download</a>
+  </div>
+</nav>
+
+<h1>LINUS-<span>AI</span></h1>
+<p class="subtitle">System Architecture &amp; Flow Diagrams &nbsp;·&nbsp; v1.4.0 &nbsp;·&nbsp; <a href="readme.html" style="color:var(--accent2)">README</a> &nbsp;·&nbsp; <a href="spec.html" style="color:var(--accent2)">SPEC</a></p>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('overview')">Overview</div>
+  <div class="tab" onclick="show('runtime')">Runtime Flow</div>
+  <div class="tab" onclick="show('tensor')">Tensor Parallel</div>
+  <div class="tab" onclick="show('pipeline')">Pipeline Parallel</div>
+  <div class="tab" onclick="show('payment')">Payment Gate</div>
+  <div class="tab" onclick="show('mesh')">Mesh Discovery</div>
+  <div class="tab" onclick="show('shell')">Launch Shell</div>
+  <div class="tab" onclick="show('blockchain')">Blockchain Ledger</div>
+  <div class="tab" onclick="show('build')">Build Pipeline</div>
+  <div class="tab" onclick="show('tests')">Test Suite</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ OVERVIEW -->
+<div class="pane active" id="pane-overview">
+  <div class="section-title">System Overview</div>
+  <div class="section-sub">LINUS-AI is a dual-runtime local AI system: a Rust binary for production and a Python runtime for development. Both serve identical HTTP APIs and the same embedded control panel HTML.</div>
+
+  <div class="flow">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">User Browser</div><div class="sub">http://localhost:9480/app</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="badge">Rust</div><div class="lbl">linus_ai binary</div><div class="sub">axum 0.7 · embedded HTML</div></div>
+      <div class="arr-v">↕</div>
+      <div class="node proc"><div class="badge">Python</div><div class="lbl">main.py runtime</div><div class="sub">asyncio TCP · same routes</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">InferenceEngine</div><div class="sub">llama-server / ollama / cli</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node info"><div class="lbl">MeshNetwork</div><div class="sub">UDP beacon + HTTP probe</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node warn"><div class="lbl">PaymentLedger</div><div class="sub">SQLite · internet billing</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node src"><div class="lbl">Blockchain</div><div class="sub">SHA-256 hash chain</div></div>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card"><div class="ic-title">Inference backends</div><div class="ic-val">4</div><div class="ic-sub">llama-server · ollama · llama-cli · fallback</div></div>
+    <div class="info-card"><div class="ic-title">Pipeline nodes max</div><div class="ic-val">N</div><div class="ic-sub">Unlimited — proportional RAM assignment</div></div>
+    <div class="info-card"><div class="ic-title">Welcome credits</div><div class="ic-val">5</div><div class="ic-sub">Free inference units for new internet nodes</div></div>
+    <div class="info-card"><div class="ic-title">Test coverage</div><div class="ic-val">340</div><div class="ic-sub">Python (286) + Rust (54) unit tests</div></div>
+    <div class="info-card"><div class="ic-title">Platforms</div><div class="ic-val">7</div><div class="ic-sub">macOS · Linux · Windows · Android · iOS · WASM</div></div>
+    <div class="info-card"><div class="ic-title">GUI tabs</div><div class="ic-val">11</div><div class="ic-sub">Chat · Models · Mesh · Chorus · Tasks · Thermal · Ledger · Hardware · Permissions · Setup · Launch</div></div>
+  </div>
+
+  <div class="section-title" style="margin-top:1rem">Subsystem Map</div>
+  <table class="tbl">
+    <tr><th>Subsystem</th><th>Location</th><th>Role</th><th>Status</th></tr>
+    <tr><td>InferenceEngine</td><td><code>linus-ai-rs/crates/linus-ai-inference</code></td><td>Select + run backend</td><td><span class="pill pill-green">active</span></td></tr>
+    <tr><td>MeshNetwork</td><td><code>linus-ai-rs/crates/linus-ai-net</code></td><td>UDP beacon + peer DB</td><td><span class="pill pill-green">active</span></td></tr>
+    <tr><td>PipelineOrchestrator</td><td><code>ai/pipeline.py</code></td><td>Layer-parallel inference</td><td><span class="pill pill-green">v1.0</span></td></tr>
+    <tr><td>MeshModelManager</td><td><code>ai/mesh_model_manager.py</code></td><td>Auto model selection</td><td><span class="pill pill-green">active</span></td></tr>
+    <tr><td>PaymentLedger</td><td><code>blockchain/__init__.py</code></td><td>Internet node billing</td><td><span class="pill pill-green">active</span></td></tr>
+    <tr><td>TransparencyLedger</td><td><code>blockchain/__init__.py</code></td><td>SHA-256 hash chain audit</td><td><span class="pill pill-green">active</span></td></tr>
+    <tr><td>Shell Handler</td><td><code>main.py</code> + <code>linus-ai-http/src/lib.rs</code></td><td>Launch shell (in-app)</td><td><span class="pill pill-green">active</span></td></tr>
+    <tr><td>ThermalGovernor</td><td><code>linus-ai-rs/crates/linus-ai-thermal</code></td><td>5-stage throttle</td><td><span class="pill pill-green">active</span></td></tr>
+    <tr><td>Vault</td><td><code>linus-ai-rs/crates/linus-ai-vault</code></td><td>ChaCha20 secret store</td><td><span class="pill pill-green">active</span></td></tr>
+    <tr><td>task Scheduler</td><td><code>linus-ai-rs/crates/linus-ai-task</code></td><td>Distributed jobs</td><td><span class="pill pill-blue">optional</span></td></tr>
+    <tr><td>py2c Compiler</td><td><code>py2c/</code></td><td>Python→C→native cross-compile</td><td><span class="pill pill-blue">bundled</span></td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ RUNTIME FLOW -->
+<div class="pane" id="pane-runtime">
+  <div class="section-title">Runtime Request Flow</div>
+  <div class="section-sub">End-to-end lifecycle of a user request — from browser input through the Inference Mode switcher to the correct backend. The mode is persisted in <code style="font-family:var(--mono)">localStorage</code> and restored on every page load.</div>
+
+  <!-- Step 1: Entry -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">1 — User Entry</div>
+  <div class="flow" style="align-items:center;margin-bottom:1.5rem">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Browser / Tray</div><div class="sub">http://localhost:9480/app<br>macOS · Windows · Linux<br>iOS · Android (remote)</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">Control Panel HTML</div><div class="sub">linus_ai_control_panel.html<br>embedded in binary via<br>include_str!()</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">setInferMode()</div><div class="sub">restored from localStorage<br>linus_ai_infer_mode<br>local · pipeline · tensor_rpc · tensor_native</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">Chat tab</div><div class="sub">user types prompt<br>clicks Send or presses Enter</div></div>
+    </div>
+  </div>
+
+  <!-- Step 2: Mode routing -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">2 — Inference Mode Routing (JS → API)</div>
+  <div class="lane-wrap" style="margin-bottom:1.5rem">
+    <div class="lane" style="border-color:var(--accent3)">
+      <div class="lane-title" style="color:var(--accent3)">Local</div>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        Single-node inference.<br>
+        <b style="color:var(--text)">JS calls:</b> <code style="font-family:var(--mono);font-size:.78rem">POST /infer</code><br>
+        or <code style="font-family:var(--mono);font-size:.78rem">POST /infer/stream</code> (SSE)<br>
+        <b style="color:var(--text)">Agentic:</b> <code style="font-family:var(--mono);font-size:.78rem">POST /agent/stream</code><br>
+        <b style="color:var(--text)">Source:</b> <code style="font-family:var(--mono);font-size:.75rem">sendChat() in control panel</code>
+      </div>
+    </div>
+    <div class="lane" style="border-color:var(--accent2)">
+      <div class="lane-title" style="color:var(--accent2)">Pipeline</div>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        Layers distributed across N nodes.<br>
+        <b style="color:var(--text)">Setup:</b> Apply Plan in Setup tab → <code style="font-family:var(--mono);font-size:.78rem">POST /pipeline/plan</code><br>
+        <b style="color:var(--text)">JS calls:</b> <code style="font-family:var(--mono);font-size:.78rem">POST /pipeline/infer</code><br>
+        <b style="color:var(--text)">Intra-pipeline:</b> <code style="font-family:var(--mono);font-size:.78rem">POST /pipeline/forward</code><br>
+        <b style="color:var(--text)">Source:</b> <code style="font-family:var(--mono);font-size:.75rem">applyPipelinePlan(), ai/pipeline.py</code>
+      </div>
+    </div>
+    <div class="lane" style="border-color:var(--accent)">
+      <div class="lane-title" style="color:var(--accent)">Tensor RPC</div>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        Weight matrices split via llama.cpp RPC.<br>
+        <b style="color:var(--text)">Setup:</b> Apply Plan → <code style="font-family:var(--mono);font-size:.78rem">POST /tensor/plan</code>,<br>
+        Start RPC Worker → <code style="font-family:var(--mono);font-size:.78rem">POST /tensor/rpc/start</code><br>
+        <b style="color:var(--text)">JS calls:</b> <code style="font-family:var(--mono);font-size:.78rem">POST /tensor/infer</code><br>
+        <b style="color:var(--text)">Source:</b> <code style="font-family:var(--mono);font-size:.75rem">applyTensorPlan(), tensor_parallel.rs</code>
+      </div>
+    </div>
+    <div class="lane" style="border-color:var(--warn)">
+      <div class="lane-title" style="color:var(--warn)">Tensor Native <span style="font-weight:400;font-size:.72rem">(Phase 2)</span></div>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        AllReduce over HTTP, no external tools.<br>
+        <b style="color:var(--text)">Setup:</b> Apply Plan → <code style="font-family:var(--mono);font-size:.78rem">POST /tensor/plan</code> (backend=Native)<br>
+        <b style="color:var(--text)">JS calls:</b> <code style="font-family:var(--mono);font-size:.78rem">POST /tensor/infer</code><br>
+        <b style="color:var(--text)">AllReduce:</b> <code style="font-family:var(--mono);font-size:.78rem">POST /tensor/allreduce</code> (TNSR frame)<br>
+        <b style="color:var(--text)">Source:</b> <code style="font-family:var(--mono);font-size:.75rem">native_allreduce_infer(), tensor_parallel.rs</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Server dispatch -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">3 — Server Dispatch (Rust · Python)</div>
+  <div class="flow" style="align-items:flex-start;margin-bottom:1.5rem">
+    <div class="flow-col">
+      <div class="node proc"><div class="badge">axum</div><div class="lbl">HTTP Router</div><div class="sub">linus-ai-http/src/lib.rs<br>routes all /infer* /tensor* /pipeline*</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col" style="gap:.5rem">
+      <div class="node out" style="border-color:var(--accent3)"><div class="lbl">infer_handler()</div><div class="sub">local: InferenceEngine<br>llama-server · ollama · candle · cli</div></div>
+      <div class="node out" style="border-color:var(--accent2)"><div class="lbl">pipeline_infer()</div><div class="sub">PipelineOrchestrator<br>Python: ai/pipeline.py</div></div>
+      <div class="node out" style="border-color:var(--accent)"><div class="lbl">tensor_infer()</div><div class="sub">rpc_infer() → llama-server --rpc<br>or native_allreduce_infer()</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Response</div><div class="sub">JSON · SSE stream<br>returned to browser</div></div>
+    </div>
+  </div>
+
+  <!-- Step 4: Backend selection (local path) -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">4 — Local Backend Priority (InferenceEngine)</div>
+  <div class="flow" style="align-items:center;margin-bottom:1.5rem">
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">InferenceEngine</div><div class="sub">engine.rs<br>dispatch logic</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col" style="gap:.4rem">
+      <div class="node out" style="border-color:var(--accent);min-width:160px"><div class="badge" style="background:var(--accent)">1st</div><div class="lbl">bundled llama.cpp</div><div class="sub">Metal / CUDA · feature: llama-bundled</div></div>
+      <div class="node out" style="border-color:var(--accent2);min-width:160px"><div class="badge" style="background:var(--accent2)">2nd</div><div class="lbl">candle (pure Rust)</div><div class="sub">Metal / CUDA · feature: candle-only</div></div>
+      <div class="node out" style="border-color:var(--accent3);min-width:160px"><div class="badge" style="background:var(--accent3)">3rd</div><div class="lbl">llama-server subprocess</div><div class="sub">external binary on PATH</div></div>
+      <div class="node out" style="border-color:var(--muted);min-width:160px"><div class="badge" style="background:var(--muted)">4th</div><div class="lbl">ollama subprocess</div><div class="sub">ollama serve on PATH</div></div>
+    </div>
+  </div>
+
+  <!-- Setup tab relation -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">5 — Setup Tab → Mode Config (GUI Source Map)</div>
+  <table class="tbl">
+    <tr><th>Setup Card</th><th>Action</th><th>API endpoint</th><th>JS function</th><th>Source</th></tr>
+    <tr><td>Inference Mode</td><td>Click mode button</td><td>—  (localStorage only)</td><td><code>setInferMode()</code></td><td><code>control panel JS</code></td></tr>
+    <tr><td>Tensor Parallelism</td><td>Apply Plan</td><td><code>POST /tensor/plan</code></td><td><code>applyTensorPlan()</code></td><td><code>tensor_parallel.rs</code></td></tr>
+    <tr><td>Tensor Parallelism</td><td>▶ Start RPC Worker</td><td><code>POST /tensor/rpc/start</code></td><td><code>tensorRpcStart()</code></td><td><code>TpRpcWorker::spawn()</code></td></tr>
+    <tr><td>Tensor Parallelism</td><td>⟳ Status</td><td><code>GET /tensor/status</code></td><td><code>loadTensorStatus()</code></td><td><code>tensor_status() handler</code></td></tr>
+    <tr><td>Pipeline Parallelism</td><td>Apply Plan</td><td><code>POST /pipeline/plan</code></td><td><code>applyPipelinePlan()</code></td><td><code>ai/pipeline.py PipelineOrchestrator</code></td></tr>
+    <tr><td>Pipeline Parallelism</td><td>⟳ Status</td><td><code>GET /pipeline/plan</code></td><td><code>loadPipelineStatus()</code></td><td><code>_handle_pipeline_plan()</code></td></tr>
+    <tr><td>Runtime Controls</td><td>Save</td><td><code>POST /settings</code></td><td><code>saveRuntimeSettings()</code></td><td><code>settings_save() handler</code></td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ TENSOR PARALLEL -->
+<div class="pane" id="pane-tensor">
+  <div class="section-title">Tensor Parallelism — Weight Matrix Splitting</div>
+  <div class="section-sub">Every weight matrix in every transformer layer is split column-wise across N nodes. All nodes receive the same token and compute a 1/N partial result simultaneously. Results are summed (AllReduce) after each block. Rank 0 = coordinator — the only node that accepts client inference requests.</div>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div>Coordinator (rank 0)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent2)"></div>Worker (rank 1…N-1)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent3)"></div>Reduced result</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--warn)"></div>Partial activations</div>
+  </div>
+
+  <!-- RPC mode flow -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">RPC Mode — llama.cpp --rpc (Production)</div>
+  <div class="flow" style="align-items:flex-start;margin-bottom:1.5rem">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Client</div><div class="sub">POST /tensor/infer<br>{prompt, max_tokens}</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node src" style="border-color:var(--accent)"><div class="badge">rank 0</div><div class="lbl">Coordinator</div><div class="sub">rpc_infer()<br>tensor_parallel.rs:341</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node proc"><div class="lbl">llama-server</div><div class="sub">--rpc w1:9099,w2:9099<br>--tensor-split (by RAM)<br>--n-gpu-layers auto</div></div>
+    </div>
+    <div class="arr-h"><span style="font-size:.7rem;color:var(--warn);display:block;text-align:center">weight<br>shards</span>→</div>
+    <div class="flow-col" style="gap:.5rem">
+      <div class="node proc" style="border-color:var(--accent2)"><div class="badge">rank 1</div><div class="lbl">llama-rpc-server</div><div class="sub">worker A · port 9099<br>holds W/N weights</div></div>
+      <div class="node proc" style="border-color:var(--accent2)"><div class="badge">rank 2</div><div class="lbl">llama-rpc-server</div><div class="sub">worker B · port 9099<br>holds W/N weights</div></div>
+    </div>
+    <div class="arr-h"><span style="font-size:.7rem;color:var(--accent3);display:block;text-align:center">token<br>out</span>→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">Response</div><div class="sub">text returned<br>to client</div></div>
+    </div>
+  </div>
+
+  <!-- Native AllReduce flow -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Native AllReduce Mode — TNSR Wire Protocol (Phase 2)</div>
+  <div class="flow" style="align-items:flex-start;margin-bottom:1.5rem">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Client</div><div class="sub">POST /tensor/infer</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col" style="gap:.4rem">
+      <div class="node src" style="border-color:var(--accent)"><div class="badge">rank 0</div><div class="lbl">Coordinator</div><div class="sub">loads W_col_slice<br>computes partial_0 = X @ W0</div></div>
+      <div class="node proc" style="border-color:var(--accent2)"><div class="badge">rank 1</div><div class="lbl">Worker</div><div class="sub">loads W_col_slice<br>computes partial_1 = X @ W1</div></div>
+      <div class="node proc" style="border-color:var(--accent2)"><div class="badge">rank N-1</div><div class="lbl">Worker</div><div class="sub">loads W_col_slice<br>computes partial_N = X @ WN</div></div>
+    </div>
+    <div class="arr-h"><span style="font-size:.7rem;color:var(--warn);display:block;text-align:center">POST /tensor<br>/allreduce<br>TNSR frame</span>→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">AllReduceCoordinator</div><div class="sub">accumulates world_size frames<br>sums f32 arrays element-wise<br>returns reduced tensor</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">Full activation</div><div class="sub">Σ partials<br>→ next layer input</div></div>
+    </div>
+  </div>
+
+  <!-- Wire format + plan fields -->
+  <div class="lane-wrap">
+    <div class="lane">
+      <div class="lane-title">TensorParallelPlan fields</div>
+      <div class="code"><span class="kw">plan_id</span>           String
+<span class="kw">world_size</span>        usize   <span class="cm"># total ranks</span>
+<span class="kw">local_rank</span>        usize   <span class="cm"># this node</span>
+<span class="kw">backend</span>           TpBackend <span class="cm"># Rpc | Native</span>
+<span class="kw">rpc_port</span>          u16     <span class="cm"># worker listen</span>
+<span class="kw">coord_server_port</span> u16     <span class="cm"># coordinator</span>
+<span class="kw">model_path</span>        String
+<span class="kw">peers</span>             Vec&lt;TpPeer&gt;
+
+<span class="cm"># TpPeer</span>
+<span class="kw">rank</span>        usize
+<span class="kw">node_id</span>     String
+<span class="kw">address</span>     String  <span class="cm"># host:port</span>
+<span class="kw">rpc_address</span> String  <span class="cm"># host:rpc_port</span>
+<span class="kw">ram_mb</span>      u64     <span class="cm"># tensor-split weight</span>
+<span class="kw">gpu_backend</span> Option&lt;String&gt;</div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">TNSR Wire Frame (native mode)</div>
+      <div class="code"><span class="cm"># Binary · little-endian</span>
+<span class="kw">0     4B</span>  magic = <span class="st">b"TNSR"</span>
+<span class="kw">4     1B</span>  rank       (u8)
+<span class="kw">5     1B</span>  world_size (u8)
+<span class="kw">6    16B</span>  request_id ([u8;16] UUID)
+<span class="kw">22    4B</span>  element_count (u32 LE)
+<span class="kw">26  N×4B</span>  f32 elements  (LE)</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-top:.6rem">
+        Sent via <code style="font-family:var(--mono)">POST /tensor/allreduce</code>.<br>
+        Coordinator waits for all world_size frames, then sums and returns the reduced frame.
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Weight Splitting (RPC mode)</div>
+      <div style="font-size:.82rem;line-height:1.7;color:var(--muted)">
+        <b style="color:var(--text)">tensor_split_arg()</b> — proportional to node RAM:<br>
+        <code style="font-family:var(--mono);font-size:.78rem">frac_i = ram_i / Σ ram</code><br><br>
+        <b style="color:var(--text)">head_range()</b> — attention heads split linearly:<br>
+        <code style="font-family:var(--mono);font-size:.78rem">heads_i = floor(total / N)</code><br>
+        remainder heads → last rank<br><br>
+        <b style="color:var(--text)">build_plan_from_peers()</b> — auto-builds plan<br>
+        from mesh peers; ranked by composite_score desc.<br><br>
+        <b style="color:var(--text)">Source:</b> <code style="font-family:var(--mono);font-size:.75rem">linus-ai-inference/src/tensor_parallel.rs</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- API table -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Tensor Parallelism API</div>
+  <table class="tbl">
+    <tr><th>Method</th><th>Path</th><th>Description</th><th>Handler</th></tr>
+    <tr><td><span class="pill pill-blue">GET</span></td><td><code>/tensor/plan</code></td><td>Return active plan or <code>{"plan":null}</code></td><td><code>tensor_plan_get()</code></td></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/tensor/plan</code></td><td>Set <code>TensorParallelPlan</code></td><td><code>tensor_plan_set()</code></td></tr>
+    <tr><td><span class="pill pill-blue">GET</span></td><td><code>/tensor/status</code></td><td>Plan summary + RPC worker health</td><td><code>tensor_status()</code></td></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/tensor/infer</code></td><td>Run TP inference (coordinator only)</td><td><code>tensor_infer()</code></td></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/tensor/allreduce</code></td><td>Submit TNSR partial frame; returns reduced</td><td><code>tensor_allreduce()</code></td></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/tensor/rpc/start</code></td><td>Spawn <code>llama-rpc-server</code> subprocess</td><td><code>tensor_rpc_start()</code></td></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/tensor/rpc/stop</code></td><td>Kill <code>llama-rpc-server</code></td><td><code>tensor_rpc_stop()</code></td></tr>
+  </table>
+
+  <!-- Parallelism comparison -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Parallelism Strategy Comparison</div>
+  <table class="tbl">
+    <tr><th>Strategy</th><th>Split axis</th><th>Communication</th><th>Latency</th><th>Best for</th></tr>
+    <tr><td><span class="pill pill-green">Local</span></td><td>None</td><td>None</td><td>Lowest</td><td>Model fits on 1 node</td></tr>
+    <tr><td><span class="pill pill-blue">Tensor RPC</span></td><td>Weight matrix width</td><td>Parallel → AllReduce per block</td><td>Low (same-clock nodes)</td><td>Large models, fast LAN, homogeneous nodes</td></tr>
+    <tr><td><span class="pill pill-yellow">Pipeline</span></td><td>Layer depth</td><td>Sequential A→B→C</td><td>Medium (serial hops)</td><td>Model too large for any single node</td></tr>
+    <tr><td><span class="pill pill-red">Hybrid</span></td><td>Both</td><td>Pipeline groups + TP inside each</td><td>Configurable</td><td>70B+ on heterogeneous mesh</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ PIPELINE -->
+<div class="pane" id="pane-pipeline">
+  <div class="section-title">Pipeline Parallelism — Multi-Machine Inference</div>
+  <div class="section-sub">Models larger than any single machine's RAM run across N mesh nodes. Each node holds a contiguous range of transformer layers. Activations flow node-to-node over HTTP using a compact binary wire protocol.</div>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div>Head node</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent2)"></div>Mid node(s)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent3)"></div>Tail node</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--warn)"></div>Activation tensor</div>
+  </div>
+
+  <!-- Request path -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Inference Request Path</div>
+  <div class="flow">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Client</div><div class="sub">POST /pipeline/infer</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node src" style="border-color:var(--accent)"><div class="badge">HEAD</div><div class="lbl">Head Node</div><div class="sub">embed tokens<br>layers 0–K</div></div>
+    </div>
+    <div class="arr-h"><span style="font-size:.7rem;color:var(--warn);display:block;text-align:center">activation<br>tensor</span>→</div>
+    <div class="flow-col">
+      <div class="node proc" style="border-color:var(--accent2)"><div class="badge">MID</div><div class="lbl">Mid Node</div><div class="sub">layers K–M<br>POST /pipeline/forward</div></div>
+    </div>
+    <div class="arr-h"><span style="font-size:.7rem;color:var(--warn);display:block;text-align:center">activation<br>tensor</span>→</div>
+    <div class="flow-col">
+      <div class="node out" style="border-color:var(--accent3)"><div class="badge">TAIL</div><div class="lbl">Tail Node</div><div class="sub">layers M–N<br>logits → token</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Response</div><div class="sub">token / text</div></div>
+    </div>
+  </div>
+
+  <!-- Layer planning -->
+  <div class="lane-wrap">
+    <div class="lane">
+      <div class="lane-title">Layer Assignment (LayerPlanner)</div>
+      <div style="font-size:.82rem;line-height:1.7;color:var(--muted)">
+        1. Read GGUF tensor index (offsets only, no weights)<br>
+        2. Enumerate all nodes: local + live peers<br>
+        3. Compute RAM fraction per node<br>
+        4. Assign <code style="font-family:var(--mono);font-size:.78rem">floor(ram_frac × total_layers)</code> layers<br>
+        5. Distribute remainder to highest-RAM nodes<br>
+        6. Assign roles: <code style="font-family:var(--mono);font-size:.78rem">head | mid | tail</code>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Tensor Wire Format</div>
+      <div class="code"><span class="cm"># Binary frame (little-endian)</span>
+<span class="kw">4B</span>  magic    = <span class="nu">0x4C4E5350</span>  <span class="cm"># "LNSP"</span>
+<span class="kw">4B</span>  seq_id   (uint32)
+<span class="kw">4B</span>  dtype    <span class="cm"># 0=f32  1=f16</span>
+<span class="kw">4B</span>  ndim     (uint32)
+<span class="kw">N×4B</span> shape (uint32 each)
+<span class="kw">M×B</span> raw tensor data</div>
+      <div style="font-size:.78rem;color:var(--muted)">Sent over HTTP POST <code style="font-family:var(--mono)">/pipeline/forward</code>.<br>Meta JSON prepended as <code style="font-family:var(--mono)">[4B len][JSON][frame]</code>.</div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">GGML Quantization Support</div>
+      <table class="tbl" style="margin-bottom:0">
+        <tr><th>Type</th><th>Block</th><th>Bytes/block</th></tr>
+        <tr><td>F32</td><td>1 elem</td><td>4</td></tr>
+        <tr><td>F16</td><td>1 elem</td><td>2</td></tr>
+        <tr><td>Q4_0</td><td>32 elem</td><td>18</td></tr>
+        <tr><td>Q8_0</td><td>32 elem</td><td>34</td></tr>
+        <tr><td>Q4_K</td><td>256 elem</td><td>144</td></tr>
+        <tr><td>Q6_K</td><td>256 elem</td><td>210</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- KV cache -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">KV Cache &amp; Autoregressive Decode</div>
+  <div class="flow">
+    <div class="flow-col">
+      <div class="node info"><div class="lbl">Prefill phase</div><div class="sub">process all prompt tokens<br>fill KV cache on each node</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node proc"><div class="lbl">Decode loop</div><div class="sub">1 new token per step<br>KV cache append only</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">KV Cache</div><div class="sub">per-node<br>per-request<br>cleared via /pipeline/clear</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">Token stream</div><div class="sub">returned to client<br>after each decode step</div></div>
+    </div>
+  </div>
+
+  <!-- API -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Pipeline API Endpoints</div>
+  <table class="tbl">
+    <tr><th>Method</th><th>Path</th><th>Description</th></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/pipeline/plan</code></td><td>Configure plan from mesh peers + GGUF metadata</td></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/pipeline/infer</code></td><td>Head-node inference through full pipeline</td></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/pipeline/forward</code></td><td>Node-to-node activation forwarding (binary body)</td></tr>
+    <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/pipeline/clear</code></td><td>Clear KV cache for a request ID</td></tr>
+    <tr><td><span class="pill pill-blue">GET</span></td><td><code>/pipeline/plan</code></td><td>Current plan status + mesh RAM snapshot</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ PAYMENT -->
+<div class="pane" id="pane-payment">
+  <div class="section-title">Internet Node Payment Gate</div>
+  <div class="section-sub">LAN and loopback callers are always free. Internet callers (public IP) must have an inference credit balance. New nodes receive 5 free welcome units. 1 unit = 1 inference call = up to 1,000 output tokens.</div>
+
+  <!-- Decision flow -->
+  <div class="flow" style="align-items:center">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Inference request</div><div class="sub">POST /infer</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">IP check</div><div class="sub">_is_lan_address(caller_ip)</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node free"><div class="lbl">✓ LAN / loopback</div><div class="sub">192.168.x.x · 10.x.x.x<br>172.16–31.x.x · 127.x · ::1<br>169.254.x.x · fe80::</div></div>
+      <div style="height:.6rem"></div>
+      <div class="node paid"><div class="lbl">⚠ Internet IP</div><div class="sub">Check PaymentLedger</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">✓ Allowed</div><div class="sub">reason: lan_free<br>no deduction</div></div>
+      <div style="height:.6rem"></div>
+      <div class="flow-col" style="gap:.4rem">
+        <div class="node out"><div class="lbl">✓ Balance ≥ 1</div><div class="sub">deduct 1 unit<br>reason: ok</div></div>
+        <div class="node danger"><div class="lbl">✗ Balance = 0</div><div class="sub">402 Payment Required<br>reason: insufficient_balance:0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account lifecycle -->
+  <div class="lane-wrap">
+    <div class="lane">
+      <div class="lane-title">Account Lifecycle</div>
+      <div style="font-size:.82rem;line-height:1.9;color:var(--muted)">
+        <b style="color:var(--text)">First contact</b> — account created with <code style="font-family:var(--mono);font-size:.78rem">balance = WELCOME_UNITS (5)</code><br>
+        <b style="color:var(--text)">Each inference</b> — balance deducted by 1 unit<br>
+        <b style="color:var(--text)">Provider credit</b> — internet providers earn 1 unit per served request<br>
+        <b style="color:var(--text)">Top-up</b> — admin adds units via <code style="font-family:var(--mono);font-size:.78rem">POST /billing/topup</code><br>
+        <b style="color:var(--text)">Persistence</b> — SQLite <code style="font-family:var(--mono);font-size:.78rem">payment_ledger.db</code>, survives restarts
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Constants</div>
+      <div class="code"><span class="kw">INFERENCE_UNIT_COST</span> = <span class="nu">1</span>     <span class="cm"># units per call</span>
+<span class="kw">TOKENS_PER_UNIT</span>     = <span class="nu">1_000</span>  <span class="cm"># output tokens</span>
+<span class="kw">WELCOME_UNITS</span>       = <span class="nu">5</span>     <span class="cm"># on new account</span></div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Billing API</div>
+      <table class="tbl" style="margin-bottom:0">
+        <tr><th>Method</th><th>Path</th><th>Action</th></tr>
+        <tr><td><span class="pill pill-blue">GET</span></td><td><code>/billing</code></td><td>All accounts</td></tr>
+        <tr><td><span class="pill pill-yellow">POST</span></td><td><code>/billing/topup</code></td><td>Add units</td></tr>
+      </table>
+      <div class="code" style="margin-top:.6rem"><span class="cm"># Top up a node</span>
+curl -X POST /billing/topup \
+  -d '{
+    <span class="st">"node_id"</span>: <span class="st">"abc123"</span>,
+    <span class="st">"address"</span>: <span class="st">"203.0.113.5"</span>,
+    <span class="st">"units"</span>: <span class="nu">50</span>
+  }'</div>
+    </div>
+  </div>
+
+  <!-- Integration points -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Integration Points</div>
+  <table class="tbl">
+    <tr><th>Component</th><th>Role</th><th>File</th></tr>
+    <tr><td><code>PaymentLedger.__init__</code></td><td>Open/create SQLite DB, load cache</td><td><code>blockchain/__init__.py</code></td></tr>
+    <tr><td><code>check_and_deduct()</code></td><td>Atomic check + deduct</td><td><code>blockchain/__init__.py</code></td></tr>
+    <tr><td><code>_is_lan_address()</code></td><td>RFC1918 + loopback + link-local check</td><td><code>blockchain/__init__.py</code></td></tr>
+    <tr><td>Payment gate in <code>handle_request()</code></td><td>Intercepts POST /infer before routing</td><td><code>main.py:915–944</code></td></tr>
+    <tr><td><code>_api_billing()</code></td><td>GET /billing handler</td><td><code>main.py</code></td></tr>
+    <tr><td><code>_api_billing_topup_async()</code></td><td>POST /billing/topup handler</td><td><code>main.py</code></td></tr>
+    <tr><td>Blockchain audit</td><td>Records every top-up event</td><td><code>main.py → TransparencyLedger.record()</code></td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ MESH -->
+<div class="pane" id="pane-mesh">
+  <div class="section-title">Mesh Discovery &amp; Auto Model Management</div>
+  <div class="section-sub">Peers discover each other via UDP beacons. Each node probes newly discovered peers over HTTP to collect richer status. MeshModelManager evaluates the collective mesh every 30 s and automatically selects and loads the best model.</div>
+
+  <div class="flow" style="align-items:flex-start">
+    <div class="flow-col" style="gap:.5rem">
+      <div class="node src"><div class="lbl">Node A starts</div><div class="sub">broadcasts UDP beacon<br>port 9481</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node proc"><div class="lbl">Node B hears beacon</div><div class="sub">adds A to peer table</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node proc"><div class="lbl">HTTP probe</div><div class="sub">GET /status → RAM, GPU,<br>models, accepting_inference</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node out"><div class="lbl">PeerInfo stored</div><div class="sub">node_id · address · ram_mb<br>gpu_backend · model_names</div></div>
+    </div>
+    <div class="arr-h" style="margin-top:3rem">→</div>
+    <div class="flow-col" style="gap:.5rem">
+      <div class="node info"><div class="lbl">MeshModelManager</div><div class="sub">eval every 30 s</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node proc"><div class="lbl">Collect peers</div><div class="sub">filter: RAM ≥ 3 GB<br>accepting_inference = true</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node proc"><div class="lbl">Choose model</div><div class="sub">largest model that fits<br>collective RAM<br>(headroom 20%)</div></div>
+      <div class="arr-v">↓</div>
+      <div class="flow-col" style="gap:.5rem">
+        <div class="node out"><div class="lbl">Single node fit</div><div class="sub">load model locally</div></div>
+        <div class="node warn"><div class="lbl">Needs pipeline</div><div class="sub">configure PipelineOrchestrator<br>assign layer ranges</div></div>
+      </div>
+    </div>
+    <div class="arr-h" style="margin-top:3rem">→</div>
+    <div class="flow-col" style="gap:.5rem">
+      <div class="node src"><div class="lbl">Hub scoring</div><div class="sub">compute_scores()<br>master_hub · hub · spoke · edge</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node out"><div class="lbl">Auto-push model</div><div class="sub">push best model to peers<br>with no models (≤ 8 GB limit)</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node info"><div class="lbl">Blockchain audit</div><div class="sub">every decision recorded<br>in TransparencyLedger</div></div>
+    </div>
+  </div>
+
+  <div class="lane-wrap" style="margin-top:1rem">
+    <div class="lane">
+      <div class="lane-title">Hub Role Scoring</div>
+      <table class="tbl" style="margin-bottom:0">
+        <tr><th>Score</th><th>Role</th><th>Criteria</th></tr>
+        <tr><td>≥ 80</td><td><span class="pill pill-green">master_hub</span></td><td>High RAM + GPU</td></tr>
+        <tr><td>≥ 60</td><td><span class="pill pill-blue">hub</span></td><td>Good RAM or GPU</td></tr>
+        <tr><td>≥ 40</td><td><span class="pill pill-yellow">spoke</span></td><td>Medium capacity</td></tr>
+        <tr><td>&lt; 40</td><td><span class="pill pill-red">edge</span></td><td>Limited RAM/GPU</td></tr>
+      </table>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Constants</div>
+      <div class="code"><span class="kw">MIN_PEER_RAM_MB</span>   = <span class="nu">3_072</span>   <span class="cm"># 3 GB min</span>
+<span class="kw">EVAL_INTERVAL_S</span>   = <span class="nu">30</span>      <span class="cm"># re-eval rate</span>
+<span class="kw">MAX_AUTO_PUSH</span>     = <span class="nu">8 GB</span>    <span class="cm"># model push limit</span>
+<span class="kw">RAM_HEADROOM_FRAC</span> = <span class="nu">0.20</span>   <span class="cm"># 20% reserved</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SHELL -->
+<div class="pane" id="pane-shell">
+  <div class="section-title">Launch Shell — In-App Terminal</div>
+  <div class="section-sub">The Launch tab embeds a browser-based terminal directly in the control panel. Commands run on the node hosting the LINUS-AI server. No separate terminal window required.</div>
+
+  <!-- Architecture -->
+  <div class="flow" style="align-items:center">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Launch tab</div><div class="sub">linus_ai_control_panel.html<br>shellRun() → fetch()</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">POST /shell/exec</div><div class="sub">JSON body:<br>{command, timeout_s?}</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">Safety filter</div><div class="sub">Block dangerous patterns</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node out"><div class="lbl">sh -c command</div><div class="sub">asyncio subprocess<br>stdout + stderr captured</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">JSON response</div><div class="sub">{ok, stdout, stderr,<br>exit_code}</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Output rendered</div><div class="sub">appended to<br>#shellOutput div</div></div>
+    </div>
+  </div>
+
+  <div class="lane-wrap">
+    <div class="lane">
+      <div class="lane-title">Blocked Patterns (Safety Filter)</div>
+      <div class="code"><span class="st">"rm -rf /"</span>    <span class="cm"># wipe root</span>
+<span class="st">"rm -rf ~"</span>    <span class="cm"># wipe home</span>
+<span class="st">"> /dev/sda"</span>   <span class="cm"># overwrite disk</span>
+<span class="st">"mkfs."</span>        <span class="cm"># format partition</span>
+<span class="st">":(){ :|:&amp;};"</span> <span class="cm"># fork bomb</span>
+<span class="st">"dd if="</span>       <span class="cm"># raw disk copy</span></div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Quick-Launch Buttons</div>
+      <div style="font-size:.82rem;line-height:1.9;color:var(--muted)">
+        📂 <code style="font-family:var(--mono);font-size:.78rem">ls ~/.linus_ai/models/</code><br>
+        💾 <code style="font-family:var(--mono);font-size:.78rem">df -h</code><br>
+        🧠 <code style="font-family:var(--mono);font-size:.78rem">free -h || vm_stat</code><br>
+        ⚡ <code style="font-family:var(--mono);font-size:.78rem">nvidia-smi</code><br>
+        🔍 <code style="font-family:var(--mono);font-size:.78rem">ps aux | grep llama</code><br>
+        📡 <code style="font-family:var(--mono);font-size:.78rem">curl -s localhost:9480/status</code>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">JS Features</div>
+      <div style="font-size:.82rem;line-height:1.9;color:var(--muted)">
+        ↑ / ↓ arrow key command history<br>
+        Enter key runs command<br>
+        Clear button resets output<br>
+        Timeout up to 120 s<br>
+        stdout + stderr in separate colours<br>
+        Dual implementation: Python + Rust
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">API Contract</div>
+  <div class="code"><span class="cm"># Request</span>
+POST /shell/exec
+Content-Type: application/json
+
+{
+  <span class="st">"command"</span>:    <span class="st">"ls -la models/"</span>,
+  <span class="st">"timeout_s"</span>:  <span class="nu">30</span>
+}
+
+<span class="cm"># Response</span>
+{
+  <span class="st">"ok"</span>:         <span class="kw">true</span>,
+  <span class="st">"stdout"</span>:    <span class="st">"total 12\n..."</span>,
+  <span class="st">"stderr"</span>:    <span class="st">""</span>,
+  <span class="st">"exit_code"</span>: <span class="nu">0</span>
+}</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ BLOCKCHAIN -->
+<div class="pane" id="pane-blockchain">
+  <div class="section-title">Blockchain Transparency Ledger</div>
+  <div class="section-sub">Every LINUS-AI decision — inference, job submit, peer discovery, billing top-up — is recorded in an append-only SHA-256 hash chain backed by SQLite. Blocks are committed every 30 s or when 100 records accumulate. Merkle proofs enable selective verification.</div>
+
+  <div class="flow" style="align-items:center">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Event occurs</div><div class="sub">inference · job · peer<br>billing · hive</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">LedgerRecord</div><div class="sub">record_id (uuid)<br>data dict → SHA-256</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">Pending buffer</div><div class="sub">accumulate until<br>30 s or 100 records</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">Block sealing</div><div class="sub">Merkle root of record hashes<br>+ prev_block_hash<br>→ SHA-256 block_hash</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">SQLite persist</div><div class="sub">table: blocks<br>verify_chain() on read</div></div>
+    </div>
+  </div>
+
+  <div class="lane-wrap">
+    <div class="lane">
+      <div class="lane-title">Block Structure</div>
+      <div class="code"><span class="kw">block_number</span>  INTEGER  PK
+<span class="kw">block_hash</span>    TEXT     SHA-256
+<span class="kw">prev_hash</span>     TEXT     chain link
+<span class="kw">merkle_root</span>   TEXT     record summary
+<span class="kw">timestamp</span>     REAL
+<span class="kw">node_id</span>       TEXT
+<span class="kw">records_json</span>  TEXT     JSON array</div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Merkle Proof</div>
+      <div style="font-size:.82rem;line-height:1.7;color:var(--muted)">
+        Given a <code style="font-family:var(--mono);font-size:.78rem">record_hash</code>, <code style="font-family:var(--mono);font-size:.78rem">get_merkle_proof()</code> returns the sibling-hash path from the record leaf to the block's Merkle root — enabling independent verification of any record without reading the entire chain.<br><br>
+        SHA-256 over pairs: <code style="font-family:var(--mono);font-size:.78rem">H(left || right)</code>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Audit Events Recorded</div>
+      <div style="font-size:.82rem;line-height:1.9;color:var(--muted)">
+        <code style="font-family:var(--mono);font-size:.78rem">linus_ai_started</code><br>
+        <code style="font-family:var(--mono);font-size:.78rem">inference_completed</code><br>
+        <code style="font-family:var(--mono);font-size:.78rem">job_submitted</code><br>
+        <code style="font-family:var(--mono);font-size:.78rem">hive_training_requested</code><br>
+        <code style="font-family:var(--mono);font-size:.78rem">billing_topup</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Rust Ledger (linus-ai-blockchain)</div>
+  <div style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">The Rust binary has its own <code style="font-family:var(--mono)">Ledger</code> in <code style="font-family:var(--mono)">linus-ai-blockchain/src/lib.rs</code> — same design, native Rust implementation with rusqlite. All significant runtime events are recorded there.</div>
+  <table class="tbl">
+    <tr><th>Layer</th><th>Implementation</th><th>DB file</th></tr>
+    <tr><td>Python</td><td><code>blockchain/__init__.py TransparencyLedger</code></td><td><code>ledger.db</code></td></tr>
+    <tr><td>Python</td><td><code>blockchain/__init__.py PaymentLedger</code></td><td><code>payment_ledger.db</code></td></tr>
+    <tr><td>Rust</td><td><code>linus-ai-blockchain/src/lib.rs Ledger</code></td><td><code>linus_ai.db</code></td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ BUILD -->
+<div class="pane" id="pane-build">
+  <div class="section-title">Build Pipeline</div>
+  <div class="section-sub"><code style="font-family:var(--mono)">./build.sh [target] [--llama-cpp2 | --candle-only]</code> — single entry point for all targets and engines. The control panel HTML is embedded at compile time via <code style="font-family:var(--mono)">include_str!()</code>. Run <code style="font-family:var(--mono)">./build.sh list</code> to see built targets and binary sizes.</div>
+
+  <!-- Top-level flow -->
+  <div class="flow" style="align-items:flex-start;margin-bottom:1.5rem">
+    <div class="flow-col">
+      <div class="node src"><div class="lbl">Source tree</div><div class="sub">linus-ai-rs/<br>11 Rust crates</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node proc"><div class="lbl">build.sh</div><div class="sub">target + engine<br>feature flags</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node proc"><div class="lbl">cargo build --release</div><div class="sub">--features llama-bundled<br>or candle-only</div></div>
+      <div class="arr-v">↓</div>
+      <div class="node proc"><div class="lbl">include_str!()</div><div class="sub">control panel HTML<br>embedded in binary</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">linus_ai binary</div><div class="sub">single static executable<br>zero runtime deps</div></div>
+    </div>
+    <div class="arr-h">→</div>
+    <div class="flow-col">
+      <div class="node out"><div class="lbl">dist/</div><div class="sub">dist/&lt;target&gt;/linus_ai<br>dist/&lt;target&gt;-candle/<br>linus_ai</div></div>
+    </div>
+  </div>
+
+  <!-- Engine decision -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Inference Engine Selection</div>
+  <div class="lane-wrap" style="margin-bottom:1.5rem">
+    <div class="lane" style="border-color:var(--accent)">
+      <div class="lane-title" style="color:var(--accent)">--llama-cpp2 (default)</div>
+      <div style="font-size:.82rem;line-height:1.7;color:var(--muted)">
+        Statically links llama.cpp (C++). <b style="color:var(--text)">Best performance.</b><br>
+        GPU added automatically: Metal on macOS, CUDA when <code style="font-family:var(--mono);font-size:.78rem">nvcc</code> is on PATH.<br>
+        Output: <code style="font-family:var(--mono);font-size:.78rem">dist/&lt;target&gt;/linus_ai</code><br>
+        <span style="color:var(--warn)">⚠ Cannot cross-compile from macOS → Linux/Windows.</span><br>
+        Use natively on each Linux/Windows machine, or switch to <code style="font-family:var(--mono);font-size:.78rem">--candle-only</code>.
+      </div>
+    </div>
+    <div class="lane" style="border-color:var(--accent2)">
+      <div class="lane-title" style="color:var(--accent2)">--candle-only</div>
+      <div style="font-size:.82rem;line-height:1.7;color:var(--muted)">
+        Pure-Rust HuggingFace candle. <b style="color:var(--text)">Cross-compile from any host.</b><br>
+        GPU: Metal on macOS, CUDA on Linux (auto-detected). ~20-30% slower than llama-cpp2.<br>
+        Output: <code style="font-family:var(--mono);font-size:.78rem">dist/&lt;target&gt;-candle/linus_ai</code><br>
+        Requires <code style="font-family:var(--mono);font-size:.78rem">tokenizer.json</code> alongside each <code style="font-family:var(--mono);font-size:.78rem">.gguf</code> at runtime.<br>
+        Safe for all CI cross-compilation pipelines.
+      </div>
+    </div>
+  </div>
+
+  <!-- Host × Target matrix -->
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Host × Target Compatibility</div>
+  <table class="tbl" style="margin-bottom:1.5rem;font-size:.78rem">
+    <tr>
+      <th>Target</th>
+      <th>macOS ARM64</th>
+      <th>macOS x86_64</th>
+      <th>Linux x86_64</th>
+      <th>Linux ARM64</th>
+      <th>Windows</th>
+    </tr>
+    <tr>
+      <td><code>macos-arm64</code></td>
+      <td><span class="pill pill-green">native ✓</span></td>
+      <td><span class="pill pill-green">llama / candle</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+    </tr>
+    <tr>
+      <td><code>macos-x86_64</code></td>
+      <td><span class="pill pill-green">llama / candle</span></td>
+      <td><span class="pill pill-green">native ✓</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+    </tr>
+    <tr>
+      <td><code>macos-universal</code></td>
+      <td><span class="pill pill-green">llama / candle</span></td>
+      <td><span class="pill pill-green">llama / candle</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-yellow">✗</span></td>
+    </tr>
+    <tr>
+      <td><code>linux-x86_64</code></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-green">native ✓</span></td>
+      <td><span class="pill pill-green">llama / candle</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+    </tr>
+    <tr>
+      <td><code>linux-arm64</code></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-green">llama / candle</span></td>
+      <td><span class="pill pill-green">native ✓</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+    </tr>
+    <tr>
+      <td><code>windows-x86_64</code></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-blue">candle only</span></td>
+      <td><span class="pill pill-green">native ✓</span></td>
+    </tr>
+    <tr>
+      <td><code>android-arm64</code></td>
+      <td><span class="pill pill-green">NDK req.</span></td>
+      <td><span class="pill pill-green">NDK req.</span></td>
+      <td><span class="pill pill-green">NDK req.</span></td>
+      <td><span class="pill pill-green">NDK req.</span></td>
+      <td><span class="pill pill-yellow">✗</span></td>
+    </tr>
+    <tr>
+      <td><code>ios-arm64</code></td>
+      <td><span class="pill pill-green">Xcode req.</span></td>
+      <td><span class="pill pill-green">Xcode req.</span></td>
+      <td><span class="pill pill-yellow">✗</span></td>
+      <td><span class="pill pill-yellow">✗</span></td>
+      <td><span class="pill pill-yellow">✗</span></td>
+    </tr>
+    <tr>
+      <td><code>ios-sim</code></td>
+      <td><span class="pill pill-green">Xcode req.</span></td>
+      <td><span class="pill pill-green">Xcode req.</span></td>
+      <td><span class="pill pill-yellow">✗</span></td>
+      <td><span class="pill pill-yellow">✗</span></td>
+      <td><span class="pill pill-yellow">✗</span></td>
+    </tr>
+  </table>
+
+  <div class="lane-wrap">
+    <div class="lane">
+      <div class="lane-title">Crate Graph</div>
+      <div class="code"><span class="fn">linus_ai</span>          (bin)
+  ├─ <span class="fn">linus-ai-http</span>    routes + handlers
+  ├─ <span class="fn">linus-ai-inference</span> engine + backends
+  │    ├─ bundled.rs    <span class="cm">[llama-bundled]</span>
+  │    ├─ candle_backend.rs <span class="cm">[candle-only]</span>
+  │    └─ backend.rs   <span class="cm">[subprocess fallback]</span>
+  ├─ <span class="fn">linus-ai-net</span>     mesh + peer
+  ├─ <span class="fn">linus-ai-blockchain</span> ledger
+  ├─ <span class="fn">linus-ai-thermal</span>  governor
+  ├─ <span class="fn">linus-ai-task</span>   scheduler
+  ├─ <span class="fn">linus-ai-vault</span>   secret store
+  ├─ <span class="fn">linus-ai-guardian</span> auth
+  ├─ <span class="fn">linus-ai-launcher</span> tray app
+  └─ <span class="fn">linus-ai-core</span>    config + types</div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Build Commands</div>
+      <div class="code"><span class="cm"># Native (auto-detects machine)</span>
+./build.sh
+
+<span class="cm"># Specific target, default engine</span>
+./build.sh macos-arm64
+
+<span class="cm"># Slim build (pure Rust)</span>
+./build.sh macos-arm64 --candle-only
+
+<span class="cm"># Cross Linux from macOS (candle required)</span>
+./build.sh linux-x86_64 --candle-only
+
+<span class="cm"># Fat binary (arm64 + x86_64)</span>
+./build.sh macos-universal
+
+<span class="cm"># All targets, cross-safe</span>
+./build.sh all --candle-only
+
+<span class="cm"># List targets + built sizes</span>
+./build.sh list
+
+<span class="cm"># Clean a target</span>
+./build.sh clean linux-x86_64</div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">Pre-release Backup</div>
+      <div class="code"><span class="cm"># Timestamped source backup</span>
+bash backup.sh [label]
+
+<span class="cm"># Output:</span>
+~/Desktop/linus-ai-backups/
+  linus-ai-2026-03-14_label/
+    linus-ai-rs/ nomad/
+    (excludes: target/ *.gguf .env)</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem">Keeps 20 most recent backups. Run <code style="font-family:var(--mono);font-size:.75rem">./build.sh list</code> after building to verify output.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ TESTS -->
+<div class="pane" id="pane-tests">
+  <div class="section-title">Test Suite</div>
+  <div class="section-sub">340 automated tests across 9 Python test modules and 2 Rust test blocks. Run from the project root with <code style="font-family:var(--mono)">bash run_tests.sh</code>.</div>
+
+  <div class="info-grid">
+    <div class="info-card"><div class="ic-title">Python tests</div><div class="ic-val">286</div><div class="ic-sub">stdlib unittest via pytest_runner.py (stdlib shadow workaround)</div></div>
+    <div class="info-card"><div class="ic-title">Rust tests</div><div class="ic-val">54</div><div class="ic-sub">cargo test — linus-ai-http (29) + linus-ai-inference (25)</div></div>
+    <div class="info-card"><div class="ic-title">Total</div><div class="ic-val">340</div><div class="ic-sub">0 failures · 0 errors</div></div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Suite</th><th>File</th><th>Tests</th><th>Coverage</th></tr>
+    <tr><td>Blockchain &amp; Payment</td><td><code>test_blockchain_payment.py</code></td><td>37</td><td>_is_lan_address, NodeAccount, PaymentLedger, TransparencyLedger</td></tr>
+    <tr><td>Pipeline Codec</td><td><code>test_pipeline_codec.py</code></td><td>16</td><td>TensorFrameCodec encode/decode, Dequantizer F32/F16/Q4_0/Q8_0</td></tr>
+    <tr><td>Pipeline Planner</td><td><code>test_pipeline_planner.py</code></td><td>18</td><td>LayerPlanner 1/2/3 nodes, edge cases, to_dict()</td></tr>
+    <tr><td>Mesh Model Manager</td><td><code>test_mesh_model_manager.py</code></td><td>16</td><td>_is_internet_ip, _compute_layer_ranges, get_status()</td></tr>
+    <tr><td>Shell &amp; Payment Gate</td><td><code>test_api_shell.py</code></td><td>24</td><td>Shell exec via asyncio, all blocked patterns, payment gate</td></tr>
+    <tr><td>HTML Launch Tab</td><td><code>test_html_launch_tab.py</code></td><td>20</td><td>Nav item, tab div, JS functions, CSS, existing tabs intact</td></tr>
+    <tr><td>HTML Parallelism UI</td><td><code>test_html_parallelism_ui.py</code></td><td>84</td><td>Inference Mode switcher, Tensor Parallelism card, Pipeline Parallelism card, JS functions, API endpoints</td></tr>
+    <tr><td>Flowchart Structure</td><td><code>test_flowchart.py</code></td><td>71</td><td>Runtime Flow tab, Tensor Parallel tab, pane content, show() IDs, pre-existing panes intact</td></tr>
+    <tr><td>Rust HTTP</td><td><code>linus-ai-http/src/lib.rs</code></td><td>29</td><td>Shell safety, timeout clamp, hub scoring, layer split, tensor plan/status/infer JSON shapes</td></tr>
+    <tr><td>Rust Tensor Parallel</td><td><code>linus-ai-inference/src/tensor_parallel.rs</code></td><td>25</td><td>TpFrame encode/decode/round-trip, TensorParallelPlan methods (is_coordinator, local_fraction, rpc_peer_arg, tensor_split_arg, head_range), TpBackend enum, TNSR magic</td></tr>
+  </table>
+
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Exec Instructions</div>
+  <div class="code"><span class="cm"># Install deps (once)</span>
+pip3 install --break-system-packages pytest numpy
+
+<span class="cm"># All tests</span>
+bash run_tests.sh
+
+<span class="cm"># Python only / Rust only</span>
+bash run_tests.sh python
+bash run_tests.sh rust
+
+<span class="cm"># Single file</span>
+python3 tests/pytest_runner.py tests/test_blockchain_payment.py -v
+
+<span class="cm"># Keyword filter</span>
+bash run_tests.sh python -k payment
+
+<span class="cm"># Single test</span>
+python3 tests/pytest_runner.py \
+  tests/test_pipeline_planner.py::TestLayerPlanner::test_three_nodes_roles -v</div>
+
+  <div class="section-title" style="font-size:.9rem;margin-bottom:.6rem">Test Infrastructure Notes</div>
+  <div class="lane-wrap">
+    <div class="lane">
+      <div class="lane-title">pytest_runner.py — stdlib shadow workaround</div>
+      <div style="font-size:.82rem;line-height:1.7;color:var(--muted)">
+        linus-ai ships a <code style="font-family:var(--mono);font-size:.78rem">platform/</code> sub-package that shadows Python's stdlib <code style="font-family:var(--mono);font-size:.78rem">platform</code> module. pytest imports <code style="font-family:var(--mono);font-size:.78rem">platform</code> during its own startup — before conftest.py runs.<br><br>
+        <code style="font-family:var(--mono);font-size:.78rem">pytest_runner.py</code> strips linus-ai paths from <code style="font-family:var(--mono);font-size:.78rem">sys.path</code>, pre-loads stdlib <code style="font-family:var(--mono);font-size:.78rem">platform</code> into <code style="font-family:var(--mono);font-size:.78rem">sys.modules</code>, then restores the path before handing off to <code style="font-family:var(--mono);font-size:.78rem">pytest.main()</code>.
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-title">conftest.py — module stubs</div>
+      <div style="font-size:.82rem;line-height:1.7;color:var(--muted)">
+        <code style="font-family:var(--mono);font-size:.78rem">_build_stubs()</code> populates <code style="font-family:var(--mono);font-size:.78rem">sys.modules</code> with lightweight stubs for all linus_ai.* sub-packages that aren't being tested. Real modules (blockchain, ai.pipeline, ai.mesh_model_manager) are loaded by absolute file path via <code style="font-family:var(--mono);font-size:.78rem">load_module()</code>.<br><br>
+        This avoids the full Python runtime startup (config files, network sockets, etc.) while still testing real production code paths.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer style="margin-top:4rem;padding:2rem;text-align:center;border-top:1px solid #2a2d3e;font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.82rem;color:#64748b;">
+  <p>
+    <a href="../index.html" style="color:#7c3aed;text-decoration:none;">LINUS-AI</a> &nbsp;·&nbsp;
+    <a href="index.html" style="color:#64748b;text-decoration:none;">Docs</a> &nbsp;·&nbsp;
+    <a href="readme.html" style="color:#64748b;text-decoration:none;">README</a> &nbsp;·&nbsp;
+    <a href="spec.html" style="color:#64748b;text-decoration:none;">Spec</a> &nbsp;·&nbsp;
+    <a href="endpoints.html" style="color:#64748b;text-decoration:none;">API Reference</a> &nbsp;·&nbsp;
+    <a href="../download.html" style="color:#64748b;text-decoration:none;">Download</a>
+  </p>
+  <p style="margin-top:.5rem;">&copy; 2026 LINUS-AI&#8482;. All rights reserved.</p>
+</footer>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const ids = ['overview','runtime','tensor','pipeline','payment','mesh','shell','blockchain','build','tests'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.pane').forEach(p => {
+    p.classList.toggle('active', p.id === 'pane-' + id);
+  });
+}
+</script>
+</body>
+</html>
