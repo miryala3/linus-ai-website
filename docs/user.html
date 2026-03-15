@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Guide — LINUS-AI</title>
+  <meta name="description" content="LINUS-AI User Guide. Everything you need to go from download to production chat in under 10 minutes. Installation, license activation, model management, inference modes, and CLI reference." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles — one level up from docs/ -->
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    /* ── Page-level layout ── */
+    .ug-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .ug-layout {
+        grid-template-columns: 1fr;
+      }
+      .ug-sidebar {
+        display: none;
+      }
+    }
+
+    /* ── Sidebar TOC ── */
+    .ug-sidebar {
+      position: sticky;
+      top: 80px;
+      padding: 24px 0;
+    }
+
+    .ug-sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      padding: 0 12px;
+    }
+
+    .ug-toc {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .ug-toc a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      border: 1px solid transparent;
+    }
+
+    .ug-toc a:hover {
+      color: var(--text);
+      background: rgba(56, 189, 248, 0.06);
+      border-color: var(--border);
+    }
+
+    .ug-toc a.active {
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
+      border-color: rgba(56, 189, 248, 0.2);
+    }
+
+    .ug-toc .toc-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+      width: 18px;
+      text-align: center;
+    }
+
+    .ug-toc-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 12px;
+    }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .breadcrumb a:hover { color: var(--accent); }
+
+    .breadcrumb-sep {
+      color: var(--text-dim);
+    }
+
+    .breadcrumb-current {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ── Hero ── */
+    .ug-hero {
+      padding: 100px 0 48px;
+      text-align: center;
+    }
+
+    .ug-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin: 16px 0 12px;
+    }
+
+    .ug-hero .hero-sub {
+      max-width: 600px;
+      margin: 0 auto;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    /* ── Section headings inside doc body ── */
+    .ug-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ug-section:last-child {
+      border-bottom: none;
+    }
+
+    .ug-section h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 12px 0 8px;
+    }
+
+    .ug-section h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 32px 0 12px;
+      color: var(--text);
+    }
+
+    .ug-section p {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    /* ── Inline code ── */
+    .ug-section code,
+    .ug-section p code {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--accent);
+    }
+
+    /* ── Note / callout boxes ── */
+    .callout {
+      display: flex;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .callout-warn {
+      border-left-color: var(--yellow);
+    }
+
+    .callout-tip {
+      border-left-color: var(--green);
+    }
+
+    .callout-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      line-height: 1.4;
+    }
+
+    .callout strong { color: var(--text); }
+
+    /* ── Tables ── */
+    .ug-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    .ug-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .ug-table th {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 11.5px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .ug-table td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      vertical-align: top;
+    }
+
+    .ug-table td:first-child {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .ug-table tr:hover td {
+      background: rgba(56, 189, 248, 0.03);
+    }
+
+    .ug-table .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+      font-family: var(--font-mono);
+    }
+
+    .badge-green  { background: rgba(52,211,153,0.15); color: var(--green); }
+    .badge-blue   { background: rgba(56,189,248,0.15); color: var(--accent); }
+    .badge-yellow { background: rgba(251,191,36,0.15); color: var(--yellow); }
+    .badge-red    { background: rgba(248,113,113,0.15); color: var(--red); }
+    .badge-purple { background: rgba(167,139,250,0.15); color: #a78bfa; }
+
+    /* ── Platform install cards ── */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .platform-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.2s;
+    }
+
+    .platform-card:hover { border-color: var(--accent); }
+
+    .platform-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .platform-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .platform-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .platform-card p {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      margin: 0 0 8px;
+    }
+
+    /* ── Profile table special col ── */
+    .profile-name {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .profile-tier {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    /* ── CLI flag table ── */
+    .cli-table td:nth-child(2) {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ── Troubleshooting items ── */
+    .ts-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+    }
+
+    .ts-item summary {
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+    }
+
+    .ts-item summary::before {
+      content: "▶";
+      font-size: 10px;
+      color: var(--accent);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .ts-item[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .ts-item summary::-webkit-details-marker { display: none; }
+
+    .ts-body {
+      padding-top: 16px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .ts-body code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--accent);
+    }
+
+    /* ── Sysreq list ── */
+    .sysreq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .sysreq-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      font-size: 13px;
+    }
+
+    .sysreq-card .sysreq-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .sysreq-card .sysreq-val {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .sysreq-card .sysreq-note {
+      font-size: 11.5px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* ── GUI tab diagram ── */
+    .gui-tabs-demo {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+
+    .gui-tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.2);
+      padding: 0 16px;
+    }
+
+    .gui-tab {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dim);
+      border-bottom: 2px solid transparent;
+      cursor: default;
+    }
+
+    .gui-tab.active-tab {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .gui-tab-body {
+      padding: 24px;
+    }
+
+    .gui-tab-body h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .gui-tab-body p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    .gui-feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .gui-feature-list li {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .gui-feature-list li::before {
+      content: "→";
+      color: var(--accent);
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Spacing utility ── */
+    .mt-20 { margin-top: 20px; }
+    .mt-28 { margin-top: 28px; }
+    .mb-20 { margin-bottom: 20px; }
+  </style>
+</head>
+<body data-page="docs">
+
+  <!-- ── Navigation ───────────────────────────────────────── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="../index.html" class="logo">
+          LINUS<span style="color:var(--accent2)">-</span>AI
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#features">Features</a></li>
+          <li><a href="../index.html#pricing">Pricing</a></li>
+          <li><a href="../download.html">Download</a></li>
+          <li><a href="index.html" class="active">Docs</a></li>
+          <li><a href="../activate.html">Activate</a></li>
+        </ul>
+
+        <div class="nav-cta">
+          <a href="../download.html" class="btn btn-secondary btn-sm">Download</a>
+          <a href="../index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+        </div>
+
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" aria-hidden="true">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#features">Features</a></li>
+        <li><a href="../index.html#pricing">Pricing</a></li>
+        <li><a href="../download.html">Download</a></li>
+        <li><a href="index.html">Docs</a></li>
+        <li><a href="../activate.html">Activate</a></li>
+      </ul>
+      <div class="mobile-cta">
+        <a href="../download.html" class="btn btn-secondary btn-sm">Download</a>
+        <a href="../index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <section class="ug-hero">
+    <div class="container">
+      <div class="section-tag">User Guide</div>
+      <h1><span class="gradient-text">User Guide</span> — LINUS-AI</h1>
+      <p class="hero-sub">
+        Everything you need to go from download to production chat in under 10 minutes.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Main content ──────────────────────────────────────── -->
+  <main>
+    <div class="container" style="padding-bottom: 80px;">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <a href="index.html">Docs</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">User Guide</span>
+      </nav>
+
+      <!-- ── Two-column layout: sidebar + content ── -->
+      <div class="ug-layout">
+
+        <!-- ── Sidebar TOC ──────────────────────────────────── -->
+        <aside class="ug-sidebar" aria-label="Table of contents">
+          <div class="ug-sidebar-title">On this page</div>
+          <ul class="ug-toc">
+            <li>
+              <a href="#install" class="active">
+                <span class="toc-icon">📥</span>Installation
+              </a>
+            </li>
+            <li>
+              <a href="#license-activation">
+                <span class="toc-icon">🔑</span>License Activation
+              </a>
+            </li>
+            <li>
+              <a href="#models">
+                <span class="toc-icon">🤖</span>Model Management
+              </a>
+            </li>
+            <li>
+              <a href="#inference-modes">
+                <span class="toc-icon">⚡</span>Inference Modes
+              </a>
+            </li>
+            <li>
+              <a href="#profiles">
+                <span class="toc-icon">◈</span>AI Profiles
+              </a>
+            </li>
+            <li>
+              <a href="#custom-prompts">
+                <span class="toc-icon">✏</span>Custom System Prompts
+              </a>
+            </li>
+            <li>
+              <a href="#gui">
+                <span class="toc-icon">🖥</span>Control Panel GUI
+              </a>
+            </li>
+            <li>
+              <a href="#cli-reference">
+                <span class="toc-icon">⌨</span>CLI Reference
+              </a>
+            </li>
+            <li>
+              <a href="#troubleshooting">
+                <span class="toc-icon">🛠</span>Troubleshooting
+              </a>
+            </li>
+            <div class="ug-toc-divider"></div>
+            <li>
+              <a href="index.html">
+                <span class="toc-icon">←</span>Back to Docs
+              </a>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- ── Doc body ────────────────────────────────────── -->
+        <article>
+
+          <!-- Quick-links TOC (mobile / top-of-page) -->
+          <section class="ug-section" style="padding-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 32px; margin-bottom: 0;">
+            <div class="section-tag">Jump to section</div>
+            <div class="ql-grid" style="margin-top: 16px;">
+              <a href="#install" class="ql-item">
+                <span class="ql-icon">📥</span>Installation
+              </a>
+              <a href="#license-activation" class="ql-item">
+                <span class="ql-icon">🔑</span>License Activation
+              </a>
+              <a href="#models" class="ql-item">
+                <span class="ql-icon">🤖</span>Model Management
+              </a>
+              <a href="#inference-modes" class="ql-item">
+                <span class="ql-icon">⚡</span>Inference Modes
+              </a>
+              <a href="#profiles" class="ql-item">
+                <span class="ql-icon">◈</span>AI Profiles
+              </a>
+              <a href="#custom-prompts" class="ql-item">
+                <span class="ql-icon">✏</span>Custom Prompts
+              </a>
+              <a href="#gui" class="ql-item">
+                <span class="ql-icon">🖥</span>Control Panel GUI
+              </a>
+              <a href="#cli-reference" class="ql-item">
+                <span class="ql-icon">⌨</span>CLI Reference
+              </a>
+              <a href="#troubleshooting" class="ql-item">
+                <span class="ql-icon">🛠</span>Troubleshooting
+              </a>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 1. INSTALLATION                                  -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="install">
+            <div class="section-tag">Section 1</div>
+            <h2>Installation</h2>
+            <p>
+              LINUS-AI ships as a single self-contained binary with no runtime dependencies.
+              Download the appropriate build for your platform, mark it executable, and place it
+              on your <code>PATH</code>. That's all there is to it.
+            </p>
+
+            <!-- System requirements -->
+            <h3>System Requirements</h3>
+            <div class="sysreq-grid">
+              <div class="sysreq-card">
+                <div class="sysreq-label">RAM — 7B models</div>
+                <div class="sysreq-val">4 GB</div>
+                <div class="sysreq-note">Q4_K_M quantization</div>
+              </div>
+              <div class="sysreq-card">
+                <div class="sysreq-label">RAM — 13B models</div>
+                <div class="sysreq-val">16 GB</div>
+                <div class="sysreq-note">Q4_K_M quantization</div>
+              </div>
+              <div class="sysreq-card">
+                <div class="sysreq-label">RAM — 32B+ models</div>
+                <div class="sysreq-val">32 GB+</div>
+                <div class="sysreq-note">GPU VRAM or unified memory</div>
+              </div>
+              <div class="sysreq-card">
+                <div class="sysreq-label">Disk</div>
+                <div class="sysreq-val">5 GB+</div>
+                <div class="sysreq-note">Binary ~25 MB, models extra</div>
+              </div>
+              <div class="sysreq-card">
+                <div class="sysreq-label">OS</div>
+                <div class="sysreq-val">macOS 13+</div>
+                <div class="sysreq-note">Linux kernel 5.4+, Win 10 64-bit</div>
+              </div>
+              <div class="sysreq-card">
+                <div class="sysreq-label">GPU (optional)</div>
+                <div class="sysreq-val">CUDA 12 / ROCm / Metal</div>
+                <div class="sysreq-note">Significantly improves speed</div>
+              </div>
+            </div>
+
+            <!-- macOS -->
+            <h3>macOS (Apple Silicon &amp; Intel)</h3>
+            <p>
+              Choose the Apple Silicon build (<code>darwin-arm64</code>) for M1/M2/M3/M4 Macs.
+              For older Intel Macs, use <code>darwin-x86_64</code>. The Metal backend is
+              automatically used on Apple Silicon for GPU-accelerated inference.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">macOS — Apple Silicon (M-series)</span>
+              </div>
+              <div class="out"># Download the Apple Silicon binary</div>
+              <div><span class="prompt">$ </span><span class="cmd">curl -Lo linus-ai https://github.com/LINUS-AI-PRO/linus-ai/releases/latest/download/linus-ai-darwin-arm64</span></div>
+              <div>&nbsp;</div>
+              <div class="out"># Make it executable and install system-wide</div>
+              <div><span class="prompt">$ </span><span class="cmd">chmod +x linus-ai</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">sudo mv linus-ai /usr/local/bin/</span></div>
+              <div>&nbsp;</div>
+              <div class="out"># Verify installation</div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --version</span></div>
+              <div class="out-accent">linus-ai 1.4.2 (darwin/arm64 · metal)</div>
+              <div>&nbsp;</div>
+              <div class="out"># Optional: shell completion (zsh)</div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --completion zsh &gt; ~/.zsh/completions/_linus-ai</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">echo 'fpath=(~/.zsh/completions $fpath)' &gt;&gt; ~/.zshrc &amp;&amp; source ~/.zshrc</span></div>
+            </div>
+
+            <div class="terminal" style="margin-top: 16px;">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">macOS — Intel (x86_64)</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">curl -Lo linus-ai https://github.com/LINUS-AI-PRO/linus-ai/releases/latest/download/linus-ai-darwin-x86_64</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">chmod +x linus-ai && sudo mv linus-ai /usr/local/bin/</span></div>
+            </div>
+
+            <div class="callout callout-tip">
+              <span class="callout-icon">🍺</span>
+              <div><strong>Homebrew tap coming soon.</strong> A Homebrew tap (<code>brew install linus-ai/tap/linus-ai</code>) is planned for an upcoming release. Watch the GitHub repository for announcements.</div>
+            </div>
+
+            <!-- Linux -->
+            <h3>Linux (x86_64 &amp; ARM64)</h3>
+            <p>
+              LINUS-AI runs on any modern Linux distribution. CUDA-enabled builds include GPU
+              support out of the box. After install, consider setting up a systemd service for
+              automatic startup.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Linux x86_64</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">curl -Lo linus-ai https://github.com/LINUS-AI-PRO/linus-ai/releases/latest/download/linus-ai-linux-x86_64</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">chmod +x linus-ai && sudo mv linus-ai /usr/local/bin/</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --version</span></div>
+              <div class="out-accent">linus-ai 1.4.2 (linux/amd64 · cuda)</div>
+            </div>
+
+            <div class="terminal" style="margin-top: 16px;">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Linux ARM64 (Raspberry Pi 5, AWS Graviton, etc.)</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">curl -Lo linus-ai https://github.com/LINUS-AI-PRO/linus-ai/releases/latest/download/linus-ai-linux-arm64</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">chmod +x linus-ai && sudo mv linus-ai /usr/local/bin/</span></div>
+            </div>
+
+            <h3>systemd Service (Linux)</h3>
+            <p>
+              To run LINUS-AI automatically on boot as a background server, create a systemd
+              unit file. Replace <code>your-user</code> with your actual Linux username.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">/etc/systemd/system/linus-ai.service</span>
+              </div>
+              <div class="cmd">[Unit]</div>
+              <div class="cmd">Description=LINUS-AI Private AI Inference Server</div>
+              <div class="cmd">After=network.target</div>
+              <div>&nbsp;</div>
+              <div class="cmd">[Service]</div>
+              <div class="cmd">Type=simple</div>
+              <div class="cmd">User=your-user</div>
+              <div class="cmd">ExecStart=/usr/local/bin/linus-ai --serve</div>
+              <div class="cmd">Restart=on-failure</div>
+              <div class="cmd">RestartSec=5</div>
+              <div class="cmd">Environment=LINUS_AI_LICENSE_KEY=LNAI-XXXX-XXXX-XXXX-XXXX</div>
+              <div>&nbsp;</div>
+              <div class="cmd">[Install]</div>
+              <div class="cmd">WantedBy=multi-user.target</div>
+              <div>&nbsp;</div>
+              <div class="out"># Enable and start</div>
+              <div><span class="prompt">$ </span><span class="cmd">sudo systemctl daemon-reload</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">sudo systemctl enable --now linus-ai</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">sudo systemctl status linus-ai</span></div>
+              <div class="out-accent">● linus-ai.service — LINUS-AI Private AI Inference Server</div>
+              <div class="out-accent">   Active: active (running) since …</div>
+            </div>
+
+            <!-- Windows -->
+            <h3>Windows (PowerShell)</h3>
+            <p>
+              Download the Windows binary via PowerShell and add it to your PATH. Windows Terminal
+              is recommended for the best experience. CUDA acceleration is supported on Windows
+              with NVIDIA GPU drivers installed.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">PowerShell (run as Administrator)</span>
+              </div>
+              <div class="out"># Download the binary</div>
+              <div><span class="prompt">PS&gt; </span><span class="cmd">Invoke-WebRequest -Uri "https://github.com/LINUS-AI-PRO/linus-ai/releases/latest/download/linus-ai-windows-x86_64.exe" -OutFile "$env:LOCALAPPDATA\linus-ai\linus-ai.exe"</span></div>
+              <div>&nbsp;</div>
+              <div class="out"># Add to PATH permanently</div>
+              <div><span class="prompt">PS&gt; </span><span class="cmd">$path = [Environment]::GetEnvironmentVariable("Path","User")</span></div>
+              <div><span class="prompt">PS&gt; </span><span class="cmd">[Environment]::SetEnvironmentVariable("Path","$path;$env:LOCALAPPDATA\linus-ai","User")</span></div>
+              <div>&nbsp;</div>
+              <div class="out"># Restart terminal, then verify</div>
+              <div><span class="prompt">PS&gt; </span><span class="cmd">linus-ai --version</span></div>
+              <div class="out-accent">linus-ai 1.4.2 (windows/amd64 · cuda)</div>
+            </div>
+
+            <div class="callout">
+              <span class="callout-icon">💡</span>
+              <div><strong>WSL2 note.</strong> LINUS-AI works natively in WSL2 (Windows Subsystem for Linux). Use the Linux x86_64 binary inside your WSL2 environment. GPU passthrough to WSL2 via NVIDIA CUDA and AMD ROCm is supported — install the appropriate Windows GPU driver and WSL2 GPU package first.</div>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 2. LICENSE ACTIVATION                            -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="license-activation">
+            <div class="section-tag">Section 2</div>
+            <h2>License Activation</h2>
+            <p>
+              LINUS-AI includes a 30-day free trial. After that, a license is required.
+              Licenses are issued in the format <code>LNAI-XXXX-XXXX-XXXX-XXXX</code> and
+              delivered to the email address used at checkout.
+            </p>
+
+            <h3>30-Day Trial</h3>
+            <p>
+              No action is required to start the trial. On first launch, LINUS-AI automatically
+              enters trial mode. A banner is displayed at startup showing the remaining trial days.
+              All features available on the Community plan are accessible during the trial.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Trial mode banner (startup)</span>
+              </div>
+              <div class="out-accent">╔══════════════════════════════════════════════════════╗</div>
+              <div class="out-accent">║  LINUS-AI  •  Trial Mode  •  23 days remaining        ║</div>
+              <div class="out-accent">║  Activate: linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX ║</div>
+              <div class="out-accent">╚══════════════════════════════════════════════════════╝</div>
+            </div>
+
+            <h3>CLI Activation</h3>
+            <p>
+              Activate with your license key and the email address used at purchase. An internet
+              connection is required only for the initial activation handshake. After that, the
+              binary operates fully offline.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">License activation</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX --activate-email user@company.com</span></div>
+              <div class="out-accent">Contacting license server…</div>
+              <div class="out-accent">✓ License activated — Professional · seat 1/5</div>
+              <div class="out-accent">✓ Machine fingerprint recorded</div>
+              <div class="out-accent">✓ License saved to ~/.linus_ai/config.toml</div>
+            </div>
+
+            <h3>Config File Activation</h3>
+            <p>
+              You can also add the license key directly to the configuration file. This is
+              convenient for automated deployments or when managing multiple machines.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">~/.linus_ai/config.toml</span>
+              </div>
+              <div class="cmd">[license]</div>
+              <div class="cmd">key   = "LNAI-XXXX-XXXX-XXXX-XXXX"</div>
+              <div class="cmd">email = "user@company.com"</div>
+            </div>
+
+            <h3>Environment Variable</h3>
+            <p>
+              For CI/CD pipelines or containerised deployments, supply the key via an environment
+              variable. The email is not required when using the environment variable method after
+              the initial machine binding has been completed.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Environment variable</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">export LINUS_AI_LICENSE_KEY="LNAI-XXXX-XXXX-XXXX-XXXX"</span></div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve</span></div>
+              <div class="out-accent">✓ License valid (Professional)</div>
+            </div>
+
+            <h3>Check License Status</h3>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">License status</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --license-status</span></div>
+              <div class="out-accent">Plan       : Professional</div>
+              <div class="out-accent">Email      : user@company.com</div>
+              <div class="out-accent">Seats      : 1 / 5</div>
+              <div class="out-accent">Expires    : perpetual</div>
+              <div class="out-accent">Machine    : bound (fingerprint: 9a2f…c41b)</div>
+              <div class="out-accent">Last check : 2026-03-15</div>
+            </div>
+
+            <h3>Trial Expiry</h3>
+            <p>
+              When the 30-day trial expires, LINUS-AI enters read-only mode. Existing
+              conversations in the vault remain accessible, but new inference requests are blocked
+              until a valid license key is activated. The control panel GUI continues to load and
+              will display an activation prompt.
+            </p>
+
+            <h3>Machine Binding (Perpetual Licenses)</h3>
+            <p>
+              Perpetual licenses are bound to the machine on which they are first activated. The
+              binding uses a hardware fingerprint derived from CPU serial, motherboard UUID, and
+              primary network interface MAC address. Virtual machines generate stable fingerprints.
+              Each seat in your license can be bound to one machine at a time.
+            </p>
+
+            <h3>Deactivate &amp; Move to Another Machine</h3>
+            <p>
+              To move a license seat to a new machine, deactivate it on the current machine first.
+              This releases the machine binding and allows activation on a different device.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Deactivate license</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --deactivate</span></div>
+              <div class="out-accent">Deactivating machine binding…</div>
+              <div class="out-accent">✓ Seat released — you can now activate on another machine</div>
+            </div>
+
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <div><strong>Lost machine access.</strong> If a machine is lost or destroyed before deactivating, contact support@linus-ai.com with your license key reference to request a manual seat release. Enterprise plans include self-serve seat management in the admin portal.</div>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 3. MODEL MANAGEMENT                              -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="models">
+            <div class="section-tag">Section 3</div>
+            <h2>Model Management</h2>
+            <p>
+              LINUS-AI uses the Ollama model registry for downloading and managing models.
+              Models are stored locally in <code>~/.linus_ai/models/</code> and are never
+              uploaded or shared. Once downloaded, models work fully offline.
+            </p>
+
+            <h3>Pulling, Listing, and Deleting Models</h3>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Model management commands</span>
+              </div>
+              <div class="out"># Pull (download) a model from the registry</div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --pull-model llama3.2</span></div>
+              <div class="out-accent">Pulling llama3.2 (Q4_K_M · 2.0 GB)…</div>
+              <div class="out-accent">████████████████████████████████ 100% · 42 MB/s</div>
+              <div class="out-accent">✓ llama3.2 ready — ~/.linus_ai/models/llama3.2</div>
+              <div>&nbsp;</div>
+              <div class="out"># Pull with a specific quantization level</div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --pull-model llama3.2:Q8_0</span></div>
+              <div>&nbsp;</div>
+              <div class="out"># List locally installed models</div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --list-models</span></div>
+              <div class="out-accent">NAME                SIZE      QUANT      MODIFIED</div>
+              <div class="out-accent">llama3.2            2.0 GB    Q4_K_M     2026-03-14</div>
+              <div class="out-accent">mistral:7b          4.1 GB    Q4_K_M     2026-03-10</div>
+              <div class="out-accent">qwen2.5:7b          4.7 GB    Q4_K_M     2026-03-08</div>
+              <div>&nbsp;</div>
+              <div class="out"># Delete a model</div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --delete-model llama3.2</span></div>
+              <div class="out-accent">✓ llama3.2 deleted</div>
+            </div>
+
+            <h3>Quantization Levels</h3>
+            <p>
+              Quantization reduces model size and memory usage at a small cost to output quality.
+              <code>Q4_K_M</code> is the recommended default for most users — it offers an
+              excellent balance of speed, memory, and quality.
+            </p>
+
+            <div class="ug-table-wrap">
+              <table class="ug-table">
+                <thead>
+                  <tr>
+                    <th>Level</th>
+                    <th>Size (7B model)</th>
+                    <th>VRAM (7B)</th>
+                    <th>Speed</th>
+                    <th>Quality</th>
+                    <th>Best for</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Q2_K</td>
+                    <td>~1.6 GB</td>
+                    <td>~2 GB</td>
+                    <td><span class="badge badge-green">Fastest</span></td>
+                    <td><span class="badge badge-red">Lowest</span></td>
+                    <td>Memory-constrained devices, quick prototyping</td>
+                  </tr>
+                  <tr>
+                    <td>Q3_K_M</td>
+                    <td>~2.1 GB</td>
+                    <td>~3 GB</td>
+                    <td><span class="badge badge-green">Very fast</span></td>
+                    <td><span class="badge badge-yellow">Fair</span></td>
+                    <td>4 GB RAM systems, edge inference</td>
+                  </tr>
+                  <tr>
+                    <td>Q4_K_M</td>
+                    <td>~2.8 GB</td>
+                    <td>~4 GB</td>
+                    <td><span class="badge badge-blue">Fast</span></td>
+                    <td><span class="badge badge-green">Good</span></td>
+                    <td><strong>Recommended default</strong> for most users</td>
+                  </tr>
+                  <tr>
+                    <td>Q5_K_M</td>
+                    <td>~3.4 GB</td>
+                    <td>~5 GB</td>
+                    <td><span class="badge badge-blue">Good</span></td>
+                    <td><span class="badge badge-green">Very good</span></td>
+                    <td>Higher quality without full precision overhead</td>
+                  </tr>
+                  <tr>
+                    <td>Q8_0</td>
+                    <td>~6.7 GB</td>
+                    <td>~8 GB</td>
+                    <td><span class="badge badge-yellow">Moderate</span></td>
+                    <td><span class="badge badge-green">Excellent</span></td>
+                    <td>Near-lossless inference, 8 GB VRAM GPUs</td>
+                  </tr>
+                  <tr>
+                    <td>F16</td>
+                    <td>~13.5 GB</td>
+                    <td>~16 GB</td>
+                    <td><span class="badge badge-red">Slowest</span></td>
+                    <td><span class="badge badge-purple">Best</span></td>
+                    <td>Reference quality, fine-tuning, benchmarking</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Recommended Models</h3>
+            <p>
+              All models below are available from the Ollama registry. Pull them with
+              <code>linus-ai --pull-model &lt;name&gt;</code>.
+            </p>
+
+            <div class="ug-table-wrap">
+              <table class="ug-table">
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Size</th>
+                    <th>RAM (Q4_K_M)</th>
+                    <th>Strengths</th>
+                    <th>Best for</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>llama3.2</td>
+                    <td>7B</td>
+                    <td>4 GB</td>
+                    <td>General reasoning, instruction following</td>
+                    <td>Daily chat, code assistance, Q&amp;A</td>
+                  </tr>
+                  <tr>
+                    <td>mistral:7b</td>
+                    <td>7B</td>
+                    <td>4 GB</td>
+                    <td>Fast, efficient, strong on structured output</td>
+                    <td>Production inference, API workloads</td>
+                  </tr>
+                  <tr>
+                    <td>qwen2.5:7b</td>
+                    <td>7B</td>
+                    <td>5 GB</td>
+                    <td>Multilingual, strong coding, long context</td>
+                    <td>Multilingual apps, coding, 128K context</td>
+                  </tr>
+                  <tr>
+                    <td>phi3:medium</td>
+                    <td>14B</td>
+                    <td>8 GB</td>
+                    <td>Exceptional reasoning relative to size</td>
+                    <td>Complex reasoning, academic tasks</td>
+                  </tr>
+                  <tr>
+                    <td>qwen2.5:32b</td>
+                    <td>32B</td>
+                    <td>20 GB</td>
+                    <td>Top-tier multilingual, coding, math</td>
+                    <td>Professional workloads, 24+ GB VRAM</td>
+                  </tr>
+                  <tr>
+                    <td>llama3.1:70b</td>
+                    <td>70B</td>
+                    <td>40 GB</td>
+                    <td>Near GPT-4 class on many benchmarks</td>
+                    <td>Enterprise, multi-GPU tensor parallel</td>
+                  </tr>
+                  <tr>
+                    <td>qwen2.5:72b</td>
+                    <td>72B</td>
+                    <td>44 GB</td>
+                    <td>State-of-the-art open model, multilingual</td>
+                    <td>Highest quality, distributed inference</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <span class="callout-icon">📁</span>
+              <div><strong>Model storage location.</strong> All downloaded models are stored in <code>~/.linus_ai/models/</code> (Linux/macOS) or <code>%USERPROFILE%\.linus_ai\models\</code> (Windows). You can symlink this directory to a larger volume if needed.</div>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 4. INFERENCE MODES                               -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="inference-modes">
+            <div class="section-tag">Section 4</div>
+            <h2>Inference Modes</h2>
+            <p>
+              LINUS-AI automatically selects the best inference backend for your hardware.
+              You can override this with the <code>backend</code> config key or the <code>--backend</code>
+              CLI flag.
+            </p>
+
+            <div class="ug-table-wrap">
+              <table class="ug-table">
+                <thead>
+                  <tr>
+                    <th>Backend</th>
+                    <th>Flag</th>
+                    <th>Hardware</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>auto</td>
+                    <td><code>--backend auto</code></td>
+                    <td>Any</td>
+                    <td><strong>Recommended.</strong> Detects Metal → CUDA → ROCm → CPU in order.</td>
+                  </tr>
+                  <tr>
+                    <td>cpu</td>
+                    <td><code>--backend cpu</code></td>
+                    <td>Any CPU</td>
+                    <td>Force CPU-only. Works everywhere, slowest for large models.</td>
+                  </tr>
+                  <tr>
+                    <td>cuda</td>
+                    <td><code>--backend cuda</code></td>
+                    <td>NVIDIA GPU</td>
+                    <td>Requires CUDA 12+ drivers. Fastest on NVIDIA hardware.</td>
+                  </tr>
+                  <tr>
+                    <td>metal</td>
+                    <td><code>--backend metal</code></td>
+                    <td>Apple Silicon</td>
+                    <td>Uses Apple GPU via Metal. Unified memory — no VRAM limit.</td>
+                  </tr>
+                  <tr>
+                    <td>rocm</td>
+                    <td><code>--backend rocm</code></td>
+                    <td>AMD GPU</td>
+                    <td>Requires ROCm 5.7+ (Linux). RX 6000/7000 series recommended.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Backend Detection Output</h3>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Startup — backend auto-detection</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve --verbose</span></div>
+              <div class="out-accent">Detecting inference backend…</div>
+              <div class="out-accent">  [✓] Metal          Apple M3 Pro · 18 GPU cores · 36 GB unified</div>
+              <div class="out-accent">  [✗] CUDA           No NVIDIA GPU detected</div>
+              <div class="out-accent">  [✗] ROCm           No AMD GPU detected</div>
+              <div class="out-accent">  [✓] CPU             12-core arm64 (fallback)</div>
+              <div class="out-accent">Selected: metal</div>
+              <div class="out-accent">Loading llama3.2 (Q4_K_M) → Metal … done (1.2 s)</div>
+              <div class="out-accent">✓ API server: http://127.0.0.1:8080</div>
+            </div>
+
+            <h3>GPU Layers</h3>
+            <p>
+              The <code>gpu_layers</code> setting controls how many model layers are offloaded to
+              the GPU. <code>-1</code> offloads all possible layers (maximum GPU acceleration).
+              Reduce this number if you hit out-of-memory errors.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">~/.linus_ai/config.toml — GPU layers</span>
+              </div>
+              <div class="cmd">[inference]</div>
+              <div class="cmd">gpu_layers = -1    <span class="out"># -1 = offload all layers (default)</span></div>
+              <div class="cmd">gpu_layers = 32    <span class="out"># offload first 32 layers only</span></div>
+              <div class="cmd">gpu_layers = 0     <span class="out"># CPU-only (same as backend = "cpu")</span></div>
+            </div>
+
+            <h3>CPU Threads</h3>
+            <p>
+              CPU thread count is automatically detected from your system's logical core count.
+              Override it with <code>threads = N</code> in config or <code>--threads N</code>
+              on the command line. For best performance, set threads to the number of
+              physical (not logical) cores.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">CPU thread override</span>
+              </div>
+              <div class="cmd">[inference]</div>
+              <div class="cmd">threads = 8    <span class="out"># Override auto-detected thread count</span></div>
+            </div>
+
+            <h3>Context Length</h3>
+            <p>
+              Context length (in tokens) determines how much conversation history and document
+              content can be kept in a single inference pass. Larger contexts use more memory.
+              Supported models (e.g., Qwen2.5, Llama 3.1) support up to 128K tokens.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Context length configuration</span>
+              </div>
+              <div class="cmd">[inference]</div>
+              <div class="cmd">context_len = 8192      <span class="out"># default: 8192 tokens</span></div>
+              <div class="cmd">context_len = 32768     <span class="out"># 32K — for longer documents</span></div>
+              <div class="cmd">context_len = 131072    <span class="out"># 128K — supported models only</span></div>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 5. AI PROFILES                                   -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="profiles">
+            <div class="section-tag">Section 5</div>
+            <h2>AI Profiles</h2>
+            <p>
+              AI Profiles are pre-tuned system prompt configurations optimised for specific
+              industry verticals and use cases. Each profile shapes the model's behaviour, tone,
+              terminology, and response style without requiring any prompt engineering on your part.
+            </p>
+
+            <h3>Available Profiles</h3>
+
+            <div class="ug-table-wrap">
+              <table class="ug-table">
+                <thead>
+                  <tr>
+                    <th>Profile ID</th>
+                    <th>Display Name</th>
+                    <th>Description</th>
+                    <th>Availability</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>general</td>
+                    <td>General Assistant</td>
+                    <td>Balanced, helpful assistant suitable for any task. Default profile.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>support</td>
+                    <td>Customer Support</td>
+                    <td>Empathetic, concise responses tuned for help-desk and customer-facing interactions.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>creative</td>
+                    <td>Creative Writing</td>
+                    <td>Higher temperature, narrative-focused. Ideal for copywriting, stories, and marketing.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>education</td>
+                    <td>Education &amp; Tutoring</td>
+                    <td>Socratic method, scaffolded explanations, avoids giving direct answers to homework.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>hr</td>
+                    <td>Human Resources</td>
+                    <td>Policy-aware tone. Handles onboarding, policy queries, and HR documentation.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>sales</td>
+                    <td>Sales &amp; CRM</td>
+                    <td>Persuasive, goal-oriented. Assists with outreach drafts, objection handling, and pipeline notes.</td>
+                    <td><span class="badge badge-blue">All plans</span></td>
+                  </tr>
+                  <tr>
+                    <td>medical</td>
+                    <td>Medical &amp; Clinical</td>
+                    <td>Conservative, evidence-based. Follows clinical terminology. Always disclaims professional advice.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>legal</td>
+                    <td>Legal Research</td>
+                    <td>Formal language, citation-aware. Suited for contract review, case research, and legal drafting.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>finance</td>
+                    <td>Finance &amp; Accounting</td>
+                    <td>Precise numeric reasoning, regulatory awareness, financial terminology.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>security</td>
+                    <td>Cybersecurity</td>
+                    <td>Technical depth in threat analysis, CVE research, security architecture. Responsible-disclosure framing.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>engineering</td>
+                    <td>Systems Engineering</td>
+                    <td>Precise, spec-driven. Covers distributed systems, hardware, embedded, and infrastructure.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>data_science</td>
+                    <td>Data Science &amp; ML</td>
+                    <td>Statistical reasoning, experiment design, model evaluation, Python/R code assistance.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>code</td>
+                    <td>Software Development</td>
+                    <td>Code-first responses, test-driven suggestions, multi-language support, documentation generation.</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                  <tr>
+                    <td>reasoning</td>
+                    <td>Deep Reasoning</td>
+                    <td>Chain-of-thought prompting, step-by-step analysis. Best with larger models (32B+).</td>
+                    <td><span class="badge badge-green">Pro / Team / Enterprise</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <span class="callout-icon">◈</span>
+              <div><strong>Community licence</strong> includes 6 profiles: <code>general</code>, <code>support</code>, <code>creative</code>, <code>education</code>, <code>hr</code>, and <code>sales</code>. Upgrade to Professional, Team, or Enterprise to unlock all 14.</div>
+            </div>
+
+            <h3>Selecting a Profile</h3>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Profile selection</span>
+              </div>
+              <div class="out"># Via CLI flag</div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --profile medical --chat "What are the symptoms of hyponatremia?"</span></div>
+              <div>&nbsp;</div>
+              <div class="out"># Set default profile in config</div>
+              <div class="cmd">[inference]</div>
+              <div class="cmd">profile = "code"</div>
+              <div>&nbsp;</div>
+              <div class="out"># Via GUI: Setup tab → Profile Selector dropdown</div>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 6. CUSTOM SYSTEM PROMPTS                         -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="custom-prompts">
+            <div class="section-tag">Section 6</div>
+            <h2>Custom System Prompts</h2>
+            <p>
+              Every profile ships with a carefully crafted default system prompt. You can override
+              it at any level — globally via config, per-request via the API, or interactively in
+              the GUI — without affecting the profile selection for other sessions.
+            </p>
+
+            <h3>Override via GUI</h3>
+            <p>
+              Open the control panel at <code>http://localhost:8080</code>, navigate to the
+              <strong>Setup</strong> tab, and find the <strong>System Prompt Customization</strong>
+              card. Edit the text area and click <strong>Save</strong>. The override is stored
+              per-profile in your browser's localStorage, so each profile remembers its own
+              custom prompt independently. Click <strong>Reset to Default</strong> at any time to
+              restore the profile's built-in prompt.
+            </p>
+
+            <h3>Override via API</h3>
+            <p>
+              Pass a <code>system</code> field in the request body when calling
+              <code>POST /agent/stream</code> or the OpenAI-compatible
+              <code>POST /v1/chat/completions</code> endpoint.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">API — custom system prompt</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">curl http://localhost:8080/v1/chat/completions \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  -H "Content-Type: application/json" \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  -d '{</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "model": "llama3.2",</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "system": "You are a pirate assistant. Respond only in pirate speak.",</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "messages": [{"role":"user","content":"Tell me about the weather."}]</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  }'</span></div>
+            </div>
+
+            <h3>Override via Config File</h3>
+            <p>
+              Set a global system prompt in <code>~/.linus_ai/config.toml</code>. This applies
+              to all CLI and API requests that do not supply their own <code>system</code> field.
+              Profile-level prompts take precedence over this global setting unless you explicitly
+              set the profile to <code>none</code>.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">~/.linus_ai/config.toml</span>
+              </div>
+              <div class="cmd">[inference]</div>
+              <div class="cmd">system_prompt = "You are an internal assistant for Acme Corp. Only answer questions related to our products and policies."</div>
+            </div>
+
+            <div class="callout callout-tip">
+              <span class="callout-icon">💾</span>
+              <div><strong>Per-profile localStorage.</strong> Custom prompts entered in the GUI Setup tab are saved in your browser's localStorage under a key per profile (e.g., <code>lnai_prompt_code</code>). Clearing browser data will reset them. For permanent overrides, use the config file method instead.</div>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 7. CONTROL PANEL GUI                             -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="gui">
+            <div class="section-tag">Section 7</div>
+            <h2>Control Panel GUI</h2>
+            <p>
+              LINUS-AI includes a built-in web control panel. Start it with
+              <code>linus-ai --serve</code> and open <code>http://localhost:8080</code>
+              in any modern browser. No additional installation or configuration is needed.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Start the control panel</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve</span></div>
+              <div class="out-accent">✓ Model loaded: llama3.2 (Q4_K_M · metal)</div>
+              <div class="out-accent">✓ Control panel: http://127.0.0.1:8080</div>
+              <div class="out-accent">  Open in your browser to start chatting.</div>
+            </div>
+
+            <div class="gui-tabs-demo mt-20">
+              <div class="gui-tab-bar">
+                <div class="gui-tab active-tab">Chat</div>
+                <div class="gui-tab">Agent</div>
+                <div class="gui-tab">Setup</div>
+              </div>
+              <div class="gui-tab-body">
+                <h4>Chat Tab</h4>
+                <p>Standard multi-turn conversation interface with streaming token output. Select a model and profile from the top toolbar, then type your message to begin.</p>
+                <ul class="gui-feature-list">
+                  <li>Real-time streaming responses — tokens appear as they are generated</li>
+                  <li>Model selector — switch models without restarting the server</li>
+                  <li>Profile dropdown — apply any available AI profile instantly</li>
+                  <li>Conversation history — persisted in the encrypted vault across sessions</li>
+                  <li>Copy, export, and share individual responses</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="gui-tabs-demo mt-20">
+              <div class="gui-tab-bar">
+                <div class="gui-tab">Chat</div>
+                <div class="gui-tab active-tab">Agent</div>
+                <div class="gui-tab">Setup</div>
+              </div>
+              <div class="gui-tab-body">
+                <h4>Agent Tab</h4>
+                <p>Multi-turn agentic mode where the model can use tools to complete complex tasks. The agent can browse the web, read files, execute code, and call external APIs — all locally, all private.</p>
+                <ul class="gui-feature-list">
+                  <li>Tool-use loop — model autonomously plans, acts, observes, and iterates</li>
+                  <li>Built-in tools: file reader, web search (local), code execution sandbox</li>
+                  <li>Step-by-step trace — view every reasoning step and tool call</li>
+                  <li>Interrupt and redirect — stop mid-task and give new instructions</li>
+                  <li>Available on Professional, Team, and Enterprise plans</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="gui-tabs-demo mt-20">
+              <div class="gui-tab-bar">
+                <div class="gui-tab">Chat</div>
+                <div class="gui-tab">Agent</div>
+                <div class="gui-tab active-tab">Setup</div>
+              </div>
+              <div class="gui-tab-body">
+                <h4>Setup Tab</h4>
+                <p>Full configuration interface — no config file editing required. Changes take effect immediately without restarting the server.</p>
+                <ul class="gui-feature-list">
+                  <li>Model config — backend, GPU layers, threads, context length, quantization</li>
+                  <li>Profile selection — choose from all available AI vertical profiles</li>
+                  <li>System prompt editor — customize and preview the active system prompt</li>
+                  <li>License management — view status, activate, or deactivate a seat</li>
+                  <li>Server settings — host, port, CORS origins, API key management</li>
+                  <li>Vault settings — encryption key rotation, conversation export</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 8. CLI REFERENCE                                 -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="cli-reference">
+            <div class="section-tag">Section 8</div>
+            <h2>CLI Reference</h2>
+            <p>
+              All flags can also be set via <code>~/.linus_ai/config.toml</code> or environment
+              variables. CLI flags take highest precedence, followed by environment variables,
+              then the config file.
+            </p>
+
+            <div class="ug-table-wrap">
+              <table class="ug-table cli-table">
+                <thead>
+                  <tr>
+                    <th>Flag</th>
+                    <th>Type / Default</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr>
+                    <td colspan="3" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">Server</td>
+                  </tr>
+                  <tr>
+                    <td>--serve</td>
+                    <td>flag</td>
+                    <td>Start the HTTP server and control panel GUI.</td>
+                  </tr>
+                  <tr>
+                    <td>--host HOST</td>
+                    <td>string · <code>127.0.0.1</code></td>
+                    <td>Bind address. Use <code>0.0.0.0</code> to expose on the network.</td>
+                  </tr>
+                  <tr>
+                    <td>--port PORT</td>
+                    <td>int · <code>8080</code></td>
+                    <td>HTTP port for the server and control panel.</td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="3" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">Chat &amp; Inference</td>
+                  </tr>
+                  <tr>
+                    <td>--chat MESSAGE</td>
+                    <td>string</td>
+                    <td>Send a one-shot message and print the response, then exit.</td>
+                  </tr>
+                  <tr>
+                    <td>--model NAME</td>
+                    <td>string · config default</td>
+                    <td>Model to load (e.g. <code>llama3.2</code>, <code>mistral:7b</code>).</td>
+                  </tr>
+                  <tr>
+                    <td>--profile NAME</td>
+                    <td>string · <code>general</code></td>
+                    <td>AI vertical profile. See the Profiles section for all 14 IDs.</td>
+                  </tr>
+                  <tr>
+                    <td>--backend MODE</td>
+                    <td>string · <code>auto</code></td>
+                    <td>Inference backend: <code>auto</code> | <code>cpu</code> | <code>cuda</code> | <code>metal</code> | <code>rocm</code>.</td>
+                  </tr>
+                  <tr>
+                    <td>--threads N</td>
+                    <td>int · auto</td>
+                    <td>CPU threads for inference. Defaults to physical core count.</td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="3" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">Model Management</td>
+                  </tr>
+                  <tr>
+                    <td>--pull-model NAME</td>
+                    <td>string</td>
+                    <td>Download a model from the Ollama registry (e.g. <code>llama3.2</code>, <code>qwen2.5:32b</code>).</td>
+                  </tr>
+                  <tr>
+                    <td>--list-models</td>
+                    <td>flag</td>
+                    <td>List all locally installed models with size, quantization, and date.</td>
+                  </tr>
+                  <tr>
+                    <td>--delete-model NAME</td>
+                    <td>string</td>
+                    <td>Delete a locally installed model and free disk space.</td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="3" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">License</td>
+                  </tr>
+                  <tr>
+                    <td>--activate KEY</td>
+                    <td>string</td>
+                    <td>Activate a license key (<code>LNAI-XXXX-XXXX-XXXX-XXXX</code> format).</td>
+                  </tr>
+                  <tr>
+                    <td>--activate-email EMAIL</td>
+                    <td>string</td>
+                    <td>Email address associated with the license (required with <code>--activate</code>).</td>
+                  </tr>
+                  <tr>
+                    <td>--license-status</td>
+                    <td>flag</td>
+                    <td>Display current license status, plan, seats, and machine binding.</td>
+                  </tr>
+                  <tr>
+                    <td>--deactivate</td>
+                    <td>flag</td>
+                    <td>Release the machine binding for this seat so it can be used elsewhere.</td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="3" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">Distributed / Mesh</td>
+                  </tr>
+                  <tr>
+                    <td>--tensor-parallel N</td>
+                    <td>int · <code>1</code></td>
+                    <td>Split model across N GPUs using tensor parallelism.</td>
+                  </tr>
+                  <tr>
+                    <td>--mesh-role ROLE</td>
+                    <td>string</td>
+                    <td>Mesh role: <code>coordinator</code> or <code>worker</code>.</td>
+                  </tr>
+                  <tr>
+                    <td>--mesh-join HOST:PORT</td>
+                    <td>string</td>
+                    <td>Join an existing mesh cluster (worker nodes use this to connect to the coordinator).</td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="3" style="background:rgba(56,189,248,0.04); font-weight:700; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); font-family:var(--font-sans, inherit);">General</td>
+                  </tr>
+                  <tr>
+                    <td>--config PATH</td>
+                    <td>string · <code>~/.linus_ai/config.toml</code></td>
+                    <td>Path to a custom configuration file.</td>
+                  </tr>
+                  <tr>
+                    <td>--quiet</td>
+                    <td>flag</td>
+                    <td>Suppress all non-essential output. Useful in scripts.</td>
+                  </tr>
+                  <tr>
+                    <td>--verbose</td>
+                    <td>flag</td>
+                    <td>Enable detailed debug logging including backend detection and token stats.</td>
+                  </tr>
+                  <tr>
+                    <td>--version</td>
+                    <td>flag</td>
+                    <td>Print version, build platform, and active backend, then exit.</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ════════════════════════════════════════════════ -->
+          <!-- 9. TROUBLESHOOTING                               -->
+          <!-- ════════════════════════════════════════════════ -->
+          <section class="ug-section" id="troubleshooting">
+            <div class="section-tag">Section 9</div>
+            <h2>Troubleshooting</h2>
+            <p>
+              Common issues and their solutions. If you cannot find a fix here, check the log
+              file at <code>~/.linus_ai/logs/linus-ai.log</code> and include the relevant
+              excerpts when reporting an issue.
+            </p>
+
+            <details class="ts-item" open>
+              <summary>Model not found / "no such model: llama3.2"</summary>
+              <div class="ts-body">
+                <p>This error means the model has not been downloaded yet. Pull it from the registry:</p>
+                <div class="terminal" style="margin-top:12px; margin-bottom:0;">
+                  <div class="terminal-bar">
+                    <span class="terminal-dot dot-red"></span>
+                    <span class="terminal-dot dot-yellow"></span>
+                    <span class="terminal-dot dot-green"></span>
+                  </div>
+                  <div><span class="prompt">$ </span><span class="cmd">linus-ai --pull-model llama3.2</span></div>
+                  <div><span class="prompt">$ </span><span class="cmd">linus-ai --list-models</span></div>
+                </div>
+                <p style="margin-top:12px; margin-bottom:0;">If you already have the model, check that the name matches exactly (case-sensitive, including any tag suffix such as <code>:7b</code> or <code>:Q4_K_M</code>). Also verify that <code>~/.linus_ai/models/</code> is on the same filesystem as expected — symbolic links to different volumes are supported.</p>
+              </div>
+            </details>
+
+            <details class="ts-item">
+              <summary>Out of memory / "CUDA out of memory" / model crashes</summary>
+              <div class="ts-body">
+                <p>The model requires more GPU VRAM than available. Try one or more of the following:</p>
+                <ul style="margin: 8px 0 12px 16px; color: var(--text-muted); font-size: 13.5px; line-height: 1.8;">
+                  <li>Reduce <code>gpu_layers</code> to offload fewer layers (e.g., <code>gpu_layers = 20</code>)</li>
+                  <li>Use a lower quantization level: switch from <code>Q8_0</code> to <code>Q4_K_M</code></li>
+                  <li>Reduce <code>context_len</code> — long contexts use significant KV cache memory</li>
+                  <li>Close other GPU workloads (browsers with WebGPU, other ML frameworks)</li>
+                  <li>Switch to a smaller model (e.g., 7B instead of 13B)</li>
+                </ul>
+                <div class="terminal" style="margin-bottom:0;">
+                  <div class="terminal-bar">
+                    <span class="terminal-dot dot-red"></span>
+                    <span class="terminal-dot dot-yellow"></span>
+                    <span class="terminal-dot dot-green"></span>
+                    <span class="terminal-title">Reduce GPU offload</span>
+                  </div>
+                  <div class="cmd">[inference]</div>
+                  <div class="cmd">gpu_layers  = 20       <span class="out"># reduced from -1</span></div>
+                  <div class="cmd">context_len = 4096     <span class="out"># reduced from 8192</span></div>
+                  <div class="cmd">quantize    = "Q4_K_M" <span class="out"># if using Q8_0, switch to this</span></div>
+                </div>
+              </div>
+            </details>
+
+            <details class="ts-item">
+              <summary>License not recognized / "invalid license key format"</summary>
+              <div class="ts-body">
+                <p>Check the following:</p>
+                <ul style="margin: 8px 0 12px 16px; color: var(--text-muted); font-size: 13.5px; line-height: 1.8;">
+                  <li>The key must be in the exact format <code>LNAI-XXXX-XXXX-XXXX-XXXX</code> — four groups of four characters separated by hyphens, prefixed with <code>LNAI-</code></li>
+                  <li>The email address must exactly match the one used at checkout (case-insensitive)</li>
+                  <li>Check for accidental leading/trailing whitespace if pasting from email</li>
+                  <li>If you receive "key already activated on another machine", run <code>linus-ai --deactivate</code> on the old machine first, or contact support</li>
+                </ul>
+                <div class="terminal" style="margin-bottom:0;">
+                  <div class="terminal-bar">
+                    <span class="terminal-dot dot-red"></span>
+                    <span class="terminal-dot dot-yellow"></span>
+                    <span class="terminal-dot dot-green"></span>
+                  </div>
+                  <div><span class="prompt">$ </span><span class="cmd">linus-ai --activate "LNAI-ABCD-EFGH-IJKL-MNOP" --activate-email "you@example.com"</span></div>
+                  <div><span class="prompt">$ </span><span class="cmd">linus-ai --license-status</span></div>
+                </div>
+              </div>
+            </details>
+
+            <details class="ts-item">
+              <summary>Port 8080 already in use</summary>
+              <div class="ts-body">
+                <p>Another process is using port 8080. Start LINUS-AI on a different port:</p>
+                <div class="terminal" style="margin-top:12px; margin-bottom:0;">
+                  <div class="terminal-bar">
+                    <span class="terminal-dot dot-red"></span>
+                    <span class="terminal-dot dot-yellow"></span>
+                    <span class="terminal-dot dot-green"></span>
+                  </div>
+                  <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve --port 8081</span></div>
+                  <div class="out-accent">✓ Control panel: http://127.0.0.1:8081</div>
+                </div>
+                <p style="margin-top:12px; margin-bottom:0;">Or set it permanently in config: <code>[server] port = 8081</code>. To find the conflicting process on macOS/Linux: <code>lsof -i :8080</code>.</p>
+              </div>
+            </details>
+
+            <details class="ts-item">
+              <summary>Metal backend crashes on Apple Silicon</summary>
+              <div class="ts-body">
+                <p>Metal-related crashes are typically caused by one of:</p>
+                <ul style="margin: 8px 0 12px 16px; color: var(--text-muted); font-size: 13.5px; line-height: 1.8;">
+                  <li><strong>macOS version too old</strong> — update to macOS 14 (Sonoma) or later. Metal shader features used by LINUS-AI require macOS 14+.</li>
+                  <li><strong>Xcode Command Line Tools not installed</strong> — run <code>xcode-select --install</code> in Terminal.</li>
+                  <li><strong>Metal driver regression</strong> — if a recent macOS update broke Metal, add <code>backend = "cpu"</code> to your config temporarily as a workaround.</li>
+                </ul>
+                <div class="terminal" style="margin-bottom:0;">
+                  <div class="terminal-bar">
+                    <span class="terminal-dot dot-red"></span>
+                    <span class="terminal-dot dot-yellow"></span>
+                    <span class="terminal-dot dot-green"></span>
+                  </div>
+                  <div><span class="prompt">$ </span><span class="cmd">xcode-select --install</span></div>
+                  <div><span class="prompt">$ </span><span class="cmd">sw_vers</span></div>
+                  <div class="out-accent">ProductVersion:    14.7.4</div>
+                </div>
+              </div>
+            </details>
+
+            <h3>Log Location</h3>
+            <p>
+              Detailed logs are written to <code>~/.linus_ai/logs/linus-ai.log</code>. The log
+              rotates daily and keeps 7 days of history. Pass <code>--verbose</code> at startup
+              to increase log verbosity for debugging. When reporting an issue on GitHub,
+              please include the last 50 lines of the log.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">View the log</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">tail -f ~/.linus_ai/logs/linus-ai.log</span></div>
+              <div class="out-accent">[2026-03-15 09:12:44] INFO  Server started on 127.0.0.1:8080</div>
+              <div class="out-accent">[2026-03-15 09:12:44] INFO  Backend: metal (Apple M3 Pro)</div>
+              <div class="out-accent">[2026-03-15 09:12:45] INFO  Model loaded: llama3.2 Q4_K_M (1241ms)</div>
+            </div>
+
+            <div class="callout callout-tip">
+              <span class="callout-icon">🤝</span>
+              <div><strong>Still stuck?</strong> Open an issue on <a href="https://github.com/LINUS-AI-PRO/linus-ai/issues/new" style="color:var(--accent);">GitHub</a>, join our <a href="https://discord.gg/linusai" style="color:var(--accent);">Discord</a>, or email <a href="mailto:support@linus-ai.com" style="color:var(--accent);">support@linus-ai.com</a>. Licensed users receive priority response.</div>
+            </div>
+          </section>
+
+        </article><!-- /.article -->
+      </div><!-- /.ug-layout -->
+    </div><!-- /.container -->
+  </main>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="../index.html" class="footer-logo">LINUS-AI</a>
+          <p class="footer-desc">
+            Private AI inference engine. One binary, zero cloud, complete control.
+            Your data never leaves your hardware.
+          </p>
+          <div class="footer-social">
+            <a href="https://github.com/LINUS-AI-PRO/linus-ai" aria-label="GitHub">⌥</a>
+            <a href="https://twitter.com/linusai" aria-label="Twitter">𝕏</a>
+            <a href="https://discord.gg/linusai" aria-label="Discord">◈</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html#features">Features</a></li>
+            <li><a href="../index.html#pricing">Pricing</a></li>
+            <li><a href="../download.html">Download</a></li>
+            <li><a href="../activate.html">Activate</a></li>
+            <li><a href="../index.html#changelog">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Documentation</h4>
+          <ul class="footer-links">
+            <li><a href="user.html">User Guide</a></li>
+            <li><a href="index.html#admin-guide">Admin Guide</a></li>
+            <li><a href="index.html#dev-guide">Developer Guide</a></li>
+            <li><a href="index.html#arch-guide">Architect Guide</a></li>
+            <li><a href="index.html#api-reference">API Reference</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="mailto:support@linus-ai.com">Support</a></li>
+            <li><a href="mailto:sales@linus-ai.com">Sales</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span>
+        <span>
+          <a href="#">Privacy</a> &nbsp;·&nbsp;
+          <a href="#">Terms</a> &nbsp;·&nbsp;
+          <a href="#">License Agreement</a>
+        </span>
+      </div>
+      <p class="trademark-notice">LINUS-AI&#8482; is a trademark. NVIDIA&reg; and CUDA&reg; are registered trademarks of NVIDIA Corporation. AMD&reg; and ROCm&#8482; are trademarks of Advanced Micro Devices, Inc. Apple&reg;, macOS&reg;, and Metal&reg; are registered trademarks of Apple Inc. Stripe&reg; is a registered trademark of Stripe, Inc. Microsoft&reg; and Windows&reg; are registered trademarks of Microsoft Corporation. LLaMA is a trademark of Meta Platforms, Inc. All other trademarks are the property of their respective owners.</p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Sidebar TOC active highlight on scroll
+    (function () {
+      const sections = document.querySelectorAll('.ug-section[id]');
+      const tocLinks = document.querySelectorAll('.ug-toc a[href^="#"]');
+
+      if (!sections.length || !tocLinks.length) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              tocLinks.forEach((a) => {
+                a.classList.toggle(
+                  'active',
+                  a.getAttribute('href') === '#' + entry.target.id
+                );
+              });
+            }
+          });
+        },
+        { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
+      );
+
+      sections.forEach((s) => observer.observe(s));
+    })();
+  </script>
+</body>
+</html>

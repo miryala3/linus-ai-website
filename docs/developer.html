@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Guide — LINUS-AI</title>
+  <meta name="description" content="LINUS-AI Developer Guide. Integrate LINUS-AI into your applications using the REST API, WebSocket streaming, Python SDK, and plugin system." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles — one level up from docs/ -->
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    /* ── Hero ───────────────────────────────────────────────── */
+    .dev-hero {
+      padding: 120px 0 60px;
+      text-align: center;
+    }
+
+    .dev-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin: 16px 0 12px;
+    }
+
+    .dev-hero .hero-sub {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* ── Breadcrumb ─────────────────────────────────────────── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 48px;
+    }
+
+    .breadcrumb a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover { color: var(--accent); }
+
+    .breadcrumb .sep { color: var(--border); }
+
+    .breadcrumb .current { color: var(--text); font-weight: 600; }
+
+    /* ── TOC quick links ────────────────────────────────────── */
+    .ql-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .ql-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .ql-item:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      background: rgba(56, 189, 248, 0.04);
+    }
+
+    .ql-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* ── API endpoint rows ──────────────────────────────────── */
+    .api-endpoint {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 13px;
+      transition: border-color 0.2s;
+    }
+
+    .api-endpoint:hover { border-color: var(--accent); }
+
+    .method {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .method-get    { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+    .method-post   { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+    .method-delete { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+    .method-put    { background: rgba(251, 191, 36, 0.15); color: var(--yellow); }
+    .method-ws     { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+
+    .api-path { font-family: var(--font-mono); font-size: 13px; color: var(--text); }
+    .api-desc { font-size: 12px; color: var(--text-muted); text-align: right; }
+
+    @media (max-width: 600px) {
+      .api-endpoint { grid-template-columns: auto 1fr; }
+      .api-desc { display: none; }
+    }
+
+    /* ── Params table ───────────────────────────────────────── */
+    .params-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 20px 0;
+    }
+
+    .params-table th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .params-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .params-table tr:last-child td { border-bottom: none; }
+
+    .params-table td:first-child {
+      font-family: var(--font-mono);
+      color: var(--accent);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .params-table td:nth-child(2) {
+      color: var(--text-dim);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .params-table td:nth-child(3) { color: var(--text-muted); }
+
+    .param-required {
+      font-size: 10px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: 600;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .param-optional {
+      font-size: 10px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text-dim);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: 600;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── Error codes table ──────────────────────────────────── */
+    .error-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 20px 0;
+    }
+
+    .error-table th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .error-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .error-table tr:last-child td { border-bottom: none; }
+
+    .http-code {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .code-2xx { color: var(--green); }
+    .code-4xx { color: var(--yellow); }
+    .code-5xx { color: var(--red); }
+
+    .error-code-name {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    /* ── Section separators ─────────────────────────────────── */
+    .dev-section {
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .dev-section:first-of-type { border-top: none; }
+
+    /* ── Code tabs ──────────────────────────────────────────── */
+    .code-tabs {
+      margin: 20px 0;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tab-btn.active {
+      background: #1a1a2e;
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .tab-btn:hover:not(.active) { color: var(--text); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Info callout ───────────────────────────────────────── */
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: rgba(56, 189, 248, 0.05);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 20px 0;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .callout strong { color: var(--text); }
+
+    .callout-warn {
+      border-left-color: var(--yellow);
+      background: rgba(251, 191, 36, 0.05);
+    }
+
+    /* ── Plugin card ────────────────────────────────────────── */
+    .plugin-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .plugin-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .plugin-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    /* ── Event badge ────────────────────────────────────────── */
+    .event-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(167, 139, 250, 0.12);
+      color: #a78bfa;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin: 2px;
+    }
+
+    /* ── mt helpers ─────────────────────────────────────────── */
+    .mt-32 { margin-top: 32px; }
+    .mt-24 { margin-top: 24px; }
+    .mb-24 { margin-bottom: 24px; }
+  </style>
+</head>
+<body data-page="docs">
+
+  <!-- ── Navigation ───────────────────────────────────────── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="../index.html" class="logo">
+          LINUS<span style="color:var(--accent2)">-</span>AI
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#features">Features</a></li>
+          <li><a href="../index.html#pricing">Pricing</a></li>
+          <li><a href="../download.html">Download</a></li>
+          <li><a href="index.html" class="active">Docs</a></li>
+          <li><a href="../activate.html">Activate</a></li>
+        </ul>
+
+        <div class="nav-cta">
+          <a href="../download.html" class="btn btn-secondary btn-sm">Download</a>
+          <a href="../index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+        </div>
+
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" aria-hidden="true">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#features">Features</a></li>
+        <li><a href="../index.html#pricing">Pricing</a></li>
+        <li><a href="../download.html">Download</a></li>
+        <li><a href="index.html">Docs</a></li>
+        <li><a href="../activate.html">Activate</a></li>
+      </ul>
+      <div class="mobile-cta">
+        <a href="../download.html" class="btn btn-secondary btn-sm">Download</a>
+        <a href="../index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <section class="dev-hero">
+    <div class="container">
+      <div class="section-tag">Developer Guide</div>
+      <h1><span class="gradient-text">Developer Guide</span> — LINUS-AI</h1>
+      <p class="hero-sub">
+        Integrate LINUS-AI into your applications using the REST API, WebSocket streaming, and Python SDK.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Main Content ──────────────────────────────────────── -->
+  <main>
+    <div class="container" style="padding-bottom:80px;">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Docs</a>
+        <span class="sep">›</span>
+        <span class="current">Developer Guide</span>
+      </nav>
+
+      <!-- ── Table of Contents ───────────────────────────────── -->
+      <section class="section" style="padding-top:0;">
+        <div class="section-tag">Contents</div>
+        <h2>Developer Guide Contents</h2>
+        <p class="section-sub">Jump to any section of this guide.</p>
+
+        <div class="ql-grid">
+          <a href="#api-overview" class="ql-item">
+            <span class="ql-icon">⚡</span>API Overview
+          </a>
+          <a href="#chat-completions" class="ql-item">
+            <span class="ql-icon">💬</span>Chat Completions
+          </a>
+          <a href="#embeddings" class="ql-item">
+            <span class="ql-icon">∿</span>Embeddings
+          </a>
+          <a href="#models-api" class="ql-item">
+            <span class="ql-icon">📦</span>Models API
+          </a>
+          <a href="#agent-api" class="ql-item">
+            <span class="ql-icon">◈</span>Agent / Agentic Stream
+          </a>
+          <a href="#websocket" class="ql-item">
+            <span class="ql-icon">🔌</span>WebSocket Streaming
+          </a>
+          <a href="#python-sdk" class="ql-item">
+            <span class="ql-icon">🐍</span>Python SDK
+          </a>
+          <a href="#js-sdk" class="ql-item">
+            <span class="ql-icon">⌨</span>Node.js / JS SDK
+          </a>
+          <a href="#plugins" class="ql-item">
+            <span class="ql-icon">🔧</span>Plugin System
+          </a>
+          <a href="#webhooks" class="ql-item">
+            <span class="ql-icon">📡</span>Webhook Events
+          </a>
+          <a href="#errors" class="ql-item">
+            <span class="ql-icon">⚠</span>Rate Limits &amp; Errors
+          </a>
+          <a href="#local-dev" class="ql-item">
+            <span class="ql-icon">🛠</span>Local Development
+          </a>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           1. API OVERVIEW
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="api-overview">
+        <div class="section-tag">REST API</div>
+        <h2>API Overview</h2>
+        <p class="section-sub">
+          LINUS-AI exposes an OpenAI-compatible REST API. Any application built
+          against the OpenAI API can point to LINUS-AI with a single base URL change.
+        </p>
+
+        <div class="features-grid" style="margin-bottom:32px;">
+          <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3>Base URL</h3>
+            <p><code>http://localhost:8080</code> — configurable via <code>server.host</code> and <code>server.port</code> in <code>config.toml</code>.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>OpenAI-Compatible</h3>
+            <p>Drop-in replacement for the OpenAI API. Change only the base URL and API key — no other code changes required.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Authentication</h3>
+            <p>When auth is enabled, include the header: <code>Authorization: Bearer YOUR_API_KEY</code>. Configure keys in <code>config.toml</code>.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📡</div>
+            <h3>Streaming</h3>
+            <p>Server-Sent Events (<code>text/event-stream</code>) for all streaming endpoints. Set <code>"stream": true</code> in your request.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <h3>CORS</h3>
+            <p>Configurable in <code>config.toml</code> via <code>server.cors</code>. Default: <code>["*"]</code> for local development.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📄</div>
+            <h3>Content-Type</h3>
+            <p>All requests must use <code>Content-Type: application/json</code>. Streaming responses use <code>text/event-stream</code>.</p>
+          </div>
+        </div>
+
+        <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:16px;">All Endpoints at a Glance</h3>
+        <div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/v1/chat/completions</span><span class="api-desc">Chat with a model (streaming or non-streaming)</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/v1/completions</span><span class="api-desc">Legacy text completions</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/v1/embeddings</span><span class="api-desc">Generate text embeddings</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/v1/models</span><span class="api-desc">List all available models</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/v1/models/pull</span><span class="api-desc">Download a model from the registry</span></div>
+          <div class="api-endpoint"><span class="method method-delete">DELETE</span><span class="api-path">/v1/models/{name}</span><span class="api-desc">Remove a model from disk</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/v1/models/{name}</span><span class="api-desc">Get model info and metadata</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/agent/stream</span><span class="api-desc">Agentic multi-turn inference (SSE)</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/agent/profiles</span><span class="api-desc">List all 14 vertical agent profiles</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/v1/vault/query</span><span class="api-desc">Semantic search over encrypted vault</span></div>
+          <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/v1/vault/store</span><span class="api-desc">Store entry in encrypted vault</span></div>
+          <div class="api-endpoint"><span class="method method-ws">WS</span><span class="api-path">ws://localhost:8080/v1/stream</span><span class="api-desc">WebSocket streaming interface</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/health</span><span class="api-desc">Health check and version info</span></div>
+          <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/metrics</span><span class="api-desc">Prometheus-compatible metrics</span></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           2. CHAT COMPLETIONS
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="chat-completions">
+        <div class="section-tag">Endpoint</div>
+        <h2>Chat Completions</h2>
+        <p class="section-sub">
+          The primary inference endpoint. OpenAI-compatible with LINUS-AI extensions
+          for profile selection and custom system prompts.
+        </p>
+
+        <div class="api-endpoint" style="margin-bottom:24px;">
+          <span class="method method-post">POST</span>
+          <span class="api-path">/v1/chat/completions</span>
+          <span class="api-desc">OpenAI-compatible chat completions</span>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Request Body Parameters</h3>
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+          <table class="params-table">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>model <span class="param-required">required</span></td>
+                <td>string</td>
+                <td>Model name, e.g. <code>"llama3.2"</code>, <code>"mistral-7b"</code>. Must be a locally available model.</td>
+              </tr>
+              <tr>
+                <td>messages <span class="param-required">required</span></td>
+                <td>array</td>
+                <td>Array of message objects with <code>role</code> (<code>"system"</code>, <code>"user"</code>, <code>"assistant"</code>) and <code>content</code> (string).</td>
+              </tr>
+              <tr>
+                <td>stream <span class="param-optional">optional</span></td>
+                <td>boolean</td>
+                <td>If <code>true</code>, returns a Server-Sent Events stream. Default: <code>false</code>.</td>
+              </tr>
+              <tr>
+                <td>temperature <span class="param-optional">optional</span></td>
+                <td>float</td>
+                <td>Sampling temperature between 0.0 and 2.0. Higher values increase randomness. Default: <code>0.7</code>.</td>
+              </tr>
+              <tr>
+                <td>max_tokens <span class="param-optional">optional</span></td>
+                <td>integer</td>
+                <td>Maximum number of tokens to generate. Default: <code>2048</code>. Capped by the model's context length.</td>
+              </tr>
+              <tr>
+                <td>top_p <span class="param-optional">optional</span></td>
+                <td>float</td>
+                <td>Nucleus sampling probability. Only tokens in the top-p probability mass are considered. Default: <code>0.9</code>.</td>
+              </tr>
+              <tr>
+                <td>top_k <span class="param-optional">optional</span></td>
+                <td>integer</td>
+                <td>Limits sampling to the top-k most probable tokens. LINUS-AI extension. Default: <code>40</code>.</td>
+              </tr>
+              <tr>
+                <td>stop <span class="param-optional">optional</span></td>
+                <td>string | array</td>
+                <td>One or more stop sequences. Generation halts when any stop string is produced.</td>
+              </tr>
+              <tr>
+                <td>system <span class="param-optional">optional</span></td>
+                <td>string</td>
+                <td>LINUS-AI extension. Overrides the system prompt for this request, taking precedence over the model's default and profile system prompts.</td>
+              </tr>
+              <tr>
+                <td>profile <span class="param-optional">optional</span></td>
+                <td>string</td>
+                <td>LINUS-AI extension. Agent profile ID (e.g. <code>"medical"</code>, <code>"legal"</code>, <code>"general"</code>). Loads profile-specific system context and model hints.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Non-streaming response -->
+        <h3 style="font-size:1rem; font-weight:700; margin: 28px 0 12px;">Non-Streaming Response</h3>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Response JSON</span>
+          </div>
+          <div class="cmd">{</div>
+          <div class="cmd">  "id": "chatcmpl-abc123",</div>
+          <div class="cmd">  "object": "chat.completion",</div>
+          <div class="cmd">  "created": 1710000000,</div>
+          <div class="cmd">  "model": "llama3.2",</div>
+          <div class="cmd">  "choices": [</div>
+          <div class="cmd">    {</div>
+          <div class="cmd">      "index": 0,</div>
+          <div class="cmd">      "message": { "role": "assistant", "content": "Hello! How can I help you?" },</div>
+          <div class="cmd">      "finish_reason": "stop"</div>
+          <div class="cmd">    }</div>
+          <div class="cmd">  ],</div>
+          <div class="cmd">  "usage": { "prompt_tokens": 12, "completion_tokens": 9, "total_tokens": 21 }</div>
+          <div class="cmd">}</div>
+        </div>
+
+        <!-- Streaming response -->
+        <h3 style="font-size:1rem; font-weight:700; margin: 28px 0 12px;">Streaming Response (SSE)</h3>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">SSE stream — text/event-stream</span>
+          </div>
+          <div class="cmd">data: {"id":"chatcmpl-abc123","choices":[{"delta":{"role":"assistant"},"index":0}]}</div>
+          <div class="cmd">data: {"id":"chatcmpl-abc123","choices":[{"delta":{"content":"Hello"},"index":0}]}</div>
+          <div class="cmd">data: {"id":"chatcmpl-abc123","choices":[{"delta":{"content":"!"},"index":0}]}</div>
+          <div class="cmd">data: {"id":"chatcmpl-abc123","choices":[{"delta":{},"finish_reason":"stop","index":0}]}</div>
+          <div class="cmd">data: [DONE]</div>
+        </div>
+
+        <!-- Code examples -->
+        <h3 style="font-size:1rem; font-weight:700; margin: 28px 0 12px;">Code Examples</h3>
+
+        <div class="code-tabs mb-24">
+          <div class="tab-bar" role="tablist">
+            <button class="tab-btn active" onclick="switchTab(this,'curl-chat')" role="tab">curl</button>
+            <button class="tab-btn" onclick="switchTab(this,'curl-stream-chat')" role="tab">curl (stream)</button>
+            <button class="tab-btn" onclick="switchTab(this,'py-chat')" role="tab">Python</button>
+            <button class="tab-btn" onclick="switchTab(this,'js-chat')" role="tab">JavaScript</button>
+          </div>
+
+          <div id="curl-chat" class="tab-panel active">
+            <div class="terminal" style="border-radius:0 8px 8px 8px;">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Non-streaming chat</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">curl http://localhost:8080/v1/chat/completions \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  -H "Content-Type: application/json" \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  -H "Authorization: Bearer YOUR_API_KEY" \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  -d '{</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "model": "llama3.2",</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "messages": [</span></div>
+              <div style="padding-left:24px;"><span class="cmd">      {"role": "system", "content": "You are a helpful assistant."},</span></div>
+              <div style="padding-left:24px;"><span class="cmd">      {"role": "user", "content": "What is the speed of light?"}</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    ],</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "temperature": 0.7,</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "max_tokens": 512</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  }'</span></div>
+            </div>
+          </div>
+
+          <div id="curl-stream-chat" class="tab-panel">
+            <div class="terminal" style="border-radius:0 8px 8px 8px;">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Streaming chat</span>
+              </div>
+              <div><span class="prompt">$ </span><span class="cmd">curl http://localhost:8080/v1/chat/completions \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  -H "Content-Type: application/json" \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  -H "Authorization: Bearer YOUR_API_KEY" \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  --no-buffer \</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  -d '{</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "model": "llama3.2",</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "stream": true,</span></div>
+              <div style="padding-left:20px;"><span class="cmd">    "messages": [{"role": "user", "content": "Write a haiku about privacy."}]</span></div>
+              <div style="padding-left:16px;"><span class="cmd">  }'</span></div>
+              <div class="out-accent">data: {"choices":[{"delta":{"content":"Quiet"}}]}</div>
+              <div class="out-accent">data: {"choices":[{"delta":{"content":" servers hum,"}}]}</div>
+              <div class="out-accent">data: [DONE]</div>
+            </div>
+          </div>
+
+          <div id="py-chat" class="tab-panel">
+            <div class="terminal" style="border-radius:0 8px 8px 8px;">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Python — openai library</span>
+              </div>
+              <div class="cmd">from openai import OpenAI</div>
+              <div>&nbsp;</div>
+              <div class="cmd">client = OpenAI(</div>
+              <div class="cmd">    base_url="http://localhost:8080/v1",</div>
+              <div class="cmd">    api_key="YOUR_API_KEY",  <span class="out"># or "none" if auth disabled</span></div>
+              <div class="cmd">)</div>
+              <div>&nbsp;</div>
+              <div class="cmd">response = client.chat.completions.create(</div>
+              <div class="cmd">    model="llama3.2",</div>
+              <div class="cmd">    messages=[</div>
+              <div class="cmd">        {"role": "system", "content": "You are a helpful assistant."},</div>
+              <div class="cmd">        {"role": "user", "content": "What is the speed of light?"},</div>
+              <div class="cmd">    ],</div>
+              <div class="cmd">    temperature=0.7,</div>
+              <div class="cmd">    max_tokens=512,</div>
+              <div class="cmd">)</div>
+              <div>&nbsp;</div>
+              <div class="cmd">print(response.choices[0].message.content)</div>
+            </div>
+          </div>
+
+          <div id="js-chat" class="tab-panel">
+            <div class="terminal" style="border-radius:0 8px 8px 8px;">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">JavaScript — fetch streaming</span>
+              </div>
+              <div class="cmd">const response = await fetch("http://localhost:8080/v1/chat/completions", {</div>
+              <div class="cmd">  method: "POST",</div>
+              <div class="cmd">  headers: {</div>
+              <div class="cmd">    "Content-Type": "application/json",</div>
+              <div class="cmd">    "Authorization": "Bearer YOUR_API_KEY",</div>
+              <div class="cmd">  },</div>
+              <div class="cmd">  body: JSON.stringify({</div>
+              <div class="cmd">    model: "llama3.2",</div>
+              <div class="cmd">    stream: true,</div>
+              <div class="cmd">    messages: [{ role: "user", content: "Hello!" }],</div>
+              <div class="cmd">  }),</div>
+              <div class="cmd">});</div>
+              <div>&nbsp;</div>
+              <div class="cmd">const reader = response.body.getReader();</div>
+              <div class="cmd">const decoder = new TextDecoder();</div>
+              <div>&nbsp;</div>
+              <div class="cmd">while (true) {</div>
+              <div class="cmd">  const { done, value } = await reader.read();</div>
+              <div class="cmd">  if (done) break;</div>
+              <div class="cmd">  const lines = decoder.decode(value).split("\n");</div>
+              <div class="cmd">  for (const line of lines) {</div>
+              <div class="cmd">    if (!line.startsWith("data: ")) continue;</div>
+              <div class="cmd">    const text = line.slice(6);</div>
+              <div class="cmd">    if (text === "[DONE]") break;</div>
+              <div class="cmd">    const chunk = JSON.parse(text);</div>
+              <div class="cmd">    process.stdout.write(chunk.choices[0].delta.content ?? "");</div>
+              <div class="cmd">  }</div>
+              <div class="cmd">}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           3. EMBEDDINGS
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="embeddings">
+        <div class="section-tag">Endpoint</div>
+        <h2>Embeddings</h2>
+        <p class="section-sub">
+          Generate vector embeddings for semantic search, RAG pipelines, clustering,
+          and similarity tasks — all computed locally.
+        </p>
+
+        <div class="api-endpoint" style="margin-bottom:24px;">
+          <span class="method method-post">POST</span>
+          <span class="api-path">/v1/embeddings</span>
+          <span class="api-desc">Generate text embeddings (768 or 1536 dims)</span>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Request Parameters</h3>
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:24px;">
+          <table class="params-table">
+            <thead>
+              <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>model <span class="param-required">required</span></td>
+                <td>string</td>
+                <td>Embedding model name, e.g. <code>"nomic-embed-text"</code>, <code>"mxbai-embed-large"</code>.</td>
+              </tr>
+              <tr>
+                <td>input <span class="param-required">required</span></td>
+                <td>string | array</td>
+                <td>Text string or array of strings to embed. Batched inputs are processed in a single pass.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Response</span>
+          </div>
+          <div class="cmd">{</div>
+          <div class="cmd">  "object": "list",</div>
+          <div class="cmd">  "data": [</div>
+          <div class="cmd">    {</div>
+          <div class="cmd">      "object": "embedding",</div>
+          <div class="cmd">      "index": 0,</div>
+          <div class="cmd">      "embedding": [0.0021, -0.1432, 0.0087, ...]  <span class="out">// 768 or 1536 floats</span></div>
+          <div class="cmd">    }</div>
+          <div class="cmd">  ],</div>
+          <div class="cmd">  "usage": { "prompt_tokens": 8, "total_tokens": 8 }</div>
+          <div class="cmd">}</div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">curl — batch embeddings</span>
+          </div>
+          <div><span class="prompt">$ </span><span class="cmd">curl http://localhost:8080/v1/embeddings \</span></div>
+          <div style="padding-left:16px;"><span class="cmd">  -H "Content-Type: application/json" \</span></div>
+          <div style="padding-left:16px;"><span class="cmd">  -d '{</span></div>
+          <div style="padding-left:20px;"><span class="cmd">    "model": "nomic-embed-text",</span></div>
+          <div style="padding-left:20px;"><span class="cmd">    "input": ["Private AI inference", "Local LLM deployment"]</span></div>
+          <div style="padding-left:16px;"><span class="cmd">  }'</span></div>
+        </div>
+
+        <div class="callout mt-32">
+          <strong>Use Cases:</strong> Semantic search, Retrieval-Augmented Generation (RAG), document clustering,
+          duplicate detection, and recommendation systems. Pair with <code>/v1/vault/store</code> to build a
+          fully private semantic memory store.
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           4. MODELS API
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="models-api">
+        <div class="section-tag">Endpoint</div>
+        <h2>Models API</h2>
+        <p class="section-sub">
+          List, download, inspect, and remove local models programmatically.
+        </p>
+
+        <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/v1/models</span><span class="api-desc">List all installed models</span></div>
+        <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/v1/models/pull</span><span class="api-desc">Download a model (streams progress)</span></div>
+        <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/v1/models/{name}</span><span class="api-desc">Get model info</span></div>
+        <div class="api-endpoint" style="margin-bottom:28px;"><span class="method method-delete">DELETE</span><span class="api-path">/v1/models/{name}</span><span class="api-desc">Remove model from disk</span></div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">GET /v1/models — response</span>
+          </div>
+          <div class="cmd">{</div>
+          <div class="cmd">  "object": "list",</div>
+          <div class="cmd">  "data": [</div>
+          <div class="cmd">    {</div>
+          <div class="cmd">      "id": "llama3.2",</div>
+          <div class="cmd">      "object": "model",</div>
+          <div class="cmd">      "created": 1710000000,</div>
+          <div class="cmd">      "size_gb": 4.7,</div>
+          <div class="cmd">      "parameters": "3.2B",</div>
+          <div class="cmd">      "quantization": "Q4_K_M",</div>
+          <div class="cmd">      "context_length": 128000</div>
+          <div class="cmd">    },</div>
+          <div class="cmd">    { "id": "mistral-7b", "parameters": "7B", "quantization": "Q5_K_M", ... }</div>
+          <div class="cmd">  ]</div>
+          <div class="cmd">}</div>
+        </div>
+
+        <div class="terminal mt-24">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">POST /v1/models/pull — stream download progress</span>
+          </div>
+          <div><span class="prompt">$ </span><span class="cmd">curl http://localhost:8080/v1/models/pull \</span></div>
+          <div style="padding-left:16px;"><span class="cmd">  -H "Content-Type: application/json" \</span></div>
+          <div style="padding-left:16px;"><span class="cmd">  --no-buffer \</span></div>
+          <div style="padding-left:16px;"><span class="cmd">  -d '{"name": "llama3.2"}'</span></div>
+          <div class="out-accent">data: {"status":"downloading","progress":12,"total_mb":4812}</div>
+          <div class="out-accent">data: {"status":"downloading","progress":48,"total_mb":4812}</div>
+          <div class="out-accent">data: {"status":"verifying","progress":100}</div>
+          <div class="out-accent">data: {"status":"done","model":"llama3.2"}</div>
+          <div class="out-accent">data: [DONE]</div>
+        </div>
+
+        <div class="terminal mt-24">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">DELETE and GET /v1/models/{name}</span>
+          </div>
+          <div class="out"># Get model info</div>
+          <div><span class="prompt">$ </span><span class="cmd">curl http://localhost:8080/v1/models/llama3.2</span></div>
+          <div class="out-accent">{"id":"llama3.2","size_gb":4.7,"parameters":"3.2B","quantization":"Q4_K_M"}</div>
+          <div>&nbsp;</div>
+          <div class="out"># Remove model from disk</div>
+          <div><span class="prompt">$ </span><span class="cmd">curl -X DELETE http://localhost:8080/v1/models/llama3.2</span></div>
+          <div class="out-accent">{"deleted": true, "id": "llama3.2"}</div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           5. AGENT / AGENTIC STREAM
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="agent-api">
+        <div class="section-tag">LINUS-AI Extension</div>
+        <h2>Agent / Agentic Stream</h2>
+        <p class="section-sub">
+          LINUS-AI's native agentic inference endpoints. Supports multi-turn reasoning,
+          tool use, 14 vertical profiles, and an encrypted semantic vault.
+        </p>
+
+        <div class="api-endpoint"><span class="method method-post">POST</span><span class="api-path">/agent/stream</span><span class="api-desc">Multi-turn agentic inference (SSE)</span></div>
+        <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/agent/profiles</span><span class="api-desc">List all 14 vertical profiles</span></div>
+        <div class="api-endpoint"><span class="method method-get">GET</span><span class="api-path">/v1/vault/query?q=QUERY</span><span class="api-desc">Semantic search over encrypted vault</span></div>
+        <div class="api-endpoint" style="margin-bottom:28px;"><span class="method method-post">POST</span><span class="api-path">/v1/vault/store</span><span class="api-desc">Store entry in encrypted vault</span></div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">POST /agent/stream — Request Parameters</h3>
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:24px;">
+          <table class="params-table">
+            <thead>
+              <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>model <span class="param-required">required</span></td>
+                <td>string</td>
+                <td>Model to use for inference, e.g. <code>"llama3.2"</code>.</td>
+              </tr>
+              <tr>
+                <td>message <span class="param-required">required</span></td>
+                <td>string</td>
+                <td>The current user message (latest turn).</td>
+              </tr>
+              <tr>
+                <td>profile <span class="param-optional">optional</span></td>
+                <td>string</td>
+                <td>One of the 14 vertical profile IDs: <code>general</code>, <code>medical</code>, <code>legal</code>, <code>financial</code>, <code>research</code>, <code>coding</code>, <code>education</code>, <code>creative</code>, <code>security</code>, <code>data</code>, <code>hr</code>, <code>executive</code>, <code>customer</code>, <code>compliance</code>.</td>
+              </tr>
+              <tr>
+                <td>history <span class="param-optional">optional</span></td>
+                <td>array</td>
+                <td>Prior conversation turns. Same format as <code>messages</code> in chat completions.</td>
+              </tr>
+              <tr>
+                <td>session_id <span class="param-optional">optional</span></td>
+                <td>string</td>
+                <td>Session identifier for vault-backed memory retrieval. Omit to start a stateless session.</td>
+              </tr>
+              <tr>
+                <td>system <span class="param-optional">optional</span></td>
+                <td>string</td>
+                <td>Custom system prompt. Overrides the profile system prompt when set.</td>
+              </tr>
+              <tr>
+                <td>max_turns <span class="param-optional">optional</span></td>
+                <td>integer</td>
+                <td>Maximum agentic reasoning turns before returning. Default: <code>8</code>.</td>
+              </tr>
+              <tr>
+                <td>temperature <span class="param-optional">optional</span></td>
+                <td>float</td>
+                <td>Sampling temperature. Default: <code>0.7</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">SSE Event Types</h3>
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Agent SSE stream events</span>
+          </div>
+          <div class="out"># Token delta — streamed text content</div>
+          <div class="cmd">data: {"type":"delta","content":"Based on the latest research..."}</div>
+          <div>&nbsp;</div>
+          <div class="out"># Tool call — agent invoking a registered tool</div>
+          <div class="cmd">data: {"type":"tool_call","tool":"web_search","args":{"query":"privacy laws 2025"}}</div>
+          <div>&nbsp;</div>
+          <div class="out"># Tool result — result returned to agent</div>
+          <div class="cmd">data: {"type":"tool_result","tool":"web_search","result":"...search results..."}</div>
+          <div>&nbsp;</div>
+          <div class="out"># Done — inference complete</div>
+          <div class="cmd">data: {"type":"done","usage":{"prompt_tokens":421,"completion_tokens":187}}</div>
+          <div class="cmd">data: [DONE]</div>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">GET /agent/profiles — Response</h3>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Profile list</span>
+          </div>
+          <div class="cmd">{</div>
+          <div class="cmd">  "profiles": [</div>
+          <div class="cmd">    {</div>
+          <div class="cmd">      "id": "medical",</div>
+          <div class="cmd">      "name": "Medical Assistant",</div>
+          <div class="cmd">      "icon": "🏥",</div>
+          <div class="cmd">      "description": "Clinical decision support, drug interactions, diagnostics.",</div>
+          <div class="cmd">      "model_hints": ["llama3-70b", "meditron-7b"],</div>
+          <div class="cmd">      "suggested_model": "meditron-7b"</div>
+          <div class="cmd">    },</div>
+          <div class="cmd">    { "id": "legal",    "name": "Legal Assistant",    "icon": "⚖", ... },</div>
+          <div class="cmd">    { "id": "coding",   "name": "Code Assistant",     "icon": "⌨", ... },</div>
+          <div class="cmd">    { "id": "security", "name": "Security Analyst",   "icon": "🛡", ... },</div>
+          <div class="cmd">    <span class="out">// ... 14 profiles total</span></div>
+          <div class="cmd">  ]</div>
+          <div class="cmd">}</div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           6. WEBSOCKET STREAMING
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="websocket">
+        <div class="section-tag">WebSocket</div>
+        <h2>WebSocket Streaming</h2>
+        <p class="section-sub">
+          For real-time bidirectional communication — ideal for chat UIs and applications
+          that need low-latency token streaming without managing SSE connections.
+        </p>
+
+        <div class="api-endpoint" style="margin-bottom:24px;">
+          <span class="method method-ws">WS</span>
+          <span class="api-path">ws://localhost:8080/v1/stream</span>
+          <span class="api-desc">WebSocket streaming interface</span>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Message Protocol</h3>
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:24px;">
+          <table class="params-table">
+            <thead>
+              <tr><th>Direction</th><th>Type</th><th>Fields</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Client → Server</td>
+                <td><code>chat</code></td>
+                <td><code>type, model, messages, temperature, max_tokens, profile, session_id</code></td>
+              </tr>
+              <tr>
+                <td>Server → Client</td>
+                <td><code>delta</code></td>
+                <td><code>type, content</code> — streamed token chunk</td>
+              </tr>
+              <tr>
+                <td>Server → Client</td>
+                <td><code>done</code></td>
+                <td><code>type, usage</code> — inference complete with token counts</td>
+              </tr>
+              <tr>
+                <td>Server → Client</td>
+                <td><code>error</code></td>
+                <td><code>type, code, message</code> — error condition</td>
+              </tr>
+              <tr>
+                <td>Client → Server</td>
+                <td><code>auth</code></td>
+                <td><code>type, api_key</code> — send immediately after connection when auth is enabled</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">JavaScript — WebSocket client with reconnection</span>
+          </div>
+          <div class="cmd">class LinusAISocket {</div>
+          <div class="cmd">  constructor(url = "ws://localhost:8080/v1/stream", apiKey = null) {</div>
+          <div class="cmd">    this.url = url;</div>
+          <div class="cmd">    this.apiKey = apiKey;</div>
+          <div class="cmd">    this.reconnectDelay = 1000;</div>
+          <div class="cmd">    this.connect();</div>
+          <div class="cmd">  }</div>
+          <div>&nbsp;</div>
+          <div class="cmd">  connect() {</div>
+          <div class="cmd">    this.ws = new WebSocket(this.url);</div>
+          <div>&nbsp;</div>
+          <div class="cmd">    this.ws.onopen = () => {</div>
+          <div class="cmd">      this.reconnectDelay = 1000;  <span class="out">// reset backoff on success</span></div>
+          <div class="cmd">      if (this.apiKey) {</div>
+          <div class="cmd">        this.ws.send(JSON.stringify({ type: "auth", api_key: this.apiKey }));</div>
+          <div class="cmd">      }</div>
+          <div class="cmd">    };</div>
+          <div>&nbsp;</div>
+          <div class="cmd">    this.ws.onmessage = (event) => {</div>
+          <div class="cmd">      const msg = JSON.parse(event.data);</div>
+          <div class="cmd">      if (msg.type === "delta") process.stdout.write(msg.content);</div>
+          <div class="cmd">      if (msg.type === "done") console.log("\n[done]", msg.usage);</div>
+          <div class="cmd">      if (msg.type === "error") console.error("Error:", msg.message);</div>
+          <div class="cmd">    };</div>
+          <div>&nbsp;</div>
+          <div class="cmd">    this.ws.onclose = () => {</div>
+          <div class="cmd">      setTimeout(() => this.connect(), this.reconnectDelay);</div>
+          <div class="cmd">      this.reconnectDelay = Math.min(this.reconnectDelay * 2, 30000);</div>
+          <div class="cmd">    };</div>
+          <div class="cmd">  }</div>
+          <div>&nbsp;</div>
+          <div class="cmd">  chat(model, messages) {</div>
+          <div class="cmd">    this.ws.send(JSON.stringify({ type: "chat", model, messages }));</div>
+          <div class="cmd">  }</div>
+          <div class="cmd">}</div>
+          <div>&nbsp;</div>
+          <div class="out"># Usage</div>
+          <div class="cmd">const ai = new LinusAISocket("ws://localhost:8080/v1/stream", "YOUR_API_KEY");</div>
+          <div class="cmd">ai.chat("llama3.2", [{ role: "user", content: "Hello from WebSocket!" }]);</div>
+        </div>
+
+        <div class="callout mt-32">
+          <strong>Reconnection:</strong> The client above implements exponential backoff (1s → 2s → 4s … up to 30s).
+          The server retains no in-flight state between connections — resend the full message history on reconnect.
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           7. PYTHON SDK
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="python-sdk">
+        <div class="section-tag">SDK</div>
+        <h2>Python SDK</h2>
+        <p class="section-sub">
+          LINUS-AI uses the standard <code>openai</code> Python library for all
+          OpenAI-compatible endpoints, plus direct HTTP for LINUS-AI extensions.
+        </p>
+
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Install</span>
+          </div>
+          <div><span class="prompt">$ </span><span class="cmd">pip install openai</span></div>
+          <div class="out-accent">Successfully installed openai-1.x.x</div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">linus_ai_example.py — complete working script</span>
+          </div>
+          <div class="cmd">#!/usr/bin/env python3</div>
+          <div class="cmd">"""LINUS-AI Python integration example."""</div>
+          <div>&nbsp;</div>
+          <div class="cmd">import httpx</div>
+          <div class="cmd">import json</div>
+          <div class="cmd">from openai import OpenAI</div>
+          <div>&nbsp;</div>
+          <div class="cmd">BASE_URL = "http://localhost:8080"</div>
+          <div class="cmd">API_KEY  = "YOUR_API_KEY"  <span class="out"># or "none" if auth is disabled</span></div>
+          <div>&nbsp;</div>
+          <div class="out"># ── 1. OpenAI-compatible client ──────────────────────────</div>
+          <div class="cmd">client = OpenAI(base_url=f"{BASE_URL}/v1", api_key=API_KEY)</div>
+          <div>&nbsp;</div>
+          <div class="out"># ── 2. Standard chat completion ──────────────────────────</div>
+          <div class="cmd">def chat(prompt: str, model: str = "llama3.2") -> str:</div>
+          <div class="cmd">    resp = client.chat.completions.create(</div>
+          <div class="cmd">        model=model,</div>
+          <div class="cmd">        messages=[{"role": "user", "content": prompt}],</div>
+          <div class="cmd">        temperature=0.7,</div>
+          <div class="cmd">        max_tokens=512,</div>
+          <div class="cmd">    )</div>
+          <div class="cmd">    return resp.choices[0].message.content</div>
+          <div>&nbsp;</div>
+          <div class="out"># ── 3. Streaming chat ────────────────────────────────────</div>
+          <div class="cmd">def chat_stream(prompt: str, model: str = "llama3.2"):</div>
+          <div class="cmd">    stream = client.chat.completions.create(</div>
+          <div class="cmd">        model=model,</div>
+          <div class="cmd">        messages=[{"role": "user", "content": prompt}],</div>
+          <div class="cmd">        stream=True,</div>
+          <div class="cmd">    )</div>
+          <div class="cmd">    for chunk in stream:</div>
+          <div class="cmd">        delta = chunk.choices[0].delta.content</div>
+          <div class="cmd">        if delta:</div>
+          <div class="cmd">            print(delta, end="", flush=True)</div>
+          <div class="cmd">    print()  <span class="out"># newline at end</span></div>
+          <div>&nbsp;</div>
+          <div class="out"># ── 4. Embeddings ────────────────────────────────────────</div>
+          <div class="cmd">def embed(texts: list[str]) -> list[list[float]]:</div>
+          <div class="cmd">    resp = client.embeddings.create(</div>
+          <div class="cmd">        model="nomic-embed-text",</div>
+          <div class="cmd">        input=texts,</div>
+          <div class="cmd">    )</div>
+          <div class="cmd">    return [d.embedding for d in resp.data]</div>
+          <div>&nbsp;</div>
+          <div class="out"># ── 5. Agent stream (LINUS-AI extension) ─────────────────</div>
+          <div class="cmd">def agent_stream(message: str, profile: str = "general"):</div>
+          <div class="cmd">    with httpx.stream("POST", f"{BASE_URL}/agent/stream",</div>
+          <div class="cmd">                       headers={"Authorization": f"Bearer {API_KEY}"},</div>
+          <div class="cmd">                       json={"model": "llama3.2", "message": message,</div>
+          <div class="cmd">                             "profile": profile}) as r:</div>
+          <div class="cmd">        for line in r.iter_lines():</div>
+          <div class="cmd">            if not line.startswith("data: "): continue</div>
+          <div class="cmd">            payload = line[6:]</div>
+          <div class="cmd">            if payload == "[DONE]": break</div>
+          <div class="cmd">            event = json.loads(payload)</div>
+          <div class="cmd">            if event["type"] == "delta":</div>
+          <div class="cmd">                print(event["content"], end="", flush=True)</div>
+          <div class="cmd">    print()</div>
+          <div>&nbsp;</div>
+          <div class="out"># ── 6. List agent profiles ───────────────────────────────</div>
+          <div class="cmd">def list_profiles():</div>
+          <div class="cmd">    r = httpx.get(f"{BASE_URL}/agent/profiles")</div>
+          <div class="cmd">    return r.json()["profiles"]</div>
+          <div>&nbsp;</div>
+          <div class="out"># ── Demo ─────────────────────────────────────────────────</div>
+          <div class="cmd">if __name__ == "__main__":</div>
+          <div class="cmd">    print("Chat:", chat("What is entropy?"))</div>
+          <div class="cmd">    print("\nStream: ", end="")</div>
+          <div class="cmd">    chat_stream("Explain quantum computing in 3 sentences.")</div>
+          <div class="cmd">    vecs = embed(["Local AI is private", "Cloud AI shares data"])</div>
+          <div class="cmd">    print(f"\nEmbedding dim: {len(vecs[0])}")</div>
+          <div class="cmd">    print("\nAgent (medical profile):", end=" ")</div>
+          <div class="cmd">    agent_stream("What are the symptoms of hyponatremia?", profile="medical")</div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           8. NODE.JS / JAVASCRIPT SDK
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="js-sdk">
+        <div class="section-tag">SDK</div>
+        <h2>Node.js / JavaScript SDK</h2>
+        <p class="section-sub">
+          Use the official <code>openai</code> npm package for OpenAI-compatible
+          endpoints, and <code>fetch</code> for LINUS-AI extensions.
+        </p>
+
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Install</span>
+          </div>
+          <div><span class="prompt">$ </span><span class="cmd">npm install openai</span></div>
+          <div class="out-accent">added 1 package, audited 1 package in 0.8s</div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">linus-ai-example.mjs — complete working script</span>
+          </div>
+          <div class="cmd">import OpenAI from "openai";</div>
+          <div>&nbsp;</div>
+          <div class="cmd">const BASE_URL = "http://localhost:8080";</div>
+          <div class="cmd">const API_KEY  = "YOUR_API_KEY";</div>
+          <div>&nbsp;</div>
+          <div class="cmd">const client = new OpenAI({</div>
+          <div class="cmd">  baseURL: `${BASE_URL}/v1`,</div>
+          <div class="cmd">  apiKey: API_KEY,</div>
+          <div class="cmd">});</div>
+          <div>&nbsp;</div>
+          <div class="out">// ── Standard chat ───────────────────────────────────────</div>
+          <div class="cmd">async function chat(prompt, model = "llama3.2") {</div>
+          <div class="cmd">  const resp = await client.chat.completions.create({</div>
+          <div class="cmd">    model,</div>
+          <div class="cmd">    messages: [{ role: "user", content: prompt }],</div>
+          <div class="cmd">    temperature: 0.7,</div>
+          <div class="cmd">  });</div>
+          <div class="cmd">  return resp.choices[0].message.content;</div>
+          <div class="cmd">}</div>
+          <div>&nbsp;</div>
+          <div class="out">// ── Streaming chat ───────────────────────────────────────</div>
+          <div class="cmd">async function chatStream(prompt, model = "llama3.2") {</div>
+          <div class="cmd">  const stream = await client.chat.completions.create({</div>
+          <div class="cmd">    model, stream: true,</div>
+          <div class="cmd">    messages: [{ role: "user", content: prompt }],</div>
+          <div class="cmd">  });</div>
+          <div class="cmd">  for await (const chunk of stream) {</div>
+          <div class="cmd">    const delta = chunk.choices[0]?.delta?.content ?? "";</div>
+          <div class="cmd">    process.stdout.write(delta);</div>
+          <div class="cmd">  }</div>
+          <div class="cmd">  process.stdout.write("\n");</div>
+          <div class="cmd">}</div>
+          <div>&nbsp;</div>
+          <div class="out">// ── Agent stream (LINUS-AI extension via fetch) ──────────</div>
+          <div class="cmd">async function agentStream(message, profile = "general") {</div>
+          <div class="cmd">  const resp = await fetch(`${BASE_URL}/agent/stream`, {</div>
+          <div class="cmd">    method: "POST",</div>
+          <div class="cmd">    headers: {</div>
+          <div class="cmd">      "Content-Type": "application/json",</div>
+          <div class="cmd">      "Authorization": `Bearer ${API_KEY}`,</div>
+          <div class="cmd">    },</div>
+          <div class="cmd">    body: JSON.stringify({ model: "llama3.2", message, profile }),</div>
+          <div class="cmd">  });</div>
+          <div class="cmd">  const reader = resp.body.getReader();</div>
+          <div class="cmd">  const dec = new TextDecoder();</div>
+          <div class="cmd">  while (true) {</div>
+          <div class="cmd">    const { done, value } = await reader.read();</div>
+          <div class="cmd">    if (done) break;</div>
+          <div class="cmd">    for (const line of dec.decode(value).split("\n")) {</div>
+          <div class="cmd">      if (!line.startsWith("data: ")) continue;</div>
+          <div class="cmd">      const payload = line.slice(6);</div>
+          <div class="cmd">      if (payload === "[DONE]") return;</div>
+          <div class="cmd">      const event = JSON.parse(payload);</div>
+          <div class="cmd">      if (event.type === "delta") process.stdout.write(event.content);</div>
+          <div class="cmd">    }</div>
+          <div class="cmd">  }</div>
+          <div class="cmd">}</div>
+          <div>&nbsp;</div>
+          <div class="out">// ── Demo ────────────────────────────────────────────────</div>
+          <div class="cmd">console.log(await chat("What is differential privacy?"));</div>
+          <div class="cmd">await chatStream("Explain zero-knowledge proofs simply.");</div>
+          <div class="cmd">await agentStream("Summarize GDPR for a developer.", "legal");</div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           9. PLUGIN SYSTEM
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="plugins">
+        <div class="section-tag">Extensions</div>
+        <h2>Plugin System</h2>
+        <p class="section-sub">
+          Extend the LINUS-AI agent with custom tools by dropping Python modules
+          into the plugin directory. No server restart required — plugins are hot-loaded.
+        </p>
+
+        <div class="features-grid" style="margin-bottom:28px;">
+          <div class="feature-card">
+            <div class="feature-icon">📁</div>
+            <h3>Plugin Directory</h3>
+            <p>Place plugin packages in <code>~/.linus_ai/plugins/</code>. Each plugin is a directory containing <code>plugin.json</code> and a Python module.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔌</div>
+            <h3>Entry Point</h3>
+            <p>Every plugin must expose a <code>register(app)</code> function in its main module. Called at load time with the LINUS-AI app context.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🛠</div>
+            <h3>Tool Registration</h3>
+            <p>Use <code>@tool</code> decorator to register functions as agent tools. The agent discovers and invokes them during agentic inference.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📄</div>
+            <h3>Plugin Manifest</h3>
+            <p>Each plugin declares its identity and tools in <code>plugin.json</code>: name, version, description, author, and tools array.</p>
+          </div>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Plugin Manifest — plugin.json</h3>
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">~/.linus_ai/plugins/weather/plugin.json</span>
+          </div>
+          <div class="cmd">{</div>
+          <div class="cmd">  "name": "weather",</div>
+          <div class="cmd">  "version": "1.0.0",</div>
+          <div class="cmd">  "description": "Fetches current weather for any city.",</div>
+          <div class="cmd">  "author": "Your Name",</div>
+          <div class="cmd">  "main": "weather_plugin.py",</div>
+          <div class="cmd">  "tools": ["get_weather", "get_forecast"]</div>
+          <div class="cmd">}</div>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Complete Plugin Example — Weather Tool</h3>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">~/.linus_ai/plugins/weather/weather_plugin.py</span>
+          </div>
+          <div class="cmd">"""LINUS-AI weather plugin — fetches weather data locally."""</div>
+          <div class="cmd">import httpx</div>
+          <div class="cmd">from linus_ai.plugin import tool, register</div>
+          <div>&nbsp;</div>
+          <div class="cmd">@tool(</div>
+          <div class="cmd">    name="get_weather",</div>
+          <div class="cmd">    description="Get current weather conditions for a city.",</div>
+          <div class="cmd">    params={</div>
+          <div class="cmd">        "city": {"type": "string", "description": "City name, e.g. 'Berlin'"},</div>
+          <div class="cmd">        "units": {"type": "string", "enum": ["metric", "imperial"], "default": "metric"},</div>
+          <div class="cmd">    },</div>
+          <div class="cmd">)</div>
+          <div class="cmd">def get_weather(city: str, units: str = "metric") -> dict:</div>
+          <div class="cmd">    """Fetch real-time weather from Open-Meteo (no API key required)."""</div>
+          <div class="cmd">    geo = httpx.get(</div>
+          <div class="cmd">        "https://geocoding-api.open-meteo.com/v1/search",</div>
+          <div class="cmd">        params={"name": city, "count": 1}</div>
+          <div class="cmd">    ).json()["results"][0]</div>
+          <div class="cmd">    weather = httpx.get(</div>
+          <div class="cmd">        "https://api.open-meteo.com/v1/forecast",</div>
+          <div class="cmd">        params={</div>
+          <div class="cmd">            "latitude": geo["latitude"],</div>
+          <div class="cmd">            "longitude": geo["longitude"],</div>
+          <div class="cmd">            "current": "temperature_2m,wind_speed_10m,weather_code",</div>
+          <div class="cmd">        }</div>
+          <div class="cmd">    ).json()</div>
+          <div class="cmd">    cur = weather["current"]</div>
+          <div class="cmd">    return {</div>
+          <div class="cmd">        "city": city,</div>
+          <div class="cmd">        "temperature": cur["temperature_2m"],</div>
+          <div class="cmd">        "wind_speed": cur["wind_speed_10m"],</div>
+          <div class="cmd">        "weather_code": cur["weather_code"],</div>
+          <div class="cmd">    }</div>
+          <div>&nbsp;</div>
+          <div class="cmd">def register(app):</div>
+          <div class="cmd">    """Called by LINUS-AI at plugin load time."""</div>
+          <div class="cmd">    app.tools.register(get_weather)</div>
+          <div class="cmd">    app.logger.info("weather plugin loaded — tools: get_weather")</div>
+        </div>
+
+        <div class="callout mt-32">
+          <strong>Plugin API import:</strong> <code>from linus_ai.plugin import tool, register</code> is available
+          in any plugin. Tools are automatically discovered by the agent and included in its reasoning context.
+          No server restart is required — LINUS-AI hot-loads plugins from the plugins directory on startup and
+          when a <code>SIGHUP</code> is received.
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           10. WEBHOOK EVENTS
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="webhooks">
+        <div class="section-tag">Integrations</div>
+        <h2>Webhook Events</h2>
+        <p class="section-sub">
+          Configure LINUS-AI to push structured event notifications to any HTTP endpoint.
+          Useful for monitoring, audit pipelines, and workflow automation.
+        </p>
+
+        <div class="callout">
+          <strong>Privacy note:</strong> Webhook payloads never include prompt content or model outputs.
+          Only metadata is transmitted: event type, timestamp, session ID, model name, and token counts.
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin: 24px 0 12px;">Configuration</h3>
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">~/.linus_ai/config.toml</span>
+          </div>
+          <div class="cmd">[webhooks]</div>
+          <div class="cmd">url    = "https://your-server.example.com/linus-ai-events"</div>
+          <div class="cmd">secret = "your-hmac-secret-for-signature-verification"</div>
+          <div class="cmd">events = ["chat.start", "chat.complete", "model.load", "model.unload", "error"]</div>
+          <div class="cmd">timeout_ms = 5000</div>
+          <div class="cmd">retry_count = 3</div>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Event Types</h3>
+        <div style="margin-bottom:16px;">
+          <span class="event-badge">chat.start</span>
+          <span class="event-badge">chat.complete</span>
+          <span class="event-badge">model.load</span>
+          <span class="event-badge">model.unload</span>
+          <span class="event-badge">error</span>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Payload Format</h3>
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">POST to your webhook URL</span>
+          </div>
+          <div class="out"># chat.complete event payload</div>
+          <div class="cmd">{</div>
+          <div class="cmd">  "event_type": "chat.complete",</div>
+          <div class="cmd">  "timestamp": "2026-03-15T14:23:07Z",</div>
+          <div class="cmd">  "session_id": "sess_a1b2c3d4",</div>
+          <div class="cmd">  "model": "llama3.2",</div>
+          <div class="cmd">  "token_counts": {</div>
+          <div class="cmd">    "prompt_tokens": 142,</div>
+          <div class="cmd">    "completion_tokens": 87,</div>
+          <div class="cmd">    "total_tokens": 229</div>
+          <div class="cmd">  },</div>
+          <div class="cmd">  "latency_ms": 1240,</div>
+          <div class="cmd">  "profile": "general"</div>
+          <div class="out">  // NOTE: no prompt content, no response content — metadata only</div>
+          <div class="cmd">}</div>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Signature Verification</h3>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Python — HMAC-SHA256 verification</span>
+          </div>
+          <div class="cmd">import hmac, hashlib</div>
+          <div class="cmd">from flask import Flask, request, abort</div>
+          <div>&nbsp;</div>
+          <div class="cmd">WEBHOOK_SECRET = b"your-hmac-secret-for-signature-verification"</div>
+          <div>&nbsp;</div>
+          <div class="cmd">app = Flask(__name__)</div>
+          <div>&nbsp;</div>
+          <div class="cmd">@app.post("/linus-ai-events")</div>
+          <div class="cmd">def webhook():</div>
+          <div class="cmd">    signature = request.headers.get("X-LinusAI-Signature", "")</div>
+          <div class="cmd">    expected  = hmac.new(WEBHOOK_SECRET, request.data, hashlib.sha256).hexdigest()</div>
+          <div class="cmd">    if not hmac.compare_digest(f"sha256={expected}", signature):</div>
+          <div class="cmd">        abort(401)</div>
+          <div class="cmd">    event = request.json</div>
+          <div class="cmd">    print(f"Event: {event['event_type']} | tokens: {event['token_counts']['total_tokens']}")</div>
+          <div class="cmd">    return "", 204</div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           11. RATE LIMITS & ERROR CODES
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="errors">
+        <div class="section-tag">Reference</div>
+        <h2>Rate Limits &amp; Error Codes</h2>
+        <p class="section-sub">
+          HTTP status codes, error response format, rate-limit headers, and
+          a reference table of all common error codes.
+        </p>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">HTTP Status Codes</h3>
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:28px;">
+          <table class="error-table">
+            <thead>
+              <tr><th>Code</th><th>Meaning</th><th>When it occurs</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="http-code code-2xx">200</span></td>
+                <td>OK</td>
+                <td>Request succeeded. Response body contains the result or SSE stream.</td>
+              </tr>
+              <tr>
+                <td><span class="http-code code-4xx">400</span></td>
+                <td>Bad Request</td>
+                <td>Malformed JSON, missing required fields, or invalid parameter values.</td>
+              </tr>
+              <tr>
+                <td><span class="http-code code-4xx">401</span></td>
+                <td>Unauthorized</td>
+                <td>API key missing or invalid when authentication is enabled.</td>
+              </tr>
+              <tr>
+                <td><span class="http-code code-4xx">429</span></td>
+                <td>Too Many Requests</td>
+                <td>Rate limit exceeded. Check <code>X-RateLimit-Reset</code> header for retry time.</td>
+              </tr>
+              <tr>
+                <td><span class="http-code code-5xx">500</span></td>
+                <td>Internal Server Error</td>
+                <td>Unexpected error in the inference engine. Check server logs.</td>
+              </tr>
+              <tr>
+                <td><span class="http-code code-5xx">503</span></td>
+                <td>Service Unavailable</td>
+                <td>Model is loading, GPU OOM condition, or server is at capacity.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Error Response Format</h3>
+        <div class="terminal" style="margin-bottom:28px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Error JSON</span>
+          </div>
+          <div class="cmd">{</div>
+          <div class="cmd">  "error": {</div>
+          <div class="cmd">    "code":    "model_not_found",</div>
+          <div class="cmd">    "message": "Model 'gpt-4' is not installed. Run: linus-ai --pull-model llama3.2",</div>
+          <div class="cmd">    "type":    "invalid_request_error"</div>
+          <div class="cmd">  }</div>
+          <div class="cmd">}</div>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Rate-Limit Headers</h3>
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:28px;">
+          <table class="params-table">
+            <thead>
+              <tr><th>Header</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>X-RateLimit-Limit</td>
+                <td>integer</td>
+                <td>Maximum number of requests allowed per minute for this API key.</td>
+              </tr>
+              <tr>
+                <td>X-RateLimit-Remaining</td>
+                <td>integer</td>
+                <td>Number of requests remaining in the current rate-limit window.</td>
+              </tr>
+              <tr>
+                <td>X-RateLimit-Reset</td>
+                <td>unix timestamp</td>
+                <td>UTC timestamp (seconds) when the rate-limit window resets.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:12px;">Common Error Codes</h3>
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+          <table class="error-table">
+            <thead>
+              <tr><th>Error Code</th><th>HTTP</th><th>Description &amp; Resolution</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="error-code-name">model_not_found</span></td>
+                <td><span class="http-code code-4xx">400</span></td>
+                <td>The requested model is not installed locally. Pull it with <code>POST /v1/models/pull</code> or <code>linus-ai --pull-model &lt;name&gt;</code>.</td>
+              </tr>
+              <tr>
+                <td><span class="error-code-name">context_length_exceeded</span></td>
+                <td><span class="http-code code-4xx">400</span></td>
+                <td>The combined token count of your messages exceeds the model's context window. Reduce message history or <code>max_tokens</code>.</td>
+              </tr>
+              <tr>
+                <td><span class="error-code-name">license_required</span></td>
+                <td><span class="http-code code-4xx">401</span></td>
+                <td>The requested feature requires an active LINUS-AI license. Activate with <code>linus-ai --activate &lt;key&gt;</code>.</td>
+              </tr>
+              <tr>
+                <td><span class="error-code-name">out_of_memory</span></td>
+                <td><span class="http-code code-5xx">503</span></td>
+                <td>GPU or RAM exhausted. Try a smaller model, reduce <code>gpu_layers</code>, lower <code>context_len</code>, or use a higher quantization level.</td>
+              </tr>
+              <tr>
+                <td><span class="error-code-name">model_loading</span></td>
+                <td><span class="http-code code-5xx">503</span></td>
+                <td>Model is currently loading into memory. Retry after a few seconds. Check <code>Retry-After</code> header.</td>
+              </tr>
+              <tr>
+                <td><span class="error-code-name">invalid_api_key</span></td>
+                <td><span class="http-code code-4xx">401</span></td>
+                <td>The provided API key is not recognized. Check your <code>Authorization</code> header and config.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           12. LOCAL DEVELOPMENT
+      ════════════════════════════════════════════════════════ -->
+      <section class="section dev-section" id="local-dev">
+        <div class="section-tag">Contributing</div>
+        <h2>Local Development</h2>
+        <p class="section-sub">
+          Set up a development environment to contribute to LINUS-AI, run tests,
+          or build custom inference backends.
+        </p>
+
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Clone and Python setup</span>
+          </div>
+          <div class="out"># Clone the repository</div>
+          <div><span class="prompt">$ </span><span class="cmd">git clone https://github.com/LINUS-AI-PRO/linus-ai.git</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">cd linus-ai</span></div>
+          <div>&nbsp;</div>
+          <div class="out"># Create a virtual environment and install in editable mode with dev extras</div>
+          <div><span class="prompt">$ </span><span class="cmd">python -m venv .venv && source .venv/bin/activate</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">pip install -e ".[dev]"</span></div>
+          <div class="out-accent">Successfully installed linus-ai-0.x.x (editable)</div>
+          <div>&nbsp;</div>
+          <div class="out"># Run the test suite</div>
+          <div><span class="prompt">$ </span><span class="cmd">pytest tests/ -v</span></div>
+          <div class="out-accent">collected 142 items</div>
+          <div class="out-accent">tests/test_api.py::test_chat_completions PASSED</div>
+          <div class="out-accent">tests/test_api.py::test_streaming PASSED</div>
+          <div class="out-accent">tests/test_embeddings.py::test_batch PASSED</div>
+          <div class="out-accent">...</div>
+          <div class="out-accent">142 passed in 18.4s</div>
+        </div>
+
+        <div class="terminal" style="margin-bottom:24px;">
+          <div class="terminal-bar">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">Rust backend (linus-ai-rs)</span>
+          </div>
+          <div class="out"># Build the Rust inference engine in release mode</div>
+          <div><span class="prompt">$ </span><span class="cmd">cd linus-ai-rs/</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">cargo build --release</span></div>
+          <div class="out-accent">   Compiling linus-ai-rs v0.x.x</div>
+          <div class="out-accent">    Finished release [optimized] target(s) in 42.1s</div>
+          <div>&nbsp;</div>
+          <div class="out"># Run Rust unit tests</div>
+          <div><span class="prompt">$ </span><span class="cmd">cargo test</span></div>
+          <div class="out-accent">running 38 tests ... ok</div>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🧪</div>
+            <h3>Running Tests</h3>
+            <p>Python: <code>pytest tests/ -v</code><br>Rust: <code>cargo test</code><br>Integration: <code>pytest tests/integration/ --live</code> (requires a running server).</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Linting &amp; Formatting</h3>
+            <p>Python: <code>ruff check .</code> and <code>ruff format .</code><br>Rust: <code>cargo clippy</code> and <code>cargo fmt</code></p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Contributing</h3>
+            <p>Read <a href="https://github.com/LINUS-AI-PRO/linus-ai/blob/main/CONTRIBUTING.md" style="color:var(--accent);">CONTRIBUTING.md</a> before submitting a PR. We welcome bug fixes, new model support, and documentation improvements.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌿</div>
+            <h3>Branch Conventions</h3>
+            <p>Features: <code>feat/short-description</code><br>Bug fixes: <code>fix/short-description</code><br>Docs: <code>docs/short-description</code></p>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /.container -->
+  </main>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="../index.html" class="footer-logo">LINUS-AI</a>
+          <p class="footer-desc">
+            Private AI inference engine. One binary, zero cloud, complete control.
+            Your data never leaves your hardware.
+          </p>
+          <div class="footer-social">
+            <a href="https://github.com/LINUS-AI-PRO/linus-ai" aria-label="GitHub">⌥</a>
+            <a href="https://twitter.com/linusai" aria-label="Twitter">𝕏</a>
+            <a href="https://discord.gg/linusai" aria-label="Discord">◈</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul class="footer-links">
+            <li><a href="../index.html#features">Features</a></li>
+            <li><a href="../index.html#pricing">Pricing</a></li>
+            <li><a href="../download.html">Download</a></li>
+            <li><a href="../activate.html">Activate</a></li>
+            <li><a href="../index.html#changelog">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Documentation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#user-guide">User Guide</a></li>
+            <li><a href="index.html#admin-guide">Admin Guide</a></li>
+            <li><a href="developer.html">Developer Guide</a></li>
+            <li><a href="index.html#arch-guide">Architect Guide</a></li>
+            <li><a href="index.html#api-reference">API Reference</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="mailto:support@linus-ai.com">Support</a></li>
+            <li><a href="mailto:sales@linus-ai.com">Sales</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span>
+        <span>
+          <a href="#">Privacy</a> &nbsp;·&nbsp;
+          <a href="#">Terms</a> &nbsp;·&nbsp;
+          <a href="#">License Agreement</a>
+        </span>
+      </div>
+      <p class="trademark-notice">LINUS-AI&#8482; is a trademark. NVIDIA&reg; and CUDA&reg; are registered trademarks of NVIDIA Corporation. AMD&reg; and ROCm&#8482; are trademarks of Advanced Micro Devices, Inc. Apple&reg;, macOS&reg;, and Metal&reg; are registered trademarks of Apple Inc. Stripe&reg; is a registered trademark of Stripe, Inc. Microsoft&reg; and Windows&reg; are registered trademarks of Microsoft Corporation. LLaMA is a trademark of Meta Platforms, Inc. All other trademarks are the property of their respective owners.</p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    /* ── Simple tab switcher for code examples ──────────────── */
+    function switchTab(btn, panelId) {
+      const tabs = btn.parentElement;
+      const container = tabs.parentElement;
+
+      tabs.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      container.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+
+      btn.classList.add("active");
+      const panel = container.querySelector("#" + panelId);
+      if (panel) panel.classList.add("active");
+    }
+  </script>
+</body>
+</html>

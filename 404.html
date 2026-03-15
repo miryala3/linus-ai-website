@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page Not Found · LINUS-AI</title>
+  <meta name="description" content="The page you're looking for has moved, been deleted, or never existed." />
+  <meta name="robots" content="noindex" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles — 404.html lives in website/, same level as css/ -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ── 404-specific styles ───────────────────────────────── */
+    .error-page {
+      min-height: calc(100vh - 64px - 280px); /* viewport minus nav minus footer */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .error-inner {
+      max-width: 560px;
+      width: 100%;
+    }
+
+    /* Giant 404 number */
+    .error-code {
+      font-size: clamp(6rem, 20vw, 11rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 200%;
+      animation: gradient-shift 4s ease infinite;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    @keyframes gradient-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Glitch overlay — subtle text decoration */
+    .error-code-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .error-code-wrap::before,
+    .error-code-wrap::after {
+      content: "404";
+      position: absolute;
+      inset: 0;
+      font-size: inherit;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      pointer-events: none;
+      opacity: 0;
+      animation: glitch-hide 6s ease infinite;
+    }
+
+    .error-code-wrap::before {
+      color: var(--accent);
+      transform: translate(-3px, 1px);
+      animation-name: glitch-a;
+      animation-duration: 6s;
+    }
+
+    .error-code-wrap::after {
+      color: var(--accent2);
+      transform: translate(3px, -1px);
+      animation-name: glitch-b;
+      animation-duration: 6s;
+    }
+
+    @keyframes glitch-a {
+      0%, 90%, 100% { opacity: 0; transform: translate(0, 0); }
+      92%            { opacity: 0.4; transform: translate(-4px, 1px); }
+      94%            { opacity: 0.2; transform: translate(2px, -1px); }
+      96%            { opacity: 0; }
+    }
+
+    @keyframes glitch-b {
+      0%, 90%, 100% { opacity: 0; transform: translate(0, 0); }
+      93%            { opacity: 0.3; transform: translate(4px, -1px); }
+      95%            { opacity: 0.1; transform: translate(-2px, 1px); }
+      97%            { opacity: 0; }
+    }
+
+    .error-heading {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 16px 0 12px;
+      color: var(--text);
+    }
+
+    .error-msg {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+      margin: 0 0 36px;
+    }
+
+    /* Action buttons */
+    .error-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Terminal block on 404 page */
+    .error-terminal {
+      margin-top: 48px;
+      text-align: left;
+    }
+
+    /* Subtle divider */
+    .error-divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      margin: 24px auto;
+      opacity: 0.5;
+    }
+
+    /* Make main flex for footer-at-bottom */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main.error-main {
+      flex: 1;
+    }
+  </style>
+</head>
+<body data-page="404">
+
+  <!-- ── Navigation ───────────────────────────────────────── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="logo">
+          LINUS<span style="color:var(--accent2)">-</span>AI
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="index.html#pricing">Pricing</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="docs/index.html">Docs</a></li>
+          <li><a href="activate.html">Activate</a></li>
+        </ul>
+
+        <div class="nav-cta">
+          <a href="download.html" class="btn btn-secondary btn-sm">Download</a>
+          <a href="index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+        </div>
+
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" aria-hidden="true">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#pricing">Pricing</a></li>
+        <li><a href="download.html">Download</a></li>
+        <li><a href="docs/index.html">Docs</a></li>
+        <li><a href="activate.html">Activate</a></li>
+      </ul>
+      <div class="mobile-cta">
+        <a href="download.html" class="btn btn-secondary btn-sm">Download</a>
+        <a href="index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── 404 Content ───────────────────────────────────────── -->
+  <main class="error-main">
+    <div class="error-page">
+      <div class="error-inner">
+
+        <!-- Giant 404 -->
+        <div class="error-code-wrap">
+          <div class="error-code" aria-label="404">404</div>
+        </div>
+
+        <h1 class="error-heading">Page not found</h1>
+
+        <div class="error-divider"></div>
+
+        <p class="error-msg">
+          The page you're looking for has moved, been deleted, or never existed.<br>
+          Let's get you back on track.
+        </p>
+
+        <!-- Action buttons -->
+        <div class="error-actions">
+          <a href="index.html" class="btn btn-primary">
+            ← Go Home
+          </a>
+          <a href="docs/index.html" class="btn btn-secondary">
+            Browse Docs
+          </a>
+          <a href="download.html" class="btn btn-secondary">
+            Download LINUS-AI
+          </a>
+        </div>
+
+        <!-- Fake terminal — visual interest -->
+        <div class="error-terminal">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="terminal-dot dot-red"></span>
+              <span class="terminal-dot dot-yellow"></span>
+              <span class="terminal-dot dot-green"></span>
+              <span class="terminal-title">linus-ai — debug shell</span>
+            </div>
+            <div><span class="prompt">$ </span><span class="cmd">curl -I https://linus-ai.com/this-page-does-not-exist</span></div>
+            <div class="out">HTTP/2 404</div>
+            <div class="out">content-type: text/html; charset=utf-8</div>
+            <div class="out">server: linus-ai/2.5.0</div>
+            <div class="out">x-request-id: 550e8400-e29b-41d4-a716-446655440000</div>
+            <div>&nbsp;</div>
+            <div><span class="prompt">$ </span><span class="cmd">linus-ai --diagnose --path "/this-page-does-not-exist"</span></div>
+            <div class="out-accent" style="color:var(--red);">error[E404]: route not registered in HTTP server</div>
+            <div class="out">  --> router/routes.rs:142</div>
+            <div class="out">   |</div>
+            <div class="out">   |  match request.uri().path() {</div>
+            <div class="out">   |      "/v1/chat/completions" => chat_handler,</div>
+            <div class="out">   |      "/health"              => health_handler,</div>
+            <div class="out">   |      "/metrics"             => metrics_handler,</div>
+            <div class="out-accent" style="color:var(--red);">   |      _                      => return 404,  ← you are here</div>
+            <div class="out">   |  }</div>
+            <div>&nbsp;</div>
+            <div><span class="prompt">$ </span><span class="cmd">linus-ai --suggest-fix</span></div>
+            <div class="out-accent">hint: try one of these instead:</div>
+            <div class="out">  → <a href="index.html" style="color:var(--accent); text-decoration:none;">index.html</a>          (home page)</div>
+            <div class="out">  → <a href="docs/index.html" style="color:var(--accent); text-decoration:none;">docs/index.html</a>     (documentation)</div>
+            <div class="out">  → <a href="download.html" style="color:var(--accent); text-decoration:none;">download.html</a>       (get the binary)</div>
+            <div class="out">  → <a href="activate.html" style="color:var(--accent); text-decoration:none;">activate.html</a>       (activate licence)</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="footer-logo">LINUS-AI</a>
+          <p class="footer-desc">
+            Private AI inference engine. One binary, zero cloud, complete control.
+            Your data never leaves your hardware.
+          </p>
+          <div class="footer-social">
+            <a href="https://github.com/LINUS-AI-PRO/linus-ai" aria-label="GitHub">⌥</a>
+            <a href="https://twitter.com/linusai" aria-label="Twitter">𝕏</a>
+            <a href="https://discord.gg/linusai" aria-label="Discord">◈</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#pricing">Pricing</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="activate.html">Activate</a></li>
+            <li><a href="index.html#changelog">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Documentation</h4>
+          <ul class="footer-links">
+            <li><a href="docs/index.html#user-guide">User Guide</a></li>
+            <li><a href="docs/index.html#admin-guide">Admin Guide</a></li>
+            <li><a href="docs/index.html#dev-guide">Developer Guide</a></li>
+            <li><a href="docs/architect.html">Architect Guide</a></li>
+            <li><a href="docs/index.html#api-reference">API Reference</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="mailto:support@linus-ai.com">Support</a></li>
+            <li><a href="mailto:sales@linus-ai.com">Sales</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span>
+        <span>
+          <a href="#">Privacy</a> &nbsp;·&nbsp;
+          <a href="#">Terms</a> &nbsp;·&nbsp;
+          <a href="#">License Agreement</a>
+        </span>
+      </div>
+      <p class="trademark-notice">LINUS-AI&#8482; is a trademark. NVIDIA&reg; and CUDA&reg; are registered trademarks of NVIDIA Corporation. AMD&reg; and ROCm&#8482; are trademarks of Advanced Micro Devices, Inc. Apple&reg;, macOS&reg;, and Metal&reg; are registered trademarks of Apple Inc. Stripe&reg; is a registered trademark of Stripe, Inc. Microsoft&reg; and Windows&reg; are registered trademarks of Microsoft Corporation. LLaMA is a trademark of Meta Platforms, Inc. All other trademarks are the property of their respective owners.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activate License — LINUS-AI</title>
+  <meta name="description" content="Activate your LINUS-AI license key. Enter your key and email to unlock your installation." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* Page-specific overrides */
+    .activation-hero {
+      padding: 120px 0 60px;
+      text-align: center;
+    }
+
+    .activation-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin: 16px 0 12px;
+    }
+
+    .activation-hero .hero-sub {
+      margin: 0 auto 40px;
+    }
+
+    .activation-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+      padding-bottom: 80px;
+    }
+
+    @media (max-width: 900px) {
+      .activation-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .activation-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+    }
+
+    .activation-panel h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .activation-panel .panel-sub {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    #activation-success { display: none; }
+
+    .success-icon {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .success-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-align: center;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .success-sub {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .cli-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .cli-section h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .cli-section p {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body data-page="activate">
+
+  <!-- ── Navigation ───────────────────────────────────────── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="logo">
+          LINUS<span style="color:var(--accent2)">-</span>AI
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="index.html#pricing">Pricing</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="docs/index.html">Docs</a></li>
+          <li><a href="activate.html" class="active">Activate</a></li>
+        </ul>
+
+        <div class="nav-cta">
+          <a href="download.html" class="btn btn-secondary btn-sm">Download</a>
+          <a href="index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+        </div>
+
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" aria-hidden="true">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#pricing">Pricing</a></li>
+        <li><a href="download.html">Download</a></li>
+        <li><a href="docs/index.html">Docs</a></li>
+        <li><a href="activate.html">Activate</a></li>
+      </ul>
+      <div class="mobile-cta">
+        <a href="download.html" class="btn btn-secondary btn-sm">Download</a>
+        <a href="index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <section class="activation-hero">
+    <div class="container">
+      <div class="section-tag">License Management</div>
+      <h1>Activate Your <span class="gradient-text">License</span></h1>
+      <p class="hero-sub text-center">
+        Enter your license key and email address to activate LINUS-AI on this machine.
+        Each key supports the number of seats included in your plan.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Activation Layout ─────────────────────────────────── -->
+  <main>
+    <div class="container">
+      <div class="activation-layout">
+
+        <!-- ── Left: Form ───────────────────────────────────── -->
+        <div>
+          <!-- Activation Form -->
+          <div class="activation-panel">
+            <h2>Web Activation</h2>
+            <p class="panel-sub">
+              Activates via browser. For offline or headless environments, use the CLI method shown on the right.
+            </p>
+
+            <!-- Form -->
+            <form id="activation-form" novalidate>
+
+              <div class="form-group">
+                <label for="license_key">License Key</label>
+                <input
+                  type="text"
+                  id="license_key"
+                  name="license_key"
+                  class="input-mono license-input"
+                  placeholder="LNAI-XXXX-XXXX-XXXX-XXXX"
+                  maxlength="24"
+                  autocomplete="off"
+                  spellcheck="false"
+                  data-license-input
+                  required
+                />
+                <p class="text-xs text-dim mt-4">Format: LNAI-XXXX-XXXX-XXXX-XXXX (letters and numbers)</p>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  required
+                />
+                <p class="text-xs text-dim mt-4">Must match the email used when purchasing</p>
+              </div>
+
+              <div class="form-group">
+                <label for="machine_id">Machine ID <span class="tag" style="vertical-align:middle; font-size:10px;">Auto-detected</span></label>
+                <input
+                  type="text"
+                  id="machine_id"
+                  name="machine_id"
+                  class="input-mono"
+                  readonly
+                  data-machine-id
+                />
+                <p class="text-xs text-dim mt-4">Unique identifier for this browser session — used for seat tracking</p>
+              </div>
+
+              <div class="form-alert"></div>
+
+              <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">
+                Activate License
+              </button>
+
+              <p class="text-xs text-dim text-center mt-12">
+                By activating, you agree to the
+                <a href="#" style="color:var(--accent);">License Agreement</a>.
+                Activation data is transmitted securely.
+              </p>
+            </form>
+
+            <!-- Success State -->
+            <div id="activation-success">
+              <div class="success-icon">✅</div>
+              <div class="success-title">License Activated!</div>
+              <p class="success-sub">Your LINUS-AI installation is now licensed and ready to use.</p>
+
+              <div class="license-details">
+                <div class="license-row">
+                  <span class="license-label">Plan</span>
+                  <span class="license-value" data-plan>—</span>
+                </div>
+                <div class="license-row">
+                  <span class="license-label">Licensee</span>
+                  <span class="license-value" data-licensee>—</span>
+                </div>
+                <div class="license-row">
+                  <span class="license-label">Seats</span>
+                  <span class="license-value" data-seats>—</span>
+                </div>
+                <div class="license-row">
+                  <span class="license-label">Expires</span>
+                  <span class="license-value" data-expires>—</span>
+                </div>
+                <div class="license-row">
+                  <span class="license-label">Key</span>
+                  <span class="license-value" data-key style="font-size:11px;">—</span>
+                </div>
+              </div>
+
+              <div class="alert alert-success mt-16">
+                Activation recorded. Your license is bound to this machine fingerprint.
+                To activate on additional machines, use your remaining seats.
+              </div>
+
+              <div class="flex gap-8 mt-16">
+                <a href="download.html" class="btn btn-primary btn-sm" style="flex:1; justify-content:center;">Download Now</a>
+                <a href="docs/index.html" class="btn btn-secondary btn-sm" style="flex:1; justify-content:center;">View Docs</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seat Usage Info -->
+          <div class="alert alert-info mt-16">
+            <strong>Multiple machines?</strong> Each seat allows one active machine.
+            To transfer a seat, deactivate the old machine first via <code>linus-ai --deactivate</code>
+            or contact <a href="mailto:support@linus-ai.com" style="color:inherit; font-weight:600;">support@linus-ai.com</a>.
+          </div>
+        </div>
+
+        <!-- ── Right: CLI + Info ─────────────────────────────── -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+
+          <!-- CLI Activation -->
+          <div class="cli-section">
+            <h3>CLI Activation</h3>
+            <p>
+              For headless servers, Docker containers, or airgapped environments,
+              activate directly from the command line after downloading the binary.
+            </p>
+
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+                <span class="terminal-title">Terminal</span>
+              </div>
+              <div>
+                <span class="prompt">$ </span>
+                <span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span>
+              </div>
+              <div class="out">Contacting license server…</div>
+              <div class="out-accent">✓ License activated successfully</div>
+              <div class="out">  Plan: Professional</div>
+              <div class="out">  Seats used: 1 / 1</div>
+              <div class="out">  Machine: linux-x86_64-a1b2c3d4</div>
+            </div>
+
+            <p style="margin-top:14px; margin-bottom:0;">
+              You can also pass your email for verification:
+            </p>
+            <div class="terminal" style="margin-top:10px;">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+              </div>
+              <div>
+                <span class="prompt">$ </span>
+                <span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX \</span>
+              </div>
+              <div style="padding-left:20px;">
+                <span class="cmd">  --email you@example.com</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Environment Variable -->
+          <div class="cli-section">
+            <h3>Environment Variable</h3>
+            <p>Set your license key as an environment variable for CI/CD pipelines and containers:</p>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+              </div>
+              <div>
+                <span class="prompt">$ </span>
+                <span class="cmd">export LINUS_AI_LICENSE=LNAI-XXXX-XXXX-XXXX-XXXX</span>
+              </div>
+              <div>
+                <span class="prompt">$ </span>
+                <span class="cmd">linus-ai --chat "Hello"</span>
+              </div>
+              <div class="out"># License auto-detected from environment</div>
+            </div>
+          </div>
+
+          <!-- Config file -->
+          <div class="cli-section">
+            <h3>Config File</h3>
+            <p>Add your key to <code>~/.linus_ai/config.toml</code> for persistent activation:</p>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+              </div>
+              <div class="out"># ~/.linus_ai/config.toml</div>
+              <div class="cmd">[license]</div>
+              <div class="cmd">key = "LNAI-XXXX-XXXX-XXXX-XXXX"</div>
+              <div class="cmd">email = "you@example.com"</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.activation-layout -->
+
+      <!-- ── FAQ Section ─────────────────────────────────────── -->
+      <section class="section" style="padding-top:0;">
+        <div class="section-tag">Support</div>
+        <h2>Activation FAQ</h2>
+        <p class="section-sub">Common questions about licensing and machine activation.</p>
+
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <div class="faq-q">
+              I lost my license key. How do I recover it?
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-a">
+              Your license key was sent to the email address used during purchase. Search your inbox for
+              "LINUS-AI License" from <strong>no-reply@linus-ai.com</strong>. If you can't find it,
+              visit our <a href="https://linus-ai.com/support" style="color:var(--accent);">customer portal</a>
+              and log in with your purchase email to view all your keys. You can also contact
+              <a href="mailto:support@linus-ai.com" style="color:var(--accent);">support@linus-ai.com</a>
+              with your order number.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">
+              How do I transfer my license to a new machine?
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-a">
+              Run <code>linus-ai --deactivate</code> on your old machine to release the seat.
+              Then activate on the new machine using the web form above or via CLI.
+              If the old machine is no longer accessible, contact support — we can force-release
+              seats remotely with proof of ownership (order number + email).
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">
+              What is machine binding and why does it exist?
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-a">
+              Machine binding ties a license seat to a specific hardware fingerprint to prevent
+              unauthorized sharing of license keys. The fingerprint is generated from a combination
+              of hardware identifiers and is never sent in plaintext. Community licenses are not
+              machine-bound. Professional and Team licenses respect the per-seat limit defined in
+              your plan.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">
+              Can I use one license key on multiple machines?
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-a">
+              Yes — up to the seat count for your plan. Professional includes 1 seat, Team includes
+              5 seats, and Enterprise is unlimited. Each seat can be transferred at any time by
+              deactivating the old machine. Volume purchases for additional seats are available
+              — contact <a href="mailto:sales@linus-ai.com" style="color:var(--accent);">sales@linus-ai.com</a>.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">
+              Does activation require an internet connection?
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-a">
+              Initial activation requires a one-time connection to our license server.
+              After activation, LINUS-AI runs fully offline — no periodic check-ins, no telemetry.
+              For truly airgapped environments, contact us for offline activation tokens available
+              with Enterprise plans.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">
+              What happens when my annual subscription expires?
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-a">
+              Annual subscriptions include 12 months of updates and support. After expiry, the software
+              continues to work on the last licensed version — you simply won't receive new updates.
+              Perpetual licenses never expire and include 12 months of updates from the purchase date,
+              after which you keep the version you have indefinitely.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div><!-- /.container -->
+  </main>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="footer-logo">LINUS-AI</a>
+          <p class="footer-desc">
+            Private AI inference engine. One binary, zero cloud, complete control.
+            Your data never leaves your hardware.
+          </p>
+          <div class="footer-social">
+            <a href="https://github.com/LINUS-AI-PRO/linus-ai" aria-label="GitHub">⌥</a>
+            <a href="https://twitter.com/linusai" aria-label="Twitter">𝕏</a>
+            <a href="https://discord.gg/linusai" aria-label="Discord">◈</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#pricing">Pricing</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="activate.html">Activate</a></li>
+            <li><a href="index.html#changelog">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="docs/index.html">Documentation</a></li>
+            <li><a href="docs/index.html#api">API Reference</a></li>
+            <li><a href="https://github.com/LINUS-AI-PRO/linus-ai">GitHub</a></li>
+            <li><a href="https://github.com/LINUS-AI-PRO/linus-ai/issues">Issues</a></li>
+            <li><a href="https://discord.gg/linusai">Community</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="mailto:support@linus-ai.com">Support</a></li>
+            <li><a href="mailto:sales@linus-ai.com">Sales</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span>
+        <span>
+          <a href="#">Privacy</a> &nbsp;·&nbsp;
+          <a href="#">Terms</a> &nbsp;·&nbsp;
+          <a href="#">License Agreement</a>
+        </span>
+      </div>
+      <p class="trademark-notice">LINUS-AI&#8482; is a trademark. NVIDIA&reg; and CUDA&reg; are registered trademarks of NVIDIA Corporation. AMD&reg; and ROCm&#8482; are trademarks of Advanced Micro Devices, Inc. Apple&reg;, macOS&reg;, and Metal&reg; are registered trademarks of Apple Inc. Stripe&reg; is a registered trademark of Stripe, Inc. Microsoft&reg; and Windows&reg; are registered trademarks of Microsoft Corporation. LLaMA is a trademark of Meta Platforms, Inc. All other trademarks are the property of their respective owners.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

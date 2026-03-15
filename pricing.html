@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — LINUS-AI</title>
+  <meta name="description" content="Simple, transparent pricing for LINUS-AI. Community free forever. Professional $249 perpetual. Team $799. Enterprise contact us.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner container">
+    <a href="/" class="logo">◈ LINUS-AI</a>
+    <ul class="nav-links">
+      <li><a href="/index.html#features">Features</a></li>
+      <li><a href="/pricing.html" style="color:var(--accent)">Pricing</a></li>
+      <li><a href="/download.html">Download</a></li>
+      <li><a href="/docs/index.html">Docs</a></li>
+      <li><a href="/activate.html">Activate</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://github.com/LINUS-AI-PRO/linus-ai" target="_blank" class="btn btn-secondary btn-sm">GitHub</a>
+      <a href="/download.html" class="btn btn-primary btn-sm">Download Free</a>
+      <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/index.html#features">Features</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/download.html">Download</a>
+    <a href="/docs/index.html">Docs</a>
+    <a href="/activate.html">Activate</a>
+  </div>
+</nav>
+
+<section style="padding:140px 0 60px;text-align:center">
+  <div class="container">
+    <div class="hero-tag">Transparent pricing</div>
+    <h1 style="font-size:clamp(2rem,5vw,3.2rem);font-weight:800;margin:16px 0">Start free.<br>Scale when you need to.</h1>
+    <p style="color:var(--text-muted);font-size:1.1rem;max-width:520px;margin:0 auto 36px">30-day full-featured trial on every plan. Perpetual licences run forever.
+    Annual plans include continuous updates.</p>
+
+    <!-- Billing toggle -->
+    <div style="display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:56px">
+      <button id="togglePerp" onclick="setBilling('perpetual')"
+        style="padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:var(--accent);color:#000">
+        Perpetual
+      </button>
+      <button id="toggleAnnual" onclick="setBilling('annual')"
+        style="padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:transparent;color:var(--text-muted)">
+        Annual
+      </button>
+    </div>
+
+    <div class="pricing-grid" style="max-width:1100px;margin:0 auto;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+
+      <!-- Community -->
+      <div class="plan-card">
+        <div class="plan-name">Community</div>
+        <div class="plan-price">$0</div>
+        <div class="plan-period">Free forever</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Single node inference</li>
+          <li>7B model limit</li>
+          <li>6 core AI profiles</li>
+          <li>30-day full trial of all features</li>
+          <li>Local OpenAI-compatible API</li>
+          <li>Browser control panel GUI</li>
+          <li class="na">Tensor Parallelism</li>
+          <li class="na">Pipeline Parallelism</li>
+          <li class="na">Mesh Networking</li>
+          <li class="na">70B+ models</li>
+          <li class="na">All 14 profiles</li>
+          <li class="na">Support</li>
+        </ul>
+        <a href="/download.html" class="btn btn-secondary" style="width:100%;justify-content:center">Download Free</a>
+      </div>
+
+      <!-- Professional -->
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Professional</div>
+        <div class="plan-price" id="proPriceEl">$249</div>
+        <div class="plan-period" id="proPeriodEl">one-time · perpetual</div>
+        <div class="plan-or">or</div>
+        <div class="plan-annual">$99/year</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Everything in Community</li>
+          <li>All 14 industry AI profiles</li>
+          <li>70B+ model support</li>
+          <li>Tensor Parallelism (RPC &amp; Native)</li>
+          <li>Pipeline Parallelism</li>
+          <li>Mesh Networking</li>
+          <li>Custom system prompts</li>
+          <li>1 seat · 1 concurrent machine</li>
+          <li>1 year of updates (perpetual)</li>
+          <li>Email support</li>
+          <li class="na">Multi-seat management</li>
+          <li class="na">Air-gap activation</li>
+        </ul>
+        <button onclick="checkout('professional', currentBilling)"
+          class="btn btn-primary" style="width:100%;justify-content:center">
+          Buy Professional
+        </button>
+      </div>
+
+      <!-- Team -->
+      <div class="plan-card">
+        <div class="plan-name">Team</div>
+        <div class="plan-price" id="teamPriceEl">$799</div>
+        <div class="plan-period" id="teamPeriodEl">one-time · perpetual</div>
+        <div class="plan-or">or</div>
+        <div class="plan-annual">$299/year</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Everything in Professional</li>
+          <li>Up to 10 seats</li>
+          <li>Centralised licence management</li>
+          <li>Priority email support (&lt;24h)</li>
+          <li>Licence transfer between machines</li>
+          <li>Federated Learning support</li>
+          <li>Blockchain audit ledger</li>
+          <li>Multi-node tensor clusters</li>
+          <li>Custom profile deployment</li>
+          <li>1 year of updates (perpetual)</li>
+          <li class="na">Air-gap activation</li>
+          <li class="na">SLA</li>
+        </ul>
+        <button onclick="checkout('team', currentBilling)"
+          class="btn btn-secondary" style="width:100%;justify-content:center">
+          Buy Team
+        </button>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price" style="font-size:1.6rem">Custom</div>
+        <div class="plan-period">Contact us for pricing</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Everything in Team</li>
+          <li>Unlimited seats</li>
+          <li>Air-gap / offline activation</li>
+          <li>Custom SLA (99.9% uptime)</li>
+          <li>Dedicated Slack channel</li>
+          <li>Custom model fine-tuning</li>
+          <li>On-site deployment support</li>
+          <li>Source code licence available</li>
+          <li>SSO / LDAP integration</li>
+          <li>HIPAA / SOC 2 BAA available</li>
+          <li>Perpetual + updates</li>
+          <li>Custom invoicing &amp; PO</li>
+        </ul>
+        <a href="mailto:enterprise@linus-ai.com?subject=Enterprise%20Enquiry"
+          class="btn btn-secondary" style="width:100%;justify-content:center">
+          Contact Sales
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Feature comparison table -->
+<section class="section" style="background:var(--surface)">
+  <div class="container">
+    <h2 style="text-align:center;margin-bottom:40px">Feature comparison</h2>
+    <div style="overflow-x:auto">
+      <table style="min-width:700px">
+        <thead>
+          <tr>
+            <th style="width:40%">Feature</th>
+            <th>Community</th>
+            <th>Professional</th>
+            <th>Team</th>
+            <th>Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Max model size</td><td>7B</td><td>70B+</td><td>70B+</td><td>Unlimited</td></tr>
+          <tr><td>Industry AI profiles</td><td>6</td><td>14</td><td>14</td><td>Custom</td></tr>
+          <tr><td>Custom system prompts</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Tensor Parallelism</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Pipeline Parallelism</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Mesh Networking</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Federated Learning</td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Seats</td><td>1</td><td>1</td><td>10</td><td>Unlimited</td></tr>
+          <tr><td>Licence transfers</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Air-gap activation</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
+          <tr><td>Blockchain audit log</td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Support</td><td>Community</td><td>Email</td><td>Priority email</td><td>Dedicated + SLA</td></tr>
+          <tr><td>HIPAA / SOC 2 BAA</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
+          <tr><td>Payments</td><td>Free</td><td>Stripe (card, PayPal, SEPA)</td><td>Stripe / Invoice</td><td>Invoice / PO</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="max-width:720px;margin:0 auto">
+  <div class="container">
+    <h2 style="text-align:center;margin-bottom:40px">Pricing FAQ</h2>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What payment methods are accepted? <span>+</span></div>
+      <div class="faq-a" style="display:none">Stripe accepts all major credit/debit cards (Visa, Mastercard, Amex, Discover), PayPal, Apple Pay, Google Pay, and SEPA Direct Debit (EU). Enterprise customers can pay by bank transfer / invoice.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is there a refund policy? <span>+</span></div>
+      <div class="faq-a" style="display:none">Yes. 30-day money-back guarantee, no questions asked. Email billing@linus-ai.com with your order reference.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What happens when a perpetual licence's 1-year update period expires? <span>+</span></div>
+      <div class="faq-a" style="display:none">The software continues to run indefinitely — it is perpetual. You can run the version you downloaded forever. You just won't receive new feature updates unless you renew at a discounted upgrade price.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I upgrade from Professional to Team? <span>+</span></div>
+      <div class="faq-a" style="display:none">Yes. Email billing@linus-ai.com and we'll issue a pro-rated upgrade invoice. Your existing licence key is preserved — no reinstallation needed.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-logo">◈ LINUS-AI</div><p style="font-size:13px;color:var(--text-dim);margin-top:12px">Private AI for teams that can't compromise.</p></div>
+      <div><h4>Product</h4><ul class="footer-links"><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/activate.html">Activate</a></li></ul></div>
+      <div><h4>Docs</h4><ul class="footer-links"><li><a href="/docs/user.html">User Guide</a></li><li><a href="/docs/admin.html">Admin Guide</a></li><li><a href="/docs/developer.html">Developer</a></li><li><a href="/docs/architect.html">Architecture</a></li></ul></div>
+      <div><h4>Support</h4><ul class="footer-links"><li><a href="mailto:support@linus-ai.com">support@linus-ai.com</a></li><li><a href="mailto:enterprise@linus-ai.com">enterprise@linus-ai.com</a></li><li><a href="https://github.com/LINUS-AI-PRO/linus-ai/issues" target="_blank">Issue Tracker</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span><span>Payments secured by <a href="https://stripe.com" target="_blank" style="color:var(--accent)">Stripe&reg;</a></span></div>
+    <p class="trademark-notice">LINUS-AI&#8482; is a trademark. NVIDIA&reg; and CUDA&reg; are registered trademarks of NVIDIA Corporation. AMD&reg; and ROCm&#8482; are trademarks of Advanced Micro Devices, Inc. Apple&reg;, macOS&reg;, and Metal&reg; are registered trademarks of Apple Inc. Stripe&reg; is a registered trademark of Stripe, Inc. Microsoft&reg; and Windows&reg; are registered trademarks of Microsoft Corporation. LLaMA is a trademark of Meta Platforms, Inc. All other trademarks are the property of their respective owners.</p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+let currentBilling = 'perpetual';
+const prices = {
+  professional: { perpetual: { price: '$249', period: 'one-time · perpetual' }, annual: { price: '$99', period: 'per year' } },
+  team:         { perpetual: { price: '$799', period: 'one-time · perpetual' }, annual: { price: '$299', period: 'per year' } },
+};
+function setBilling(b) {
+  currentBilling = b;
+  document.getElementById('togglePerp').style.cssText   = b === 'perpetual' ? 'padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:var(--accent);color:#000' : 'padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:transparent;color:var(--text-muted)';
+  document.getElementById('toggleAnnual').style.cssText = b === 'annual'    ? 'padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:var(--accent);color:#000' : 'padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:transparent;color:var(--text-muted)';
+  document.getElementById('proPriceEl').textContent  = prices.professional[b].price;
+  document.getElementById('proPeriodEl').textContent = prices.professional[b].period;
+  document.getElementById('teamPriceEl').textContent  = prices.team[b].price;
+  document.getElementById('teamPeriodEl').textContent = prices.team[b].period;
+}
+async function checkout(plan, billing) {
+  const btn = event.target;
+  btn.textContent = 'Redirecting…';
+  btn.disabled = true;
+  try {
+    const r = await fetch('/api/checkout', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ plan, billing }),
+    });
+    const d = await r.json();
+    if (d.url) { window.location.href = d.url; }
+    else { alert(d.error || 'Could not start checkout.'); btn.textContent = 'Buy ' + plan.charAt(0).toUpperCase() + plan.slice(1); btn.disabled = false; }
+  } catch (e) {
+    alert('Network error. Try again or email billing@linus-ai.com');
+    btn.textContent = 'Buy ' + plan.charAt(0).toUpperCase() + plan.slice(1);
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
