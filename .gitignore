@@ -1,6 +1,33 @@
+# macOS
 .DS_Store
+.AppleDouble
+._*
+
+# Windows
 Thumbs.db
+desktop.ini
+
+# Logs
 *.log
+logs/
+
+# Node (if tooling is added later)
 node_modules/
 dist/
+.cache/
+
+# Secrets
 .env
+.env.*
+*.key
+*.pem
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Temporary
+tmp/
+*.tmp
