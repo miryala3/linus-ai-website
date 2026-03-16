@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support &amp; Troubleshooting — LINUS-AI</title>
+  <meta name="description" content="Troubleshooting guide and knowledge base for LINUS-AI. Search common errors, installation issues, licensing problems, and build errors." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ── Support page styles ── */
+
+    /* Hero */
+    .support-hero {
+      padding: 120px 0 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .support-hero::before {
+      content: "";
+      position: absolute;
+      top: -150px; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 500px;
+      background: radial-gradient(ellipse at center, rgba(245,158,11,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .support-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .support-hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .support-hero p a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .support-hero p a:hover { text-decoration: underline; }
+
+    /* Search box */
+    .search-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 0 16px;
+      transition: border-color 0.2s;
+    }
+    .search-box:focus-within {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.12);
+    }
+    .search-icon {
+      color: var(--text-muted);
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-right: 10px;
+    }
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text, #f1f5f9);
+      font-family: inherit;
+      font-size: 16px;
+      padding: 18px 0;
+    }
+    .search-input::placeholder { color: var(--text-muted); }
+    .search-btn {
+      background: #f59e0b;
+      color: #0f172a;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .search-btn:hover { background: #fbbf24; }
+
+    .search-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .search-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .search-action-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Results area */
+    #search-results {
+      max-width: 860px;
+      margin: 48px auto 0;
+    }
+    #results-list { display: flex; flex-direction: column; gap: 12px; }
+
+    /* No results */
+    .no-results {
+      text-align: center;
+      padding: 48px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .no-results h3 { font-size: 18px; margin-bottom: 8px; }
+    .no-results p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+    .no-results-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* Result card */
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      border-left: 4px solid transparent;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .result-card:hover { border-color: var(--border); }
+    .result-card-header {
+      padding: 18px 20px 14px;
+    }
+    .result-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .result-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .result-card-snippet {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .result-card-snippet strong { color: #f1f5f9; font-weight: 600; }
+    .result-toggle {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      font-family: inherit;
+    }
+    .result-toggle:hover { text-decoration: underline; }
+
+    .result-card-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .result-card-body.open { display: block; }
+    .result-detail-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      margin-top: 14px;
+    }
+    .result-detail-label:first-child { margin-top: 0; }
+    .result-detail-text {
+      font-size: 14px;
+      color: #cbd5e1;
+      line-height: 1.65;
+    }
+
+    /* Category / platform badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-install  { background: rgba(56,189,248,0.15); color: #38bdf8; }
+    .badge-startup  { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .badge-runtime  { background: rgba(52,211,153,0.15); color: #34d399; }
+    .badge-licensing{ background: rgba(167,139,250,0.15); color: #a78bfa; }
+    .badge-mobile   { background: rgba(45,212,191,0.15); color: #2dd4bf; }
+    .badge-build    { background: rgba(251,146,60,0.15); color: #fb923c; }
+
+    .badge-platform {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Border colors by category */
+    .bc-install   { border-left-color: #38bdf8; }
+    .bc-startup   { border-left-color: #fbbf24; }
+    .bc-runtime   { border-left-color: #34d399; }
+    .bc-licensing { border-left-color: #a78bfa; }
+    .bc-mobile    { border-left-color: #2dd4bf; }
+    .bc-build     { border-left-color: #fb923c; }
+
+    /* Code block */
+    .code-block {
+      position: relative;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .code-block pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #a5f3fc;
+      padding: 14px 16px;
+      margin: 0;
+      overflow-x: auto;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, color 0.2s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.15); color: #f1f5f9; }
+    .copy-btn.copied { color: var(--green); }
+
+    /* Browse section */
+    #browse-section {
+      padding: 60px 0 80px;
+    }
+    .browse-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .browse-header h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+    .browse-header p { color: var(--text-muted); font-size: 14px; }
+
+    .category-section { margin-bottom: 40px; }
+    .category-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .category-heading .cat-icon { font-size: 20px; }
+
+    /* Accordion */
+    .accordion-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      border-left: 4px solid transparent;
+      margin-bottom: 8px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .accordion-item:hover { border-color: var(--border); }
+    .accordion-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 14px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: inherit;
+    }
+    .accordion-trigger-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 0;
+    }
+    .accordion-trigger-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .accordion-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f1f5f9;
+      line-height: 1.4;
+    }
+    .accordion-arrow {
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .accordion-item.open .accordion-arrow { transform: rotate(180deg); }
+    .accordion-body {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .accordion-item.open .accordion-body { display: block; }
+    .accordion-body .result-detail-label { margin-top: 12px; }
+    .accordion-body .result-detail-label:first-child { margin-top: 12px; }
+    .accordion-body .result-detail-text { font-size: 13px; }
+
+    /* Results heading */
+    .results-heading {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .results-heading span { color: #f59e0b; font-weight: 700; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .search-actions { flex-direction: column; align-items: stretch; }
+      .search-action-btn { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ───────────────────────────────────────────────── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="logo">LINUS<span style="color:var(--accent2)">-</span>AI&#8482;</a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="index.html#use-cases">Use Cases</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="docs/index.html">Docs</a></li>
+          <li><a href="support.html" class="active support-link" style="color:#f59e0b; font-weight:700;">Support</a></li>
+          <li><a href="activate.html">Activate</a></li>
+        </ul>
+
+        <div class="nav-cta">
+          <a href="https://github.com/LINUS-AI-PRO/linus-ai" class="btn btn-secondary btn-sm">&#9095; GitHub</a>
+          <a href="download.html" class="btn btn-primary btn-sm">Download Free</a>
+        </div>
+
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" aria-hidden="true">
+      <ul>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#use-cases">Use Cases</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="download.html">Download</a></li>
+        <li><a href="docs/index.html">Docs</a></li>
+        <li><a href="support.html" style="color:#f59e0b; font-weight:700;">Support</a></li>
+        <li><a href="activate.html">Activate</a></li>
+      </ul>
+      <div class="mobile-cta">
+        <a href="https://github.com/LINUS-AI-PRO/linus-ai" class="btn btn-secondary btn-sm">GitHub</a>
+        <a href="download.html" class="btn btn-primary btn-sm">Download Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <section class="support-hero">
+    <div class="container">
+      <h1>Support &amp; Troubleshooting</h1>
+      <p>
+        Search for error messages, symptoms, or keywords below. For issues not covered here, search the
+        <a href="https://github.com/LINUS-AI-PRO/linus-ai/issues" target="_blank" rel="noopener">GitHub Issues</a>
+        or open a new one.
+      </p>
+
+      <div class="search-wrap">
+        <div class="search-box">
+          <span class="search-icon">&#128269;</span>
+          <input
+            type="text"
+            id="search-input"
+            class="search-input"
+            placeholder="Search errors, symptoms, keywords…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="search-btn" onclick="triggerSearch()">Search</button>
+        </div>
+
+        <div class="search-actions">
+          <a id="btn-issues" class="search-action-btn" href="https://github.com/LINUS-AI-PRO/linus-ai/issues?q=is%3Aissue+" target="_blank" rel="noopener">
+            &#128030; Search GitHub Issues &rarr;
+          </a>
+          <a id="btn-code" class="search-action-btn" href="https://github.com/LINUS-AI-PRO/linus-ai/search?q=" target="_blank" rel="noopener">
+            &#128196; Search Repository Code &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Live results -->
+      <div id="search-results" style="display:none;">
+        <div id="results-heading" class="results-heading"></div>
+        <div id="results-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Browse by category ────────────────────────────────── -->
+  <section id="browse-section">
+    <div class="container">
+      <div class="browse-header">
+        <h2>Browse by Category</h2>
+        <p>All 54 known issues, organized by category. Click any entry to expand the full solution.</p>
+      </div>
+      <div id="browse-content"></div>
+    </div>
+  </section>
+
+  <!-- ── Scripts ───────────────────────────────────────────── -->
+  <script>
+  /* ── Knowledge Base ─────────────────────────────────────── */
+  const KB = [
+    // INSTALL
+    {id:1, cat:'install', platform:['macos'], title:"macOS Gatekeeper blocks binary",
+      symptoms:'"linus-ai" cannot be opened because it is from an unidentified developer',
+      cause:"macOS quarantine attribute set on downloaded file",
+      fix:"Right-click the binary → Open → click Open in the dialog. Or run the xattr command below.",
+      cmd:"xattr -dr com.apple.quarantine ./linus-ai-macos-arm64",
+      tags:["gatekeeper","quarantine","cannot be opened","unidentified developer","security warning"]},
+
+    {id:2, cat:'install', platform:['macos'], title:"macOS: bad CPU type in executable",
+      symptoms:'"zsh: exec format error" or "bad CPU type in executable"',
+      cause:"Running an x86_64 binary on Apple Silicon or vice versa",
+      fix:"Download the correct binary: arm64 for M1/M2/M3/M4, x86_64 for Intel. Or download the Universal binary which works on both.",
+      cmd:"",
+      tags:["exec format error","bad cpu type","architecture","arm64","x86_64","silicon"]},
+
+    {id:3, cat:'install', platform:['windows'], title:"Windows SmartScreen blocks .exe on first run",
+      symptoms:'"Windows protected your PC — Microsoft Defender SmartScreen prevented an unrecognized app from starting"',
+      cause:"Binary is unsigned; SmartScreen flags unfamiliar executables",
+      fix:"Click 'More info' → 'Run anyway'. Verify the SHA256 checksum shown on the download page before doing so.",
+      cmd:"",
+      tags:["smartscreen","defender","unrecognized app","windows protected","signature"]},
+
+    {id:4, cat:'install', platform:['windows'], title:"Windows MSI install fails: 'Another installation is in progress'",
+      symptoms:"Error 1618: Another installation is already in progress",
+      cause:"Windows Installer service is busy with another install",
+      fix:"Wait for other installs to complete, or restart the Windows Installer service.",
+      cmd:"net stop msiserver && net start msiserver",
+      tags:["error 1618","msi","installer","another installation"]},
+
+    {id:5, cat:'install', platform:['linux'], title:"dpkg: error processing archive — conflicting packages",
+      symptoms:"dpkg: error processing archive linus-ai_2.0.1_amd64.deb (--install): trying to overwrite...",
+      cause:"A previous version left conflicting files",
+      fix:"Remove the old package first, then reinstall.",
+      cmd:"sudo dpkg -r linus-ai && sudo dpkg -i linus-ai_2.0.1_amd64.deb",
+      tags:["dpkg","conflicting","overwrite","debian","ubuntu"]},
+
+    {id:6, cat:'install', platform:['linux'], title:"dpkg: dependency problems — missing libraries",
+      symptoms:"dpkg: dependency problems prevent configuration of linus-ai",
+      cause:"Missing system library dependencies",
+      fix:"Run apt to fix missing dependencies, then retry.",
+      cmd:"sudo apt-get install -f && sudo dpkg --configure -a",
+      tags:["dpkg","dependency","missing library","apt","configure"]},
+
+    {id:7, cat:'install', platform:['linux'], title:"rpm: Header V4 RSA/SHA256 signature: NOKEY",
+      symptoms:"warning: linus-ai-2.0.1-1.x86_64.rpm: Header V4 RSA/SHA256 Signature, key ID ...: NOKEY",
+      cause:"Package is not signed with a GPG key trusted by your system",
+      fix:"This is a warning, not an error. To suppress it, use --nogpgcheck. Verify the SHA256 checksum from the release instead.",
+      cmd:"sudo rpm -i --nogpgcheck linus-ai-2.0.1-1.x86_64.rpm",
+      tags:["rpm","nokey","gpg","signature","rsa"]},
+
+    {id:8, cat:'install', platform:['linux','macos'], title:"Permission denied — binary not executable",
+      symptoms:'"bash: ./linus-ai-linux-x86_64: Permission denied"',
+      cause:"Binary does not have execute permission",
+      fix:"Set the executable bit with chmod.",
+      cmd:"chmod +x linus-ai-linux-x86_64 && ./linus-ai-linux-x86_64",
+      tags:["permission denied","chmod","executable","execute bit"]},
+
+    {id:9, cat:'install', platform:['all'], title:"Checksum mismatch — corrupt download",
+      symptoms:'"sha256sum: WARNING: 1 computed checksum did NOT match"',
+      cause:"Download was interrupted or corrupted in transit",
+      fix:"Delete the file and download again. Always verify checksums from SHA256SUMS.txt on the GitHub releases page.",
+      cmd:"",
+      tags:["checksum","sha256","corrupt","mismatch","download"]},
+
+    {id:10, cat:'install', platform:['linux'], title:"Binary not found after installing .deb or .rpm",
+      symptoms:'"bash: linus-ai: command not found (after successful install)"',
+      cause:".deb/.rpm installs to /usr/local/bin which may not be in PATH",
+      fix:"Either use the full path or add /usr/local/bin to PATH.",
+      cmd:'echo \'export PATH="$PATH:/usr/local/bin"\' >> ~/.bashrc && source ~/.bashrc',
+      tags:["command not found","path","usr local bin","deb","rpm","install"]},
+
+    // STARTUP
+    {id:11, cat:'startup', platform:['all'], title:"Port 8080 already in use",
+      symptoms:'"Error: address already in use: 0.0.0.0:8080" or "EADDRINUSE"',
+      cause:"Another process is using port 8080",
+      fix:"Either stop the other process or start linus-ai on a different port.",
+      cmd:"lsof -i :8080   # find the process\nlinus-ai --serve --port 9090   # use a different port",
+      tags:["address already in use","eaddrinuse","port 8080","bind","listen"]},
+
+    {id:12, cat:'startup', platform:['all'], title:"License key not found — activation required",
+      symptoms:'"Error: no license found. Run: linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX"',
+      cause:"Binary has not been activated on this machine",
+      fix:"Activate with your license key. License keys start with LNAI-. Purchase at linus-ai.com/pricing.html if you don't have one.",
+      cmd:"linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX",
+      tags:["no license","activation required","license not found","lnai"]},
+
+    {id:13, cat:'startup', platform:['all'], title:"License expired",
+      symptoms:'"Error: license expired on 2025-03-01. Renew at linus-ai.com"',
+      cause:"Annual license subscription has lapsed",
+      fix:"Renew your subscription at linus-ai.com. After payment, a new key is emailed within minutes. Deactivate the old key first, then activate the new one.",
+      cmd:"linus-ai --deactivate\nlinus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX",
+      tags:["license expired","renewal","subscription","lapsed"]},
+
+    {id:14, cat:'startup', platform:['all'], title:"License file tampered or corrupt",
+      symptoms:'"Error: license signature verification failed"',
+      cause:"The license file (~/.linus_ai/license.json) was manually edited or corrupted",
+      fix:"Delete the license file and re-activate.",
+      cmd:"rm ~/.linus_ai/license.json\nlinus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX",
+      tags:["signature verification failed","tampered","corrupt license","license json"]},
+
+    {id:15, cat:'startup', platform:['all'], title:"Config file parse error",
+      symptoms:'"Error: failed to parse config: expected string at line 12"',
+      cause:"TOML syntax error in ~/.linus_ai/config.toml",
+      fix:"Open the config file and fix the syntax error on the indicated line. Or delete the config to reset to defaults.",
+      cmd:"linus-ai --config-validate   # show errors\nrm ~/.linus_ai/config.toml    # reset to defaults",
+      tags:["parse error","config","toml","syntax","line"]},
+
+    {id:16, cat:'startup', platform:['linux','macos'], title:"Log directory permission denied at startup",
+      symptoms:'"Error: failed to open log file /var/log/linus-ai/server.log: permission denied"',
+      cause:"Log directory owned by root but process runs as user",
+      fix:"Create the log directory with correct ownership, or configure a writable log path.",
+      cmd:"sudo mkdir -p /var/log/linus-ai && sudo chown $USER /var/log/linus-ai\n# Or set a custom log path:\nlinus-ai --log-file ~/.linus_ai/server.log",
+      tags:["permission denied","log file","log directory","cannot open"]},
+
+    {id:17, cat:'startup', platform:['linux','windows'], title:"CUDA driver version insufficient",
+      symptoms:'"Error: CUDA driver version is insufficient for CUDA runtime version (need >= 11.8, got 11.4)"',
+      cause:"Installed NVIDIA driver is too old for the CUDA version embedded in the binary",
+      fix:"Update your NVIDIA driver. On Linux use nvidia-smi to check current version.",
+      cmd:"nvidia-smi   # check current driver version\n# Then update via your distro's package manager or from nvidia.com",
+      tags:["cuda","driver","insufficient","nvidia","runtime version","11.8"]},
+
+    {id:18, cat:'startup', platform:['macos'], title:"Metal framework unavailable — GPU acceleration disabled",
+      symptoms:'"Warning: Metal framework not available on this macOS version. Falling back to CPU."',
+      cause:"macOS version below 12 or running in a VM",
+      fix:"Upgrade to macOS 12 Monterey or newer for Metal GPU acceleration. CPU inference still works.",
+      cmd:"",
+      tags:["metal","macos","gpu","acceleration","framework","vm"]},
+
+    {id:19, cat:'startup', platform:['all'], title:"Insufficient RAM — model too large to load",
+      symptoms:'"Error: failed to allocate 48.3 GB for model weights — not enough memory"',
+      cause:"The model requires more RAM than available on the system",
+      fix:"Use a smaller quantized model (e.g. Q4_K_M instead of Q8_0), or reduce the context length.",
+      cmd:"linus-ai --model llama3-8b-q4_k_m   # use smaller quant\nlinus-ai --ctx-size 2048             # reduce context",
+      tags:["out of memory","oom","allocate","ram","not enough memory","weights"]},
+
+    {id:20, cat:'startup', platform:['all'], title:"Model directory not found",
+      symptoms:'"Error: model directory does not exist: /root/.linus_ai/models"',
+      cause:"First run before any model has been downloaded, or custom path misconfigured",
+      fix:"Pull a model, or set the correct model directory in config.",
+      cmd:"linus-ai --pull-model llama3.2\n# Or set a custom path:\nlinus-ai --models-dir /path/to/models",
+      tags:["model directory","does not exist","models","pull model","first run"]},
+
+    {id:21, cat:'startup', platform:['all'], title:'Binary killed immediately — ulimit / OOM killer',
+      symptoms:'"Killed (signal 9)" or process exits silently with code 137',
+      cause:"Linux OOM killer terminated the process due to system memory pressure, or ulimit is too low",
+      fix:"Free system memory, increase swap, or lower the model size. On systemd, check journalctl.",
+      cmd:"journalctl -xe | grep linus-ai   # check OOM killer logs\nfree -h                           # check available memory",
+      tags:["killed","signal 9","exit 137","oom killer","ulimit","systemd"]},
+
+    // RUNTIME
+    {id:22, cat:'runtime', platform:['all'], title:"Context length exceeded",
+      symptoms:'"Error: prompt length (8192 tokens) exceeds model context size (4096)"',
+      cause:"Input is longer than the model's maximum context window",
+      fix:"Reduce the prompt size, or load the model with a larger context window (if supported).",
+      cmd:"linus-ai --ctx-size 8192   # increase context (uses more RAM)",
+      tags:["context length","token limit","prompt too long","ctx size","context size"]},
+
+    {id:23, cat:'runtime', platform:['all'], title:"GPU VRAM exceeded during inference",
+      symptoms:'"CUDA out of memory. Tried to allocate X GB" or "Metal: allocation failed"',
+      cause:"Model or KV cache grew larger than available VRAM",
+      fix:"Offload some layers to CPU, reduce batch size, or use a smaller model.",
+      cmd:"linus-ai --n-gpu-layers 20   # offload only 20 layers to GPU\nlinus-ai --batch-size 128    # reduce batch size",
+      tags:["out of memory","vram","cuda","metal","allocate","gpu layers"]},
+
+    {id:24, cat:'runtime', platform:['all'], title:"Model file not found during inference",
+      symptoms:'"Error: model file not found: /root/.linus_ai/models/llama-3-8b.gguf"',
+      cause:"Model file was moved, renamed, or deleted after the server started",
+      fix:"Verify the file exists. Re-pull if needed.",
+      cmd:"ls ~/.linus_ai/models/\nlinus-ai --pull-model llama3-8b",
+      tags:["model not found","gguf","missing model","file not found"]},
+
+    {id:25, cat:'runtime', platform:['all'], title:"Model file corrupt — hash check failed",
+      symptoms:'"Error: model checksum mismatch — file may be corrupt"',
+      cause:"GGUF file was partially downloaded or disk wrote incorrectly",
+      fix:"Delete the model file and pull it again.",
+      cmd:"rm ~/.linus_ai/models/llama-3-8b.gguf\nlinus-ai --pull-model llama3-8b",
+      tags:["checksum","corrupt","hash","gguf","mismatch","partial download"]},
+
+    {id:26, cat:'runtime', platform:['all'], title:"API request too large (413 Payload Too Large)",
+      symptoms:'"HTTP 413 Payload Too Large"',
+      cause:"Request body exceeds the server's limit (default 32 MB)",
+      fix:"Reduce the size of the request. For large documents use the RAG pipeline instead of embedding them in the prompt.",
+      cmd:"",
+      tags:["413","payload too large","request size","body limit"]},
+
+    {id:27, cat:'runtime', platform:['all'], title:"Invalid JSON in API request (400 Bad Request)",
+      symptoms:'HTTP 400 Bad Request: {"error":"invalid JSON: unexpected token"}',
+      cause:"Malformed JSON body in the API call",
+      fix:"Validate your JSON. Common issues: trailing commas, unescaped quotes in strings, missing closing braces.",
+      cmd:"",
+      tags:["400","bad request","invalid json","unexpected token","malformed"]},
+
+    {id:28, cat:'runtime', platform:['all'], title:"API authentication required (401 Unauthorized)",
+      symptoms:'HTTP 401 Unauthorized: {"error":"API key required"}',
+      cause:"API key authentication is enabled but no Authorization header was sent",
+      fix:"Add the Authorization header to your request.",
+      cmd:'curl -H "Authorization: Bearer YOUR_API_KEY" http://localhost:8080/v1/chat/completions',
+      tags:["401","unauthorized","api key","authentication","bearer","authorization header"]},
+
+    {id:29, cat:'runtime', platform:['all'], title:"API key invalid or expired (403 Forbidden)",
+      symptoms:'HTTP 403 Forbidden: {"error":"invalid API key"}',
+      cause:"Wrong API key, or key was rotated",
+      fix:"Check the key in your LINUS-AI config. Regenerate a key if needed.",
+      cmd:"linus-ai --list-api-keys\nlinus-ai --rotate-api-key mykey",
+      tags:["403","forbidden","invalid api key","expired","rotated"]},
+
+    {id:30, cat:'runtime', platform:['all'], title:"Inference timeout — request took too long",
+      symptoms:'HTTP 408 or {"error":"inference timeout after 60s"}',
+      cause:"Model is too slow for the configured timeout, or system is overloaded",
+      fix:"Increase the timeout, reduce prompt size, or use GPU acceleration.",
+      cmd:"linus-ai --inference-timeout 300   # increase to 5 minutes",
+      tags:["timeout","408","inference","too slow","60s","request timeout"]},
+
+    {id:31, cat:'runtime', platform:['all'], title:"RAG index build failure — disk full",
+      symptoms:'"Error: failed to write vector index: no space left on device"',
+      cause:"Not enough disk space to build or update the RAG embedding index",
+      fix:"Free disk space. The index is stored in ~/.linus_ai/rag_index/.",
+      cmd:"du -sh ~/.linus_ai/rag_index/   # check index size\ndf -h ~/.linus_ai/              # check available space",
+      tags:["rag","vector index","no space left","disk full","embedding"]},
+
+    {id:32, cat:'runtime', platform:['all'], title:"RAG: document file not found during indexing",
+      symptoms:'"Warning: skipping document — file not found: /docs/manual.pdf"',
+      cause:"File path in the RAG config no longer exists or was moved",
+      fix:"Update the RAG source paths in the config or re-run indexing after moving files.",
+      cmd:"linus-ai --rag-index /correct/path/to/docs/",
+      tags:["rag","document not found","indexing","path","source"]},
+
+    {id:33, cat:'runtime', platform:['all'], title:"Vault decrypt failure — wrong key or corrupt vault",
+      symptoms:'"Error: vault decryption failed — AES-256-GCM authentication tag mismatch"',
+      cause:"Vault key changed (e.g. re-activated with a different license), or vault data corrupt",
+      fix:"The vault cannot be recovered without the original key. Reset the vault (deletes all stored memories).",
+      cmd:"linus-ai --vault-reset   # WARNING: deletes all vault data",
+      tags:["vault","decrypt","aes","gcm","authentication tag","corrupt","key mismatch"]},
+
+    {id:34, cat:'runtime', platform:['all'], title:"Mesh node connection refused",
+      symptoms:'"Error: mesh peer 192.168.1.5:9090 refused connection — node offline or wrong port"',
+      cause:"Peer node is not running, or firewall is blocking the mesh port",
+      fix:"Ensure the peer is running with --mesh-server, and port 9090 is open on both machines.",
+      cmd:"# On peer machine:\nlinus-ai --mesh-server --mesh-port 9090\n# Check firewall:\nsudo ufw allow 9090/tcp",
+      tags:["mesh","connection refused","peer","offline","port 9090","ufw"]},
+
+    {id:35, cat:'runtime', platform:['all'], title:"Tensor parallel: peer node unreachable",
+      symptoms:'"Error: tensor parallel peer 192.168.1.6:9091 timeout after 5s"',
+      cause:"Network latency too high, peer overloaded, or node crashed",
+      fix:"Check peer status, reduce number of tensor parallel nodes, or increase timeout.",
+      cmd:"linus-ai --tensor-parallel-timeout 30   # increase timeout\nlinus-ai --tp-nodes 192.168.1.5          # use fewer nodes",
+      tags:["tensor parallel","peer unreachable","timeout","tp nodes","distributed"]},
+
+    {id:36, cat:'runtime', platform:['all'], title:"Wrong model format — not a GGUF file",
+      symptoms:'"Error: unsupported model format — expected GGUF magic bytes, got 0x46 0x54 0x59 0x50"',
+      cause:"Supplied model file is PyTorch (.bin), SafeTensors, or another format, not GGUF",
+      fix:"Convert the model to GGUF format using llama.cpp's convert.py, or download a pre-converted GGUF from HuggingFace.",
+      cmd:"",
+      tags:["gguf","format","unsupported","pytorch","safetensors","magic bytes","convert"]},
+
+    {id:37, cat:'runtime', platform:['all'], title:"Streaming response cuts off mid-token",
+      symptoms:'"SSE stream ends abruptly without a [DONE] event"',
+      cause:"Client or proxy closed the connection early, or server inference crashed",
+      fix:"Check server logs for crash. Increase client timeout. Ensure no proxy (nginx, Cloudflare) is buffering or timing out the stream.",
+      cmd:"linus-ai --log-level debug 2>&1 | tail -50   # check for crash",
+      tags:["streaming","sse","server-sent events","cut off","done","proxy","timeout"]},
+
+    // LICENSING
+    {id:38, cat:'licensing', platform:['all'], title:"Activation seats limit exceeded",
+      symptoms:'"Error: license LNAI-XXXX already has 1 active activation (max for Professional plan: 1)"',
+      cause:"License is already activated on another machine",
+      fix:"Deactivate the old machine first, then activate the new one. Or upgrade to Team plan for 5 seats.",
+      cmd:"# On old machine:\nlinus-ai --deactivate\n# On new machine:\nlinus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX",
+      tags:["seats","activation limit","already activated","max activations","deactivate","transfer"]},
+
+    {id:39, cat:'licensing', platform:['all'], title:"Machine ID mismatch after hardware change",
+      symptoms:'"Error: machine fingerprint has changed — please deactivate and re-activate"',
+      cause:"Hardware was replaced (motherboard, CPU) changing the machine ID",
+      fix:"Contact support to force-reset the activation, then re-activate.",
+      cmd:"",
+      tags:["machine id","fingerprint","hardware change","motherboard","mismatch","deactivate"]},
+
+    {id:40, cat:'licensing', platform:['all'], title:"Invalid license key format",
+      symptoms:'"Error: invalid license key format — expected LNAI-XXXX-XXXX-XXXX-XXXX"',
+      cause:"Typo in the key, or wrong key copied (e.g. an order number instead of the license key)",
+      fix:"Check your purchase confirmation email. License keys always start with LNAI- and contain 4 groups of 4 alphanumeric characters.",
+      cmd:"",
+      tags:["invalid key","format","lnai","typo","key format"]},
+
+    {id:41, cat:'licensing', platform:['all'], title:"License server unreachable during activation",
+      symptoms:'"Error: failed to activate — could not connect to license.linus-ai.com: connection timed out"',
+      cause:"No internet connection, or the activation server is temporarily down",
+      fix:"Check your internet connection and try again. For offline/air-gapped activation, contact sales for an offline token.",
+      cmd:"",
+      tags:["license server","unreachable","activation","timeout","connection","offline","air-gapped"]},
+
+    {id:42, cat:'licensing', platform:['all'], title:"License server SSL certificate error",
+      symptoms:'"Error: SSL certificate verification failed for license.linus-ai.com"',
+      cause:"System clock is wrong (SSL certs are time-sensitive), or a proxy is intercepting HTTPS",
+      fix:"Sync your system clock. If behind a corporate proxy, contact your IT team for SSL inspection exemption.",
+      cmd:"# Sync clock on Linux:\nsudo timedatectl set-ntp true\n# Check current time:\ndate",
+      tags:["ssl","certificate","verification failed","tls","clock","proxy","corporate"]},
+
+    {id:43, cat:'licensing', platform:['all'], title:"Deactivation failed — server returned error",
+      symptoms:'"Error: deactivation failed: server returned 404 — key not found"',
+      cause:"License key was already revoked, or key doesn't exist in the server database",
+      fix:"Contact support at support@linus-ai.com with your order confirmation.",
+      cmd:"",
+      tags:["deactivation","failed","404","revoked","not found"]},
+
+    // MOBILE
+    {id:44, cat:'mobile', platform:['android'], title:"Android: dlopen failed — library not found",
+      symptoms:'"java.lang.UnsatisfiedLinkError: dlopen failed: library \'liblinus_ai.so\' not found"',
+      cause:"The .so file was not bundled in the APK's correct ABI directory",
+      fix:"Ensure you are bundling the linus-ai-android-arm64 binary in the arm64-v8a/ ABI folder of your APK.",
+      cmd:"",
+      tags:["android","dlopen","unsatisfiedlinkerror","library not found","so","abi","arm64-v8a"]},
+
+    {id:45, cat:'mobile', platform:['android'], title:"Android: SIGILL — illegal instruction on older device",
+      symptoms:'"Signal 4 (SIGILL), code 1 (ILL_ILLOPC), fault addr"',
+      cause:"Binary uses ARMv8.2+ instructions (e.g. SDOT/FMLA) not available on older ARM cores",
+      fix:"The Android binary requires ARMv8.2 or newer. This covers ~95% of Android 8.0+ devices. Very old ARMv8.0 devices are not supported.",
+      cmd:"",
+      tags:["sigill","illegal instruction","armv8","neon","sdot","old device","android"]},
+
+    {id:46, cat:'mobile', platform:['android'], title:"Android API level too low",
+      symptoms:'"ANDROID_API=21 but function requires API 26 (posix_madvise)"',
+      cause:"Running binary on Android 7.x (API < 26) — binary requires Android 8.0+ (API 26+)",
+      fix:"Minimum supported Android version is 8.0 (Oreo, API 26). Update the device or enforce minSdkVersion 26 in your app.",
+      cmd:"",
+      tags:["android api","api level","posix_madvise","api 26","android 8","minsdkversion"]},
+
+    {id:47, cat:'mobile', platform:['ios'], title:"iOS: 'linus-ai-ios-arm64' is not signed",
+      symptoms:'"The executable was signed with invalid entitlements"',
+      cause:"iOS requires all executables to be signed with valid Apple developer credentials",
+      fix:"Sign the binary with your Apple Developer certificate. For App Store distribution, embed it in an app target with proper entitlements.",
+      cmd:"",
+      tags:["ios","signed","entitlements","apple developer","certificate","codesign"]},
+
+    {id:48, cat:'mobile', platform:['ios'], title:"iOS: ___chkstk_darwin undefined symbol",
+      symptoms:'"ld: symbol(s) not found for architecture arm64: ___chkstk_darwin"',
+      cause:"Building with an iOS deployment target below 13.0",
+      fix:"Set IPHONEOS_DEPLOYMENT_TARGET=16.0 in your Xcode project or build command.",
+      cmd:"export IPHONEOS_DEPLOYMENT_TARGET=16.0\ncargo build --release --target aarch64-apple-ios",
+      tags:["chkstk","undefined symbol","arm64","deployment target","iphoneos","ios 13","linker"]},
+
+    {id:49, cat:'mobile', platform:['ios'], title:"iOS: App Transport Security blocks HTTP",
+      symptoms:'"App Transport Security has blocked a cleartext HTTP resource load"',
+      cause:"iOS ATS policy requires HTTPS for all connections; linus-ai HTTP API on localhost",
+      fix:"Add a localhost ATS exception in your Info.plist for local connections.",
+      cmd:"",
+      tags:["ats","app transport security","http","cleartext","localhost","info.plist","ios"]},
+
+    // BUILD / DEV
+    {id:50, cat:'build', platform:['all'], title:"Rust edition2024 required — cargo fails on older toolchain",
+      symptoms:'"error: feature `edition2024` is required ... --edition 2024 ... Rust 1.85+"',
+      cause:"A dependency (e.g. base64ct 1.8.3) requires Rust edition 2024, stabilised in Rust 1.85",
+      fix:"Update Rust to stable channel.",
+      cmd:"rustup update stable && rustup default stable",
+      tags:["edition2024","rust 1.85","base64ct","cargo","toolchain","nightly"]},
+
+    {id:51, cat:'build', platform:['linux'], title:"include_str! path not found in cross Docker build",
+      symptoms:'"error: couldn\'t read `../../../linus_ai_control_panel.html`: No such file or directory"',
+      cause:"cross Docker mounts only the Cargo workspace; paths escaping the workspace fail",
+      fix:"Use build.rs to copy the HTML into OUT_DIR and include_str! from there. See the build.rs in linus-ai-bin/.",
+      cmd:"",
+      tags:["include_str","cross","docker","out_dir","path","workspace","build.rs"]},
+
+    {id:52, cat:'build', platform:['android'], title:"Android build: posix_madvise / POSIX_MADV_WILLNEED not declared",
+      symptoms:'"error: use of undeclared identifier \'posix_madvise\'"',
+      cause:"posix_madvise was not available in Android NDK until API level 26; building with --platform 21",
+      fix:"Change --platform 21 to --platform 26 in the cargo-ndk build command.",
+      cmd:"cargo ndk -t arm64-v8a -p 26 build --release",
+      tags:["posix_madvise","android ndk","api 26","posix_madv_willneed","llama.cpp","undeclared"]},
+
+    {id:53, cat:'build', platform:['linux'], title:"GLIBC version not found in cross build",
+      symptoms:"\"version 'GLIBC_2.32' not found (required by build-script-build)\"",
+      cause:"cross Docker image (Ubuntu 20.04, glibc 2.31) is too old for recent stable Rust build scripts",
+      fix:"Use the native apt cross-compiler on Ubuntu 22.04 instead of the cross Docker image.",
+      cmd:"sudo apt-get install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu\nexport CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc\ncargo build --release --target aarch64-unknown-linux-gnu",
+      tags:["glibc","glibc_2.32","cross","docker","ubuntu 20.04","build script"]},
+
+    {id:54, cat:'build', platform:['all'], title:"cargo build: linker 'cc' not found",
+      symptoms:"\"error: linker 'cc' not found\\n  = note: No such file or directory (os error 2)\"",
+      cause:"C/C++ build toolchain not installed; needed by llama-cpp-sys-2",
+      fix:"Install build essentials.",
+      cmd:"# Linux:\nsudo apt-get install build-essential cmake\n# macOS:\nxcode-select --install\n# Windows:\n# Install Visual Studio Build Tools 2022 with C++ workload",
+      tags:["linker cc","not found","build-essential","cmake","xcode","msvc","llama-cpp"]},
+  ];
+
+  /* ── Helpers ─────────────────────────────────────────────── */
+  const CAT_LABELS = {
+    install:'Install', startup:'Startup', runtime:'Runtime',
+    licensing:'Licensing', mobile:'Mobile', build:'Build / Dev'
+  };
+  const CAT_ICONS = {
+    install:'🔧', startup:'⚡', runtime:'🔄', licensing:'🔑', mobile:'📱', build:'🛠'
+  };
+  const PLATFORM_LABELS = {
+    macos:'🍎 macOS', linux:'🐧 Linux', windows:'🪟 Windows',
+    android:'🤖 Android', ios:'📱 iOS', all:'🌐 All'
+  };
+
+  function catBadge(cat) {
+    return `<span class="badge badge-${cat}">${CAT_LABELS[cat] || cat}</span>`;
+  }
+  function platformBadges(platforms) {
+    return platforms.map(p => `<span class="badge-platform">${PLATFORM_LABELS[p] || p}</span>`).join('');
+  }
+
+  function codeBlock(cmd) {
+    if (!cmd) return '';
+    const id = 'cb-' + Math.random().toString(36).slice(2);
+    return `<div class="code-block" id="${id}">
+      <pre>${escHtml(cmd)}</pre>
+      <button class="copy-btn" onclick="copyCode('${id}')">Copy</button>
+    </div>`;
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function copyCode(id) {
+    const el = document.getElementById(id);
+    const text = el.querySelector('pre').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = el.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+    });
+  }
+
+  /* ── Scoring / Search ────────────────────────────────────── */
+  function score(entry, q) {
+    const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+    let s = 0;
+    const haystack = [
+      entry.title, entry.symptoms, entry.cause, entry.fix,
+      entry.cmd || '', entry.tags.join(' ')
+    ].join(' ').toLowerCase();
+    for (const t of terms) {
+      if (entry.title.toLowerCase().includes(t)) s += 10;
+      if (entry.symptoms.toLowerCase().includes(t)) s += 6;
+      if (entry.tags.some(tag => tag.includes(t))) s += 8;
+      if (haystack.includes(t)) s += 2;
+    }
+    return s;
+  }
+
+  function search(q) {
+    if (q.length < 2) { showBrowse(); return; }
+    const results = KB.map(e => ({e, s: score(e, q)}))
+      .filter(x => x.s > 0)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 12)
+      .map(x => x.e);
+    showResults(results, q);
+  }
+
+  /* ── Render: search results ──────────────────────────────── */
+  function showResults(results, q) {
+    const sr = document.getElementById('search-results');
+    const bs = document.getElementById('browse-section');
+    const rl = document.getElementById('results-list');
+    const rh = document.getElementById('results-heading');
+
+    bs.style.display = 'none';
+    sr.style.display = 'block';
+
+    if (results.length === 0) {
+      rh.textContent = '';
+      const enc = encodeURIComponent(q);
+      rl.innerHTML = `<div class="no-results">
+        <h3>No results found</h3>
+        <p>No articles matched "<strong>${escHtml(q)}</strong>". Try searching GitHub directly:</p>
+        <div class="no-results-links">
+          <a class="search-action-btn" href="https://github.com/LINUS-AI-PRO/linus-ai/issues?q=is%3Aissue+${enc}" target="_blank" rel="noopener">&#128030; Search GitHub Issues &rarr;</a>
+          <a class="search-action-btn" href="https://github.com/LINUS-AI-PRO/linus-ai/search?q=${enc}" target="_blank" rel="noopener">&#128196; Search Repository Code &rarr;</a>
+        </div>
+      </div>`;
+      return;
+    }
+
+    rh.innerHTML = `Showing <span>${results.length}</span> result${results.length !== 1 ? 's' : ''} for "<strong>${escHtml(q)}</strong>"`;
+    rl.innerHTML = results.map(e => renderResultCard(e)).join('');
+  }
+
+  function renderResultCard(e) {
+    const cardId = 'rc-' + e.id;
+    return `<div class="result-card bc-${e.cat}" id="${cardId}">
+      <div class="result-card-header">
+        <div class="result-card-meta">
+          ${catBadge(e.cat)}
+          ${platformBadges(e.platform)}
+        </div>
+        <div class="result-card-title">${escHtml(e.title)}</div>
+        <div class="result-card-snippet"><strong>Symptom:</strong> ${escHtml(e.symptoms)}</div>
+        <div class="result-card-snippet"><strong>Fix:</strong> ${escHtml(e.fix.length > 120 ? e.fix.slice(0,120) + '…' : e.fix)}</div>
+        <button class="result-toggle" onclick="toggleCard('${cardId}')">View Solution &#9660;</button>
+      </div>
+      <div class="result-card-body" id="body-${cardId}">
+        <div class="result-detail-label">Symptoms</div>
+        <div class="result-detail-text">${escHtml(e.symptoms)}</div>
+        <div class="result-detail-label">Cause</div>
+        <div class="result-detail-text">${escHtml(e.cause)}</div>
+        <div class="result-detail-label">Fix</div>
+        <div class="result-detail-text">${escHtml(e.fix)}</div>
+        ${e.cmd ? '<div class="result-detail-label">Command</div>' + codeBlock(e.cmd) : ''}
+      </div>
+    </div>`;
+  }
+
+  function toggleCard(cardId) {
+    const card = document.getElementById(cardId);
+    const body = document.getElementById('body-' + cardId);
+    const btn = card.querySelector('.result-toggle');
+    const isOpen = body.classList.toggle('open');
+    btn.innerHTML = isOpen ? 'Hide Solution &#9650;' : 'View Solution &#9660;';
+  }
+
+  /* ── Render: browse by category ──────────────────────────── */
+  function showBrowse() {
+    const sr = document.getElementById('search-results');
+    const bs = document.getElementById('browse-section');
+    sr.style.display = 'none';
+    bs.style.display = '';
+  }
+
+  function buildBrowse() {
+    const cats = ['install','startup','runtime','licensing','mobile','build'];
+    const container = document.getElementById('browse-content');
+    container.innerHTML = cats.map(cat => {
+      const entries = KB.filter(e => e.cat === cat);
+      return `<div class="category-section">
+        <div class="category-heading">
+          <span class="cat-icon">${CAT_ICONS[cat]}</span>
+          <span class="badge badge-${cat}">${CAT_LABELS[cat]}</span>
+          <span style="color:var(--text-muted);font-size:13px;font-weight:400;">${entries.length} articles</span>
+        </div>
+        <div>
+          ${entries.map(e => renderAccordion(e)).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderAccordion(e) {
+    const aid = 'acc-' + e.id;
+    return `<div class="accordion-item bc-${e.cat}" id="${aid}">
+      <button class="accordion-trigger" onclick="toggleAccordion('${aid}')" aria-expanded="false">
+        <div class="accordion-trigger-left">
+          <div class="accordion-trigger-meta">
+            ${platformBadges(e.platform)}
+          </div>
+          <div class="accordion-title">${escHtml(e.title)}</div>
+        </div>
+        <span class="accordion-arrow">&#9660;</span>
+      </button>
+      <div class="accordion-body" id="body-${aid}">
+        <div class="result-detail-label">Symptoms</div>
+        <div class="result-detail-text">${escHtml(e.symptoms)}</div>
+        <div class="result-detail-label">Cause</div>
+        <div class="result-detail-text">${escHtml(e.cause)}</div>
+        <div class="result-detail-label">Fix</div>
+        <div class="result-detail-text">${escHtml(e.fix)}</div>
+        ${e.cmd ? '<div class="result-detail-label">Command</div>' + codeBlock(e.cmd) : ''}
+      </div>
+    </div>`;
+  }
+
+  function toggleAccordion(aid) {
+    const item = document.getElementById(aid);
+    const body = document.getElementById('body-' + aid);
+    const btn = item.querySelector('.accordion-trigger');
+    const isOpen = item.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen);
+    body.style.display = isOpen ? 'block' : 'none';
+  }
+
+  /* ── GitHub link updater ─────────────────────────────────── */
+  function updateGithubLinks(q) {
+    const enc = encodeURIComponent(q);
+    document.getElementById('btn-issues').href =
+      'https://github.com/LINUS-AI-PRO/linus-ai/issues?q=is%3Aissue+' + enc;
+    document.getElementById('btn-code').href =
+      'https://github.com/LINUS-AI-PRO/linus-ai/search?q=' + enc;
+  }
+
+  /* ── Search input wiring ─────────────────────────────────── */
+  function triggerSearch() {
+    const q = document.getElementById('search-input').value.trim();
+    search(q);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    buildBrowse();
+
+    const input = document.getElementById('search-input');
+    let debounceTimer;
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim();
+      updateGithubLinks(q);
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => search(q), 150);
+    });
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        clearTimeout(debounceTimer);
+        triggerSearch();
+      }
+    });
+  });
+  </script>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
