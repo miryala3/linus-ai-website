@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pricing — LINUS-AI</title>
-  <meta name="description" content="Simple, transparent pricing for LINUS-AI. Community free forever. Professional $249 perpetual. Team $799. Enterprise contact us.">
+  <meta name="description" content="Simple, transparent pricing for LINUS-AI. Community free forever. Professional $149 perpetual + $59/yr updates. Team $299. Enterprise contact us.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
@@ -87,10 +87,10 @@
       <div class="plan-card featured">
         <div class="plan-badge">Most Popular</div>
         <div class="plan-name">Professional</div>
-        <div class="plan-price" id="proPriceEl">$249</div>
+        <div class="plan-price" id="proPriceEl">$149</div>
         <div class="plan-period" id="proPeriodEl">one-time · perpetual</div>
-        <div class="plan-or">or</div>
-        <div class="plan-annual">$99/year</div>
+        <div class="plan-or">+</div>
+        <div class="plan-annual">$59/year updates</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li>Everything in Community</li>
@@ -106,19 +106,16 @@
           <li class="na">Multi-seat management</li>
           <li class="na">Air-gap activation</li>
         </ul>
-        <button onclick="checkout('professional', currentBilling)"
-          class="btn btn-primary" style="width:100%;justify-content:center">
-          Buy Professional
-        </button>
+        <div id="professional-pp-btn" style="margin-top:8px"></div>
       </div>
 
       <!-- Team -->
       <div class="plan-card">
         <div class="plan-name">Team</div>
-        <div class="plan-price" id="teamPriceEl">$799</div>
+        <div class="plan-price" id="teamPriceEl">$299</div>
         <div class="plan-period" id="teamPeriodEl">one-time · perpetual</div>
-        <div class="plan-or">or</div>
-        <div class="plan-annual">$299/year</div>
+        <div class="plan-or">+</div>
+        <div class="plan-annual">$99/year updates</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li>Everything in Professional</li>
@@ -134,10 +131,7 @@
           <li class="na">Air-gap activation</li>
           <li class="na">SLA</li>
         </ul>
-        <button onclick="checkout('team', currentBilling)"
-          class="btn btn-secondary" style="width:100%;justify-content:center">
-          Buy Team
-        </button>
+        <div id="team-pp-btn" style="margin-top:8px"></div>
       </div>
 
       <!-- Enterprise -->
@@ -199,7 +193,7 @@
           <tr><td>Blockchain audit log</td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr>
           <tr><td>Support</td><td>Community</td><td>Email</td><td>Priority email</td><td>Dedicated + SLA</td></tr>
           <tr><td>HIPAA / SOC 2 BAA</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
-          <tr><td>Payments</td><td>Free</td><td>Stripe (card, PayPal, SEPA)</td><td>Stripe / Invoice</td><td>Invoice / PO</td></tr>
+          <tr><td>Payments</td><td>Free</td><td>PayPal (card, PayPal balance, Pay Later)</td><td>PayPal / Invoice</td><td>Invoice / PO</td></tr>
         </tbody>
       </table>
     </div>
@@ -212,7 +206,7 @@
     <h2 style="text-align:center;margin-bottom:40px">Pricing FAQ</h2>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">What payment methods are accepted? <span>+</span></div>
-      <div class="faq-a" style="display:none">Stripe accepts all major credit/debit cards (Visa, Mastercard, Amex, Discover), PayPal, Apple Pay, Google Pay, and SEPA Direct Debit (EU). Enterprise customers can pay by bank transfer / invoice.</div>
+      <div class="faq-a" style="display:none">We accept PayPal (including credit/debit cards via PayPal, PayPal balance, and Pay Later). Enterprise customers can pay by bank transfer or invoice. Contact billing@linus-ai.com.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">Is there a refund policy? <span>+</span></div>
@@ -236,20 +230,24 @@
       <div><h4>Product</h4><ul class="footer-links"><li><a href="pricing.html">Pricing</a></li><li><a href="download.html">Download</a></li><li><a href="support.html" style="color:#f59e0b;font-weight:600;">Support</a></li>
           <li><a href="support.html" style="color:#f59e0b;font-weight:600;">Support</a></li>
         <li><a href="activate.html">Activate</a></li></ul></div>
-      <div><h4>Docs</h4><ul class="footer-links"><li><a href="docs/user.html">User Guide</a></li><li><a href="docs/admin.html">Admin Guide</a></li><li><a href="docs/developer.html">Developer</a></li><li><a href="docs/architect.html">Architecture</a></li></ul></div>
+      <div><h4>Docs</h4><ul class="footer-links"><li><a href="docs/user.html">User Guide</a></li><li><a href="docs/index.html">Documentation</a></li></ul></div>
       <div><h4>Support</h4><ul class="footer-links"><li><a href="mailto:support@linus-ai.com">support@linus-ai.com</a></li><li><a href="mailto:enterprise@linus-ai.com">enterprise@linus-ai.com</a></li><li><a href="https://github.com/LINUS-AI-PRO/linus-ai/issues" target="_blank">Issue Tracker</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span><span>Payments secured by <a href="https://stripe.com" target="_blank" style="color:var(--accent)">Stripe&reg;</a></span></div>
-    <p class="trademark-notice">LINUS-AI&#8482; is a trademark. NVIDIA&reg; and CUDA&reg; are registered trademarks of NVIDIA Corporation. AMD&reg; and ROCm&#8482; are trademarks of Advanced Micro Devices, Inc. Apple&reg;, macOS&reg;, and Metal&reg; are registered trademarks of Apple Inc. Stripe&reg; is a registered trademark of Stripe, Inc. Microsoft&reg; and Windows&reg; are registered trademarks of Microsoft Corporation. LLaMA is a trademark of Meta Platforms, Inc. All other trademarks are the property of their respective owners.</p>
+    <div class="footer-bottom"><span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span><span>Payments secured by <a href="https://www.paypal.com" target="_blank" style="color:var(--accent)">PayPal</a></span></div>
+    <p class="trademark-notice">LINUS-AI&#8482; is a trademark. NVIDIA&reg; and CUDA&reg; are registered trademarks of NVIDIA Corporation. AMD&reg; and ROCm&#8482; are trademarks of Advanced Micro Devices, Inc. Apple&reg;, macOS&reg;, and Metal&reg; are registered trademarks of Apple Inc. PayPal&reg; is a registered trademark of PayPal, Inc. Microsoft&reg; and Windows&reg; are registered trademarks of Microsoft Corporation. LLaMA is a trademark of Meta Platforms, Inc. All other trademarks are the property of their respective owners.</p>
   </div>
 </footer>
 
+<script src="https://www.paypal.com/sdk/js?client-id=PAYPAL_CLIENT_ID_HERE&currency=USD"></script>
 <script src="js/main.js"></script>
 <script>
 let currentBilling = 'perpetual';
+const API = 'https://license.linus-ai.com';
 const prices = {
-  professional: { perpetual: { price: '$249', period: 'one-time · perpetual' }, annual: { price: '$99', period: 'per year' } },
-  team:         { perpetual: { price: '$799', period: 'one-time · perpetual' }, annual: { price: '$299', period: 'per year' } },
+  professional: { perpetual: { price: '$149', period: 'one-time · perpetual', plan_key: 'professional_perpetual' },
+                  annual:    { price: '$59',  period: 'per year · updates',    plan_key: 'professional_annual'    } },
+  team:         { perpetual: { price: '$299', period: 'one-time · perpetual', plan_key: 'team_perpetual' },
+                  annual:    { price: '$99',  period: 'per year · updates',    plan_key: 'team_annual'    } },
 };
 function setBilling(b) {
   currentBilling = b;
@@ -259,25 +257,42 @@ function setBilling(b) {
   document.getElementById('proPeriodEl').textContent = prices.professional[b].period;
   document.getElementById('teamPriceEl').textContent  = prices.team[b].price;
   document.getElementById('teamPeriodEl').textContent = prices.team[b].period;
+  // Re-mount PayPal buttons for new plan keys
+  ['professional','team'].forEach(p => mountPayPal(p + '-pp-btn', prices[p][b].plan_key));
 }
-async function checkout(plan, billing) {
-  const btn = event.target;
-  btn.textContent = 'Redirecting…';
-  btn.disabled = true;
-  try {
-    const r = await fetch('/api/checkout', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ plan, billing }),
-    });
-    const d = await r.json();
-    if (d.url) { window.location.href = d.url; }
-    else { alert(d.error || 'Could not start checkout.'); btn.textContent = 'Buy ' + plan.charAt(0).toUpperCase() + plan.slice(1); btn.disabled = false; }
-  } catch (e) {
-    alert('Network error. Try again or email billing@linus-ai.com');
-    btn.textContent = 'Buy ' + plan.charAt(0).toUpperCase() + plan.slice(1);
-    btn.disabled = false;
-  }
+
+// PayPal
+function mountPayPal(containerId, planKey) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  if (typeof paypal === 'undefined') return;
+  paypal.Buttons({
+    style: { layout: 'horizontal', color: 'gold', shape: 'rect', label: 'pay', height: 40 },
+    createOrder: async () => {
+      const r = await fetch(API + '/api/checkout', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ plan: planKey, email: '' })
+      });
+      const d = await r.json();
+      if (!d.ok) throw new Error(d.detail || 'Checkout failed');
+      return d.order_id;
+    },
+    onApprove: async (data) => {
+      const r = await fetch(API + '/api/capture', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ order_id: data.orderID, email: '' })
+      });
+      const d = await r.json();
+      if (d.ok) { window.location.href = '/activate?key=' + d.license_key; }
+      else { alert('Payment received. Check email for your license key, or contact support@linus-ai.com'); }
+    },
+    onError: () => { alert('Payment error. Please try again or email support@linus-ai.com'); }
+  }).render('#' + containerId);
 }
+window.addEventListener('load', () => {
+  ['professional','team'].forEach(p => mountPayPal(p + '-pp-btn', prices[p]['perpetual'].plan_key));
+});
 </script>
 </body>
 </html>
