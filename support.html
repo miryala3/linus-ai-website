@@ -926,34 +926,67 @@
   }
 
   /* ── Scoring / Search ────────────────────────────────────── */
+  const SEARCH_API = 'https://linus-ai.com/api/support/search';
+  let _apiAvailable = null; // null=unknown, true=ok, false=failed
+
   function score(entry, q) {
     const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
     let s = 0;
     const haystack = [
       entry.title, entry.symptoms, entry.cause, entry.fix,
-      entry.cmd || '', entry.tags.join(' ')
+      entry.cmd || '', (Array.isArray(entry.tags) ? entry.tags : entry.tags.split(' ')).join(' ')
     ].join(' ').toLowerCase();
     for (const t of terms) {
       if (entry.title.toLowerCase().includes(t)) s += 10;
       if (entry.symptoms.toLowerCase().includes(t)) s += 6;
-      if (entry.tags.some(tag => tag.includes(t))) s += 8;
+      const tags = Array.isArray(entry.tags) ? entry.tags : entry.tags.split(' ');
+      if (tags.some(tag => tag.includes(t))) s += 8;
       if (haystack.includes(t)) s += 2;
     }
     return s;
   }
 
-  function search(q) {
-    if (q.length < 2) { showBrowse(); return; }
-    const results = KB.map(e => ({e, s: score(e, q)}))
+  function searchLocal(q) {
+    return KB.map(e => ({e, s: score(e, q)}))
       .filter(x => x.s > 0)
       .sort((a, b) => b.s - a.s)
       .slice(0, 12)
       .map(x => x.e);
-    showResults(results, q);
+  }
+
+  async function search(q) {
+    if (q.length < 2) { showBrowse(); return; }
+
+    // Try the API if not already known to be down
+    if (_apiAvailable !== false) {
+      try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 2000); // 2s timeout
+        const resp = await fetch(
+          `${SEARCH_API}?q=${encodeURIComponent(q)}&limit=12`,
+          { signal: ctrl.signal }
+        );
+        clearTimeout(tid);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.ok && Array.isArray(data.results)) {
+            _apiAvailable = true;
+            showResults(data.results, q, 'api');
+            return;
+          }
+        }
+      } catch (_) {
+        // network error or timeout — fall through to local
+        _apiAvailable = false;
+      }
+    }
+
+    // Client-side fallback
+    showResults(searchLocal(q), q, 'local');
   }
 
   /* ── Render: search results ──────────────────────────────── */
-  function showResults(results, q) {
+  function showResults(results, q, source) {
     const sr = document.getElementById('search-results');
     const bs = document.getElementById('browse-section');
     const rl = document.getElementById('results-list');
@@ -976,7 +1009,10 @@
       return;
     }
 
-    rh.innerHTML = `Showing <span>${results.length}</span> result${results.length !== 1 ? 's' : ''} for "<strong>${escHtml(q)}</strong>"`;
+    const srcLabel = source === 'api'
+      ? ' <span style="font-size:11px;color:#f59e0b;font-weight:500;">&#9679; live</span>'
+      : '';
+    rh.innerHTML = `Showing <span>${results.length}</span> result${results.length !== 1 ? 's' : ''} for "<strong>${escHtml(q)}</strong>"${srcLabel}`;
     rl.innerHTML = results.map(e => renderResultCard(e)).join('');
   }
 
