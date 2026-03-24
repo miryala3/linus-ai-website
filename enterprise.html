@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise — LINUS-AI</title>
+  <meta name="description" content="LINUS-AI Enterprise: unlimited seats, full permissions, OEM rights, dedicated support. $4,999/year. Cancel anytime.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
+  <style>
+    :root { --gold: #f59e0b; --gold-dim: rgba(245,158,11,.12); --gold-border: rgba(245,158,11,.35); }
+
+    .ent-hero { padding: 130px 0 72px; text-align: center; background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(245,158,11,.06) 0%, transparent 70%); }
+    .ent-badge { display: inline-block; background: var(--gold-dim); border: 1px solid var(--gold-border); color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; }
+    .ent-hero h1 { font-size: clamp(2.2rem,5vw,3.4rem); font-weight: 800; margin: 0 0 20px; line-height: 1.1; }
+    .ent-hero h1 em { color: var(--gold); font-style: normal; }
+    .ent-hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 560px; margin: 0 auto 44px; line-height: 1.7; }
+    .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-gold { display: inline-block; background: var(--gold); color: #000; font-weight: 700; font-size: 15px; padding: 13px 32px; border-radius: var(--radius); text-decoration: none; border: none; cursor: pointer; transition: opacity .15s; }
+    .btn-gold:hover { opacity: .88; }
+    .btn-outline-gold { display: inline-block; border: 1.5px solid var(--gold-border); color: var(--gold); font-weight: 600; font-size: 15px; padding: 12px 28px; border-radius: var(--radius); text-decoration: none; transition: background .15s; }
+    .btn-outline-gold:hover { background: var(--gold-dim); }
+
+    .trust-bar { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; text-align: center; }
+    .trust-bar p { color: var(--text-muted); font-size: 13px; letter-spacing: .04em; }
+    .trust-bar strong { color: var(--text); }
+
+    .plans-section { padding: 80px 0; }
+    .plans-section > .container > h2 { font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 8px; }
+    .plans-section > .container > p { text-align: center; color: var(--text-muted); margin-bottom: 48px; }
+    .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
+
+    .plan-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 36px; }
+    .plan-box.highlight { border-color: var(--gold-border); background: linear-gradient(135deg, rgba(245,158,11,.04) 0%, var(--surface) 100%); }
+    .plan-box .tier-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; }
+    .plan-box.highlight .tier-label { color: var(--gold); }
+    .plan-box .tier-name { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+    .plan-box .tier-price { font-size: 2.6rem; font-weight: 800; line-height: 1; }
+    .plan-box .tier-price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); }
+    .plan-box .tier-tagline { color: var(--text-muted); font-size: 13.5px; margin: 10px 0 24px; line-height: 1.6; }
+    .plan-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    .plan-features-list { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-direction: column; gap: 10px; }
+    .plan-features-list li { font-size: 14px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+    .plan-features-list li::before { content: "✓"; color: var(--gold); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .plan-features-list li.plus::before { content: "◈"; color: var(--accent); }
+
+    .pp-wrap { margin-top: 4px; min-height: 48px; }
+    .pp-loading { color: var(--text-muted); font-size: 13px; padding: 12px 0; text-align: center; }
+
+    .features-section { padding: 80px 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .features-section h2 { font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 48px; }
+    .feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 28px; }
+    .feat-card { padding: 28px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; }
+    .feat-icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .feat-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .feat-card p { color: var(--text-muted); font-size: 13.5px; line-height: 1.7; margin: 0; }
+
+    .policy-section { padding: 72px 0; }
+    .policy-section h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 32px; text-align: center; }
+    .policy-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 860px; margin: 0 auto 40px; }
+    .policy-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; }
+    .policy-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .policy-card p { color: var(--text-muted); font-size: 13px; line-height: 1.7; margin: 0; }
+    .policy-note { background: rgba(56,189,248,.06); border: 1px solid rgba(56,189,248,.2); border-radius: 10px; padding: 18px 24px; max-width: 860px; margin: 0 auto; font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+    .policy-note strong { color: var(--text); }
+
+    .faq-section { padding: 72px 0; background: var(--surface); border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 1.6rem; font-weight: 800; text-align: center; margin-bottom: 40px; }
+    .faq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px; max-width: 900px; margin: 0 auto; }
+    .faq-item h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .faq-item p { color: var(--text-muted); font-size: 13px; line-height: 1.75; margin: 0; }
+
+    .contact-cta { padding: 80px 0; text-align: center; }
+    .contact-cta h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 14px; }
+    .contact-cta p { color: var(--text-muted); margin-bottom: 32px; font-size: 1rem; }
+    .contact-badges { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+    .contact-badge { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 18px; font-size: 13px; color: var(--text-muted); }
+
+    @media (max-width: 600px) {
+      .plans-grid { grid-template-columns: 1fr; }
+      .plan-box .tier-price { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner container">
+    <a href="index.html" class="logo">◈ LINUS-AI</a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="download.html">Download</a></li>
+      <li><a href="docs/index.html">Docs</a></li>
+      <li><a href="support.html" style="color:#f59e0b;font-weight:600">Support</a></li>
+      <li><a href="enterprise.html" style="color:var(--gold);font-weight:600">Enterprise</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://github.com/LINUS-AI-PRO/linus-ai" target="_blank" class="btn btn-secondary btn-sm">GitHub</a>
+      <a href="download.html" class="btn btn-primary btn-sm">Download Free</a>
+      <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="download.html">Download</a>
+    <a href="docs/index.html">Docs</a>
+    <a href="activate.html">Activate</a>
+    <a href="enterprise.html">Enterprise</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="ent-hero">
+  <div class="container">
+    <div class="ent-badge">Enterprise</div>
+    <h1>Unlimited AI infrastructure.<br><em>Full permissions.</em> No surprises.</h1>
+    <p>Unlimited seats, OEM rights, dedicated support, and every platform — under a single
+      annual subscription. Cancel anytime; your access continues to the end of the paid period.</p>
+    <div class="hero-ctas">
+      <a href="#plans" class="btn-gold">See Plans &amp; Pricing</a>
+      <a href="mailto:support@linus-ai.com?subject=Enterprise%20Inquiry" class="btn-outline-gold">Talk to Sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- Trust bar -->
+<div class="trust-bar">
+  <div class="container">
+    <p>
+      <strong>macOS · Linux · Windows</strong> &nbsp;&middot;&nbsp;
+      Arm64 + x86_64 &nbsp;&middot;&nbsp;
+      Zero system dependencies &nbsp;&middot;&nbsp;
+      On-premises, air-gapped, or cloud &nbsp;&middot;&nbsp;
+      <strong>Payments secured by PayPal</strong>
+    </p>
+  </div>
+</div>
+
+<!-- Plans -->
+<section class="plans-section" id="plans">
+  <div class="container">
+    <h2>Enterprise Plans</h2>
+    <p>Annual subscriptions. Cancel anytime — effective end of period.</p>
+
+    <div class="plans-grid">
+
+      <!-- Enterprise -->
+      <div class="plan-box highlight">
+        <div class="tier-label">Most popular</div>
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-price">$4,999 <span>/ year</span></div>
+        <div class="tier-tagline">Unlimited seats. All platforms. All updates. Dedicated support channel included.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features-list">
+          <li>Unlimited seats — all employees &amp; contractors</li>
+          <li>All platforms: macOS, Linux, Windows (arm64 + x86_64)</li>
+          <li>All feature flags: local inference, mesh, thermal, vault, guardian</li>
+          <li>Right to sublicense to wholly-owned subsidiaries</li>
+          <li>OEM rights for up to 3 internal products</li>
+          <li>Early access to all major releases</li>
+          <li>Dedicated Slack/email support channel</li>
+          <li>99% uptime SLA on license validation endpoint</li>
+          <li>Remove "Powered by LINUS-AI" attribution (optional)</li>
+          <li>14-day renewal reminder before every charge</li>
+        </ul>
+        <div class="pp-wrap" id="ent-pp-btn">
+          <p class="pp-loading">Loading checkout…</p>
+        </div>
+        <div style="margin-top:12px;text-align:center">
+          <a href="mailto:support@linus-ai.com?subject=Enterprise%20Purchase%20%E2%80%94%20Invoicing"
+             style="font-size:13px;color:var(--text-muted);text-decoration:underline">
+            Need an invoice? Contact us →
+          </a>
+        </div>
+      </div>
+
+      <!-- Enterprise Plus -->
+      <div class="plan-box">
+        <div class="tier-label" style="color:var(--accent)">OEM · White-label</div>
+        <div class="tier-name">Enterprise Plus</div>
+        <div class="tier-price">$9,999 <span>/ year</span></div>
+        <div class="tier-tagline">Everything in Enterprise, plus full OEM redistribution, white-label, and priority SLA.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features-list">
+          <li>Everything in Enterprise</li>
+          <li class="plus">Unlimited OEM products — embed in any commercial offering</li>
+          <li class="plus">Full attribution removal — ship as your own brand</li>
+          <li class="plus">24-hour response SLA for critical support issues</li>
+          <li class="plus">Annual architecture review call with LINUS-AI team</li>
+          <li class="plus">Source code escrow available on request</li>
+          <li class="plus">Custom build flags &amp; feature toggles on request</li>
+          <li class="plus">Named account manager</li>
+        </ul>
+        <div class="pp-wrap" id="ent-plus-pp-btn">
+          <p class="pp-loading">Loading checkout…</p>
+        </div>
+        <div style="margin-top:12px;text-align:center">
+          <a href="mailto:support@linus-ai.com?subject=Enterprise%20Plus%20Inquiry"
+             style="font-size:13px;color:var(--text-muted);text-decoration:underline">
+            Prefer to talk first? →
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /plans-grid -->
+
+    <p style="text-align:center;margin-top:32px;font-size:13px;color:var(--text-muted)">
+      Need 500+ nodes, custom SLA, or government/defense procurement?
+      <a href="mailto:support@linus-ai.com?subject=Custom%20Enterprise" style="color:var(--accent)">
+        Contact us for custom pricing →
+      </a>
+    </p>
+  </div>
+</section>
+
+<!-- Feature detail -->
+<section class="features-section">
+  <div class="container">
+    <h2>What "Full Permissions" Means</h2>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">&#9889;</div>
+        <h3>Every Feature Flag Unlocked</h3>
+        <p>Local inference, mesh networking, thermal rerouting, encrypted vault, guardian policy engine —
+          every capability enabled by default. No module add-ons.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#127970;</div>
+        <h3>Unlimited Seats</h3>
+        <p>Employees, contractors, and wholly-owned subsidiaries — all covered under one key.
+          No per-seat counting, no compliance headaches as your team grows.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#128230;</div>
+        <h3>OEM &amp; Redistribution</h3>
+        <p>Embed LINUS-AI in your own commercial products. Distribute compiled binaries to your customers.
+          Enterprise Plus adds unlimited OEM products with full white-labeling.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#128274;</div>
+        <h3>Air-Gap &amp; On-Premises</h3>
+        <p>Zero runtime dependencies. Runs fully offline. License validation works on-prem.
+          Suitable for classified, regulated, and disconnected environments.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#127760;</div>
+        <h3>All Platforms</h3>
+        <p>macOS (arm64 + x86_64 universal), Linux (x86_64 + arm64), Windows (x86_64).
+          Single license key covers every platform your team uses.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#128663;</div>
+        <h3>Dedicated Support</h3>
+        <p>Private Slack channel or email thread with the LINUS-AI engineering team.
+          Enterprise Plus adds a 24-hour SLA and a named account manager.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#128640;</div>
+        <h3>Early Access</h3>
+        <p>Get new major releases before the public. Influence the roadmap through your
+          account manager or private issue queue.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">&#128203;</div>
+        <h3>Compliance-Ready</h3>
+        <p>Commercial Source License v2.0, governed by Delaware law. Attribution-removal
+          option. Source code escrow available for Enterprise Plus.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cancellation / policy -->
+<section class="policy-section" id="cancel-policy">
+  <div class="container">
+    <h2>Cancellation &amp; Refund Policy</h2>
+    <div class="policy-cards">
+      <div class="policy-card">
+        <h3>Cancel anytime</h3>
+        <p>Cancel via the account portal or by emailing
+          <a href="mailto:support@linus-ai.com" style="color:var(--accent)">support@linus-ai.com</a>.
+          No cancellation fee. No questions asked.</p>
+      </div>
+      <div class="policy-card">
+        <h3>Effective end of period</h3>
+        <p>Your access and all license rights remain active through the last day of your
+          current paid annual period. We do not cut off access early.</p>
+      </div>
+      <div class="policy-card">
+        <h3>No partial refunds</h3>
+        <p>Fees are non-refundable for the current period once it begins. Unused time
+          is not credited or refunded.</p>
+      </div>
+      <div class="policy-card">
+        <h3>Renewal reminder</h3>
+        <p>We email you at least <strong>14 days before</strong> each annual renewal so you can
+          cancel before the next charge if you choose not to continue.</p>
+      </div>
+    </div>
+
+    <div class="policy-note">
+      <strong>EU &amp; UK customers:</strong> If you are purchasing as a consumer (not for business
+      purposes) you have a statutory 14-day right of withdrawal under EU Directive 2011/83/EU and
+      the UK Consumer Contracts Regulations 2013. This right is waived when you request and receive
+      immediate access to the software or license key — by completing your purchase you acknowledge
+      that service delivery has begun and consent to waive the withdrawal right. Nothing here limits
+      rights that cannot be excluded under the law of your jurisdiction. Enterprise purchases made
+      for business purposes are B2B transactions and consumer withdrawal rights do not apply.
+      &nbsp;&middot;&nbsp;
+      <strong>Australia:</strong> This policy does not exclude any rights you have under the
+      Australian Consumer Law where those rights cannot be excluded.
+      &nbsp;&middot;&nbsp;
+      <strong>All other jurisdictions:</strong> Where local mandatory law provides consumer rights
+      that cannot be contractually waived, those rights are preserved.
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h3>What happens if I cancel mid-year?</h3>
+        <p>Nothing changes until your paid period ends. You keep full access — all seats, all features —
+          until the last day you have paid for. After that the license expires and you must stop using
+          LINUS-AI or renew.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do I need the internet to run LINUS-AI?</h3>
+        <p>No. The binary is fully self-contained. License validation can be done offline with our
+          air-gap key option. Contact us if you need fully disconnected operation.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How many machines can I deploy on?</h3>
+        <p>Unlimited. Enterprise covers all machines operated by your organization. Deploy on developer
+          laptops, build servers, inference nodes, and edge devices under a single key.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I embed LINUS-AI in products I ship to customers?</h3>
+        <p>Enterprise includes OEM rights for up to 3 internal products. Enterprise Plus extends this
+          to unlimited products with full white-labeling. Contact us for SaaS or multi-tenant redistribution.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is source code included?</h3>
+        <p>Enterprise covers compiled binaries and internal source access for up to 20 engineers under
+          the commercial license terms. Source escrow is available to Enterprise Plus customers on request.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What payment methods are accepted?</h3>
+        <p>Credit cards and PayPal via the checkout above. For invoiced ACH, wire transfer, or purchase
+          order, email
+          <a href="mailto:support@linus-ai.com" style="color:var(--accent)">support@linus-ai.com</a>.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do subsidiaries need separate licenses?</h3>
+        <p>No. Enterprise covers all employees and contractors within your legal entity and its
+          wholly-owned subsidiaries under one key.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What is the 99% SLA for?</h3>
+        <p>The license validation endpoint at license.linus-ai.com. Only relevant for online license
+          checks — air-gap deployments do not rely on the endpoint at all.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="contact-cta">
+  <div class="container">
+    <h2>Ready to get started?</h2>
+    <p>Subscribe above with PayPal, or reach out for invoiced billing, custom terms, or a demo.</p>
+    <div class="hero-ctas">
+      <a href="#plans" class="btn-gold">Subscribe Now</a>
+      <a href="mailto:support@linus-ai.com?subject=Enterprise%20Inquiry" class="btn-outline-gold">Email Sales</a>
+    </div>
+    <div class="contact-badges">
+      <span class="contact-badge">support@linus-ai.com</span>
+      <span class="contact-badge">Response within 1 business day</span>
+      <span class="contact-badge">Invoice / PO accepted</span>
+      <span class="contact-badge">Delaware law · AAA arbitration</span>
+    </div>
+  </div>
+</section>
+
+<footer style="border-top:1px solid var(--border);padding:32px 0;text-align:center">
+  <div class="container">
+    <p style="color:var(--text-muted);font-size:13px">
+      &copy; 2026 LINUS-AI. All rights reserved. &nbsp;&middot;&nbsp;
+      <a href="pricing.html" style="color:var(--text-muted)">Pricing</a> &nbsp;&middot;&nbsp;
+      <a href="LICENSE.md" style="color:var(--text-muted)">License v2.0</a> &nbsp;&middot;&nbsp;
+      <a href="mailto:support@linus-ai.com" style="color:var(--text-muted)">support@linus-ai.com</a>
+      <br><span style="font-size:12px;margin-top:6px;display:block">Payments secured by PayPal</span>
+    </p>
+  </div>
+</footer>
+
+<script src="https://www.paypal.com/sdk/js?client-id=PAYPAL_CLIENT_ID_HERE&currency=USD&intent=capture&disable-funding=credit,card"></script>
+<script>
+  const API = 'https://license.linus-ai.com';
+
+  function mountPayPal(containerId, plan) {
+    const wrap = document.getElementById(containerId);
+    if (!wrap) return;
+    wrap.innerHTML = '';
+
+    paypal.Buttons({
+      style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay', height: 44 },
+
+      createOrder: async () => {
+        const email = prompt('Enter your business email address to receive the license key:');
+        if (!email || !email.includes('@')) {
+          alert('A valid email is required.');
+          throw new Error('email_missing');
+        }
+        sessionStorage.setItem('ent_email', email);
+        const r = await fetch(API + '/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan, email })
+        });
+        const d = await r.json();
+        if (!d.ok) throw new Error(d.error || 'Checkout failed');
+        return d.order_id;
+      },
+
+      onApprove: async (data) => {
+        const email = sessionStorage.getItem('ent_email') || '';
+        const r = await fetch(API + '/api/capture', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id: data.orderID, email })
+        });
+        const d = await r.json();
+        if (d.ok) {
+          sessionStorage.removeItem('ent_email');
+          window.location.href = 'activate.html?plan=' + encodeURIComponent(plan)
+            + '&key=' + encodeURIComponent(d.license_key || '');
+        } else {
+          alert('Payment captured but license issuance failed.\nEmail support@linus-ai.com with PayPal order ID: ' + data.orderID);
+        }
+      },
+
+      onError: (err) => {
+        console.error('PayPal error', err);
+        alert('Payment could not be completed. Please try again or email support@linus-ai.com');
+      }
+    }).render('#' + containerId);
+  }
+
+  window.addEventListener('load', () => {
+    if (typeof paypal !== 'undefined') {
+      mountPayPal('ent-pp-btn',      'enterprise');
+      mountPayPal('ent-plus-pp-btn', 'enterprise-plus');
+    } else {
+      document.querySelectorAll('.pp-loading').forEach(el => {
+        el.textContent = 'Checkout unavailable — email support@linus-ai.com to purchase.';
+      });
+    }
+  });
+
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
