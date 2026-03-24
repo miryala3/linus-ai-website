@@ -1,991 +1,393 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Download LINUS-AI — Private AI, One Binary</title>
-  <meta name="description" content="Download LINUS-AI for macOS, Linux, Windows, Android, and iOS. Private AI inference with zero dependencies. All builds on GitHub Releases." />
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/style.css" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download — LINUS-AI</title>
+  <meta name="description" content="Download LINUS-AI. Licensed users only. Enter your license key and email to access your builds.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
   <style>
-    .download-hero {
-      padding: 120px 0 60px;
-      text-align: center;
+    .dl-wrap { min-height: 100vh; display: flex; flex-direction: column; }
+    .dl-hero  { padding: 110px 0 40px; text-align: center; }
+    .dl-hero h1 { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; margin-bottom: 12px; }
+    .dl-hero p  { color: var(--text-muted); font-size: 1rem; max-width: 480px; margin: 0 auto; }
+
+    /* Gate card */
+    .gate-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 36px 40px; max-width: 460px; margin: 0 auto 60px; width: 100%;
     }
-    .download-hero h1 {
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin: 16px 0 12px;
+    .gate-step { display: none; }
+    .gate-step.active { display: block; }
+    .gate-card h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+    .gate-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; line-height: 1.6; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+    .field input {
+      width: 100%; box-sizing: border-box;
+      background: var(--bg); border: 1px solid var(--border); color: var(--text);
+      border-radius: 8px; padding: 11px 14px; font-size: 14px; font-family: inherit;
+      transition: border-color .15s;
     }
-    .platform-section {
-      margin-bottom: 40px;
+    .field input:focus { outline: none; border-color: var(--accent); }
+    .field input.mono { font-family: 'JetBrains Mono', monospace; letter-spacing: .05em; }
+    .btn-gate {
+      width: 100%; padding: 12px; border: none; border-radius: 8px;
+      background: var(--accent); color: #000; font-weight: 700; font-size: 15px;
+      cursor: pointer; transition: opacity .15s; margin-top: 8px;
     }
-    .platform-section h4 {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
+    .btn-gate:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-gate:not(:disabled):hover { opacity: .88; }
+    .gate-err { color: #f87171; font-size: 13px; margin-top: 10px; display: none; }
+    .gate-info { color: var(--text-muted); font-size: 13px; margin-top: 10px; }
+    .gate-link { color: var(--accent); text-decoration: none; font-size: 13px; }
+    .gate-link:hover { text-decoration: underline; }
+    .otp-field input { font-size: 1.8rem; text-align: center; letter-spacing: .4em; font-family: 'JetBrains Mono', monospace; }
+    .resend-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+
+    /* Download section */
+    #dl-section { display: none; }
+    #dl-section.visible { display: block; }
+    .dl-section-inner { max-width: 860px; margin: 0 auto; padding: 0 16px 80px; }
+    .welcome-bar {
+      background: rgba(52,211,153,.07); border: 1px solid rgba(52,211,153,.25);
+      border-radius: 10px; padding: 14px 20px; margin-bottom: 36px;
+      font-size: 14px; color: var(--text-muted);
     }
-    .dl-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: border-color .2s;
+    .welcome-bar strong { color: var(--green, #34d399); }
+    .product-section { margin-bottom: 48px; }
+    .product-section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .product-section .ptag { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+    .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+    .asset-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px 18px; display: flex; flex-direction: column; gap: 8px;
+      transition: border-color .15s;
     }
-    .dl-card:hover { border-color: var(--accent); }
-    .dl-card.detected {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent);
+    .asset-card:hover { border-color: var(--accent); }
+    .asset-name { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); word-break: break-all; }
+    .asset-size { font-size: 11px; color: var(--text-dim, #64748b); }
+    .asset-tag  { font-size: 11px; color: var(--accent); font-weight: 600; }
+    .btn-dl {
+      display: block; text-align: center; padding: 9px 14px;
+      background: var(--accent); color: #000; border-radius: 6px;
+      font-weight: 700; font-size: 13px; text-decoration: none;
+      transition: opacity .15s; margin-top: 4px;
     }
-    .dl-os { font-size: 28px; margin-bottom: 4px; }
-    .dl-name { font-weight: 700; font-size: 15px; }
-    .dl-arch { font-size: 12px; color: var(--text-muted); }
-    .dl-meta { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .dl-size { font-variant-numeric: tabular-nums; }
-    .dl-btn { margin-top: 10px; text-decoration: none; display: inline-block; text-align: center; }
-    .dl-btn[disabled] { opacity: .5; pointer-events: none; }
-    .checksum-row {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-      word-break: break-all;
-      background: var(--surface2);
-      border-radius: 6px;
-      padding: 8px 10px;
-      margin-top: 6px;
-      display: none;
+    .btn-dl:hover { opacity: .85; }
+    .dl-loading { color: var(--text-muted); font-size: 14px; padding: 24px 0; text-align: center; }
+    .session-bar {
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 10px 0; text-align: center; font-size: 12px; color: var(--text-dim);
+      position: sticky; bottom: 0;
     }
-    .checksum-row.visible { display: block; }
-    .toggle-sha { font-size: 11px; color: var(--accent); cursor: pointer; background: none; border: none; padding: 0; margin-top: 4px; }
-    .toggle-sha:hover { text-decoration: underline; }
-    .install-tabs-container {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
+    #session-timer { color: var(--accent); font-weight: 600; }
+
+    @media (max-width: 520px) {
+      .gate-card { padding: 28px 20px; }
     }
-    .install-tabs-container .tabs {
-      padding: 0 20px;
-      background: var(--surface2);
-      margin-bottom: 0;
-    }
-    .install-tabs-container .tab-panels { padding: 24px; }
-    .release-note {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 12px;
-    }
-    .release-note h4 {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .release-note p {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-    .loading-pulse {
-      display: inline-block;
-      width: 60px;
-      height: 14px;
-      background: var(--border);
-      border-radius: 4px;
-      animation: pulse 1.4s ease-in-out infinite;
-      vertical-align: middle;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: .4; }
-    }
-    .download-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
-    }
-    .sha-file-note {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 12px;
-    }
-    .sha-file-note a { color: var(--accent); }
   </style>
 </head>
-<body data-page="download">
+<body class="dl-wrap">
 
-  <!-- ── Navigation ───────────────────────────────────────── -->
-  <nav class="nav" role="navigation" aria-label="Main navigation">
-    <div class="container">
-      <div class="nav-inner">
-        <a href="index.html" class="logo">
-          LINUS<span style="color:var(--accent2)">-</span>AI
-        </a>
-        <ul class="nav-links" role="list">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="index.html#features">Features</a></li>
-          <li><a href="index.html#pricing">Pricing</a></li>
-          <li><a href="download.html" class="active">Download</a></li>
-          <li><a href="docs/index.html">Docs</a></li>
-          <li><a href="support.html" style="color:#f59e0b;font-weight:600;">Support</a></li>
-        <li><a href="activate.html">Activate</a></li>
-        </ul>
-        <div class="nav-cta">
-          <a href="activate.html" class="btn btn-secondary btn-sm">Activate</a>
-          <a href="index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
-        </div>
-        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
+<nav class="nav">
+  <div class="nav-inner container">
+    <a href="index.html" class="logo">◈ LINUS-AI</a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="download.html" style="color:var(--accent)">Download</a></li>
+      <li><a href="docs/index.html">Docs</a></li>
+      <li><a href="support.html" style="color:#f59e0b;font-weight:600">Support</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="pricing.html" class="btn btn-primary btn-sm">Get a License</a>
+      <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="download.html">Download</a>
+    <a href="docs/index.html">Docs</a>
+    <a href="support.html" style="color:#f59e0b;font-weight:600">Support</a>
+    <a href="activate.html">Activate</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="dl-hero">
+  <div class="container">
+    <div class="hero-tag">Licensed downloads</div>
+    <h1>Download LINUS-AI</h1>
+    <p>Builds are available to licensed users only. Enter your license key and email to access your downloads.</p>
+  </div>
+</section>
+
+<!-- Gate card -->
+<div class="container" id="gate-wrap">
+  <div class="gate-card">
+
+    <!-- Step 1: email + license key -->
+    <div class="gate-step active" id="step-1">
+      <h2>Sign in to download</h2>
+      <p class="sub">Enter the email address and license key used at purchase. A verification code will be sent to your email.</p>
+      <div class="field">
+        <label for="inp-email">Purchase email</label>
+        <input type="email" id="inp-email" placeholder="you@company.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="inp-key">License key</label>
+        <input type="text" id="inp-key" class="mono" placeholder="LNAI-XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+      </div>
+      <button class="btn-gate" id="btn-step1" onclick="requestOtp()">Send verification code</button>
+      <div class="gate-err" id="err-1"></div>
+      <div style="margin-top:20px;text-align:center">
+        <a href="reset.html" class="gate-link">Forgot your license key?</a>
+        &nbsp;·&nbsp;
+        <a href="pricing.html" class="gate-link">Buy a license</a>
       </div>
     </div>
-    <div class="mobile-menu" aria-hidden="true">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#features">Features</a></li>
-        <li><a href="index.html#pricing">Pricing</a></li>
-        <li><a href="download.html">Download</a></li>
-        <li><a href="docs/index.html">Docs</a></li>
-        <li><a href="support.html" style="color:#f59e0b;font-weight:600;">Support</a></li>
-        <li><a href="activate.html">Activate</a></li>
-      </ul>
-      <div class="mobile-cta">
-        <a href="activate.html" class="btn btn-secondary btn-sm">Activate</a>
-        <a href="index.html#pricing" class="btn btn-primary btn-sm">Get License</a>
+
+    <!-- Step 2: OTP -->
+    <div class="gate-step" id="step-2">
+      <h2>Enter verification code</h2>
+      <p class="sub" id="otp-sub">A 6-digit code was sent to your email. It expires in 10 minutes.</p>
+      <div class="field otp-field">
+        <label for="inp-otp">Verification code</label>
+        <input type="text" id="inp-otp" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+      </div>
+      <button class="btn-gate" id="btn-step2" onclick="verifyOtp()">Verify &amp; access downloads</button>
+      <div class="gate-err" id="err-2"></div>
+      <div class="resend-row">
+        <a href="#" class="gate-link" onclick="goBack();return false;">&#8592; Back</a>
+        <a href="#" class="gate-link" id="resend-link" onclick="requestOtp(true);return false;">Resend code</a>
       </div>
     </div>
-  </nav>
 
-  <!-- ── Hero ──────────────────────────────────────────────── -->
-  <section class="download-hero">
-    <div class="container">
-      <div class="section-tag">
-        <span class="dot" style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;"></span>
-        Latest Release
-      </div>
-      <h1>Download <span class="gradient-text">LINUS-AI</span> <span id="hero-version"><span class="loading-pulse"></span></span></h1>
-      <p class="hero-sub" style="margin: 0 auto 32px;">
-        Private AI. Zero dependencies. One binary.<br />
-        Runs entirely on your hardware — no cloud, no API keys, no telemetry.
-      </p>
-      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
-        <span class="badge"><span class="badge-dot"></span> <a href="LICENSE.md" style="color:inherit;text-decoration:none">Source-Available · LINUS-AI License v2.0</a></span>
-        <span class="badge">🖥 macOS · Linux · Windows</span>
-        <span class="badge">📱 Android · iOS</span>
-        <span class="badge">⚡ Single Binary</span>
-        <span class="badge">🔒 100% Offline</span>
-      </div>
-      <p style="font-size:13px; color:var(--text-muted);">
-        All binaries hosted on
-        <a href="https://github.com/LINUS-AI-PRO/linus-ai/releases" style="color:var(--accent);">GitHub Releases</a>
-        — not on this website.
-      </p>
-    </div>
-  </section>
+  </div><!-- /gate-card -->
+</div><!-- /gate-wrap -->
 
-  <!-- ── Main Content ───────────────────────────────────────── -->
-  <main>
-    <div class="container" style="padding-bottom: 80px;">
+<!-- Download section (revealed after auth) -->
+<div id="dl-section">
+  <div class="dl-section-inner">
+    <div class="welcome-bar" id="welcome-bar"></div>
+    <div id="dl-products"><p class="dl-loading">Loading your downloads&hellip;</p></div>
+  </div>
+</div>
 
-      <!-- ── Platform Download Grid ────────────────────────── -->
-      <section class="section" style="padding-top:0;">
-        <div class="section-tag">Binaries</div>
-        <h2>Choose Your Platform</h2>
-        <p class="section-sub">
-          All binaries are self-contained with no runtime dependencies.
-          Download links and file sizes load live from GitHub Releases.
-          <span id="release-loaded-note" style="display:none;">
-            Showing release <strong id="release-tag-inline"></strong>.
-          </span>
-        </p>
+<!-- Session timer bar -->
+<div class="session-bar" id="session-bar" style="display:none">
+  Download session expires in <span id="session-timer">--:--</span> &nbsp;·&nbsp;
+  <a href="download.html" class="gate-link">Sign in again</a>
+</div>
 
-        <!-- macOS -->
-        <div class="platform-section">
-          <h4>macOS</h4>
-          <div class="download-grid">
+<footer style="border-top:1px solid var(--border);padding:28px 0;text-align:center;margin-top:auto">
+  <div class="container">
+    <p style="color:var(--text-muted);font-size:13px">
+      &copy; 2026 LINUS-AI. Downloads require a valid license.
+      &nbsp;&middot;&nbsp;
+      <a href="pricing.html" style="color:var(--accent)">Get a license</a>
+      &nbsp;&middot;&nbsp;
+      <a href="mailto:support@linus-ai.com" style="color:var(--text-muted)">support@linus-ai.com</a>
+    </p>
+  </div>
+</footer>
 
-            <div class="dl-card" id="card-macos-arm64">
-              <div class="dl-os">🍎</div>
-              <div class="dl-name">Apple Silicon</div>
-              <div class="dl-arch">arm64 — M1 / M2 / M3 / M4</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-macos-arm64">—</span>
-                <span class="tag tag-green" style="font-size:10px;">Recommended</span>
-              </div>
-              <a class="btn btn-primary btn-sm dl-btn"
-                 data-asset="linus-ai-macos-arm64"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
-              <button class="toggle-sha" data-sha="sha-macos-arm64">Show SHA256</button>
-              <div class="checksum-row" id="sha-macos-arm64"></div>
-            </div>
+<script>
+const API = 'https://license.linus-ai.com';
+let _sessionToken = null;
+let _sessionExpiry = 0;
+let _timerInterval = null;
+let _userEmail = '';
 
-            <div class="dl-card" id="card-macos-x86">
-              <div class="dl-os">🍎</div>
-              <div class="dl-name">macOS Intel</div>
-              <div class="dl-arch">x86_64 — Core i5 / i7 / i9</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-macos-x86_64">—</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset="linus-ai-macos-x86_64"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
-              <button class="toggle-sha" data-sha="sha-macos-x86">Show SHA256</button>
-              <div class="checksum-row" id="sha-macos-x86"></div>
-            </div>
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
 
-            <div class="dl-card" id="card-macos-universal">
-              <div class="dl-os">🍎</div>
-              <div class="dl-name">macOS Universal</div>
-              <div class="dl-arch">ARM64 + x86_64 fat binary</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-macos-universal">—</span>
-                <span class="tag" style="font-size:10px;">Both chips</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset="linus-ai-macos-universal"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
-              <button class="toggle-sha" data-sha="sha-macos-uni">Show SHA256</button>
-              <div class="checksum-row" id="sha-macos-uni"></div>
-            </div>
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  btn.textContent = loading
+    ? (btnId === 'btn-step1' ? 'Sending…' : 'Verifying…')
+    : (btnId === 'btn-step1' ? 'Send verification code' : 'Verify & access downloads');
+}
 
-            <div class="dl-card" id="card-macos-dmg">
-              <div class="dl-os">💿</div>
-              <div class="dl-name">macOS DMG Installer</div>
-              <div class="dl-arch">Universal — drag &amp; drop install</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-macos.dmg">—</span>
-                <span class="tag tag-green" style="font-size:10px;">Easiest</span>
-              </div>
-              <a class="btn btn-primary btn-sm dl-btn"
-                 data-asset="linus-ai-macos.dmg"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .dmg</a>
-              <button class="toggle-sha" data-sha="sha-macos-dmg">Show SHA256</button>
-              <div class="checksum-row" id="sha-macos-dmg"></div>
-            </div>
+async function requestOtp(resend = false) {
+  const email = document.getElementById('inp-email').value.trim();
+  const key   = document.getElementById('inp-key').value.trim().toUpperCase();
+  showErr('err-1', '');
 
-          </div>
-        </div>
+  if (!email || !email.includes('@')) { showErr('err-1', 'Enter a valid email address.'); return; }
+  if (!key.startsWith('LNAI-') || key.length < 20) { showErr('err-1', 'Enter a valid LNAI-XXXX-XXXX-XXXX-XXXX license key.'); return; }
 
-        <!-- Linux -->
-        <div class="platform-section">
-          <h4>Linux</h4>
-          <div class="download-grid">
-
-            <div class="dl-card" id="card-linux-x86">
-              <div class="dl-os">🐧</div>
-              <div class="dl-name">Linux x86_64</div>
-              <div class="dl-arch">x86_64 — AMD64 bare binary</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-linux-x86_64">—</span>
-                <span class="tag tag-green" style="font-size:10px;">Most Common</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset="linus-ai-linux-x86_64"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
-              <button class="toggle-sha" data-sha="sha-linux-x86">Show SHA256</button>
-              <div class="checksum-row" id="sha-linux-x86"></div>
-            </div>
-
-            <div class="dl-card" id="card-linux-arm64">
-              <div class="dl-os">🐧</div>
-              <div class="dl-name">Linux ARM64</div>
-              <div class="dl-arch">aarch64 — Graviton · Pi · Ampere</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-linux-arm64">—</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset="linus-ai-linux-arm64"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
-              <button class="toggle-sha" data-sha="sha-linux-arm64">Show SHA256</button>
-              <div class="checksum-row" id="sha-linux-arm64"></div>
-            </div>
-
-            <div class="dl-card" id="card-deb-amd64">
-              <div class="dl-os">📦</div>
-              <div class="dl-name">Linux .deb (amd64)</div>
-              <div class="dl-arch">Debian · Ubuntu · Mint · Pop!_OS</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset-suffix="_amd64.deb">—</span>
-                <span class="tag tag-green" style="font-size:10px;">dpkg install</span>
-              </div>
-              <a class="btn btn-primary btn-sm dl-btn"
-                 data-asset-suffix="_amd64.deb"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .deb</a>
-              <button class="toggle-sha" data-sha="sha-deb-amd64">Show SHA256</button>
-              <div class="checksum-row" id="sha-deb-amd64"></div>
-            </div>
-
-            <div class="dl-card" id="card-deb-arm64">
-              <div class="dl-os">📦</div>
-              <div class="dl-name">Linux .deb (arm64)</div>
-              <div class="dl-arch">Debian · Ubuntu ARM · Raspberry Pi OS</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset-suffix="_arm64.deb">—</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset-suffix="_arm64.deb"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .deb</a>
-              <button class="toggle-sha" data-sha="sha-deb-arm64">Show SHA256</button>
-              <div class="checksum-row" id="sha-deb-arm64"></div>
-            </div>
-
-            <div class="dl-card" id="card-rpm-x86">
-              <div class="dl-os">📦</div>
-              <div class="dl-name">Linux .rpm (x86_64)</div>
-              <div class="dl-arch">RHEL · Fedora · CentOS · openSUSE</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset-suffix=".x86_64.rpm">—</span>
-                <span class="tag tag-green" style="font-size:10px;">rpm install</span>
-              </div>
-              <a class="btn btn-primary btn-sm dl-btn"
-                 data-asset-suffix=".x86_64.rpm"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .rpm</a>
-              <button class="toggle-sha" data-sha="sha-rpm-x86">Show SHA256</button>
-              <div class="checksum-row" id="sha-rpm-x86"></div>
-            </div>
-
-            <div class="dl-card" id="card-rpm-aarch64">
-              <div class="dl-os">📦</div>
-              <div class="dl-name">Linux .rpm (aarch64)</div>
-              <div class="dl-arch">RHEL · Fedora ARM · AWS Graviton</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset-suffix=".aarch64.rpm">—</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset-suffix=".aarch64.rpm"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .rpm</a>
-              <button class="toggle-sha" data-sha="sha-rpm-aarch64">Show SHA256</button>
-              <div class="checksum-row" id="sha-rpm-aarch64"></div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Windows -->
-        <div class="platform-section">
-          <h4>Windows</h4>
-          <div class="download-grid">
-
-            <div class="dl-card" id="card-win-exe">
-              <div class="dl-os">🪟</div>
-              <div class="dl-name">Windows x86_64</div>
-              <div class="dl-arch">64-bit bare executable</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-windows-x86_64.exe">—</span>
-                <span class="tag" style="font-size:10px;">.exe</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset="linus-ai-windows-x86_64.exe"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .exe</a>
-              <button class="toggle-sha" data-sha="sha-win-exe">Show SHA256</button>
-              <div class="checksum-row" id="sha-win-exe"></div>
-            </div>
-
-            <div class="dl-card" id="card-win-msi">
-              <div class="dl-os">🪟</div>
-              <div class="dl-name">Windows MSI Installer</div>
-              <div class="dl-arch">x86_64 — adds linus-ai to PATH</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-windows-x86_64.msi">—</span>
-                <span class="tag tag-green" style="font-size:10px;">Easiest</span>
-              </div>
-              <a class="btn btn-primary btn-sm dl-btn"
-                 data-asset="linus-ai-windows-x86_64.msi"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download .msi</a>
-              <button class="toggle-sha" data-sha="sha-win-msi">Show SHA256</button>
-              <div class="checksum-row" id="sha-win-msi"></div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Mobile / Embedded -->
-        <div class="platform-section">
-          <h4>Mobile &amp; Embedded</h4>
-          <p style="font-size:13px; color:var(--text-muted); margin:-4px 0 14px;">
-            Library-style binaries for integration into native apps. Not standalone app-store apps.
-          </p>
-          <div class="download-grid">
-
-            <div class="dl-card" id="card-android">
-              <div class="dl-os">🤖</div>
-              <div class="dl-name">Android arm64</div>
-              <div class="dl-arch">aarch64 · API 26+ (Android 8.0+)</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-android-arm64">—</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset="linus-ai-android-arm64"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
-              <button class="toggle-sha" data-sha="sha-android">Show SHA256</button>
-              <div class="checksum-row" id="sha-android"></div>
-            </div>
-
-            <div class="dl-card" id="card-ios">
-              <div class="dl-os">📱</div>
-              <div class="dl-name">iOS arm64 (Device)</div>
-              <div class="dl-arch">aarch64-apple-ios · iOS 16+</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-ios-arm64">—</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset="linus-ai-ios-arm64"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
-              <button class="toggle-sha" data-sha="sha-ios">Show SHA256</button>
-              <div class="checksum-row" id="sha-ios"></div>
-            </div>
-
-            <div class="dl-card" id="card-ios-sim">
-              <div class="dl-os">🖥</div>
-              <div class="dl-name">iOS Simulator</div>
-              <div class="dl-arch">aarch64-apple-ios-sim · Apple Silicon</div>
-              <div class="dl-meta">
-                <span class="dl-size" data-asset="linus-ai-ios-sim">—</span>
-              </div>
-              <a class="btn btn-secondary btn-sm dl-btn"
-                 data-asset="linus-ai-ios-sim"
-                 href="https://github.com/LINUS-AI-PRO/linus-ai/releases">⬇ Download</a>
-              <button class="toggle-sha" data-sha="sha-ios-sim">Show SHA256</button>
-              <div class="checksum-row" id="sha-ios-sim"></div>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="alert alert-info">
-          <strong>All releases including older versions</strong> are available on the
-          <a href="https://github.com/LINUS-AI-PRO/linus-ai/releases" style="color:inherit; font-weight:600;">GitHub Releases page →</a>
-          Checksums for every file are in <code>SHA256SUMS.txt</code> attached to each release.
-        </div>
-      </section>
-
-      <!-- ── Installation Instructions ─────────────────────── -->
-      <section class="section">
-        <div class="section-tag">Installation</div>
-        <h2>Installation Instructions</h2>
-        <p class="section-sub">Get up and running in under 60 seconds on any platform.</p>
-
-        <div class="install-tabs-container">
-          <div class="tabs" id="install-tabs">
-            <button class="tab-btn active" data-panel="tab-macos">macOS</button>
-            <button class="tab-btn" data-panel="tab-linux-bin">Linux (binary)</button>
-            <button class="tab-btn" data-panel="tab-linux-deb">Linux (.deb)</button>
-            <button class="tab-btn" data-panel="tab-linux-rpm">Linux (.rpm)</button>
-            <button class="tab-btn" data-panel="tab-windows">Windows</button>
-          </div>
-
-          <div class="tab-panels">
-
-            <!-- macOS -->
-            <div class="tab-panel active" id="tab-macos">
-              <div class="terminal">
-                <div class="terminal-bar">
-                  <span class="terminal-dot dot-red"></span>
-                  <span class="terminal-dot dot-yellow"></span>
-                  <span class="terminal-dot dot-green"></span>
-                  <span class="terminal-title">macOS — zsh</span>
-                </div>
-                <div><span class="prompt">$ </span><span class="cmd">cd ~/Downloads</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">chmod +x linus-ai-macos-arm64</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">./linus-ai-macos-arm64 --version</span></div>
-                <div class="out-accent">LINUS-AI <span class="term-version">v2.0.1</span> (darwin-arm64)</div>
-                <div>&nbsp;</div>
-                <div class="out"># Move to PATH for global access:</div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo mv linus-ai-macos-arm64 /usr/local/bin/linus-ai</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">linus-ai --chat "Hello, Linus!"</span></div>
-                <div>&nbsp;</div>
-                <div class="out"># Or use the DMG installer (drag &amp; drop):</div>
-                <div><span class="prompt">$ </span><span class="cmd">open linus-ai-macos.dmg</span></div>
-              </div>
-              <div class="alert alert-warning" style="margin-top:16px;">
-                <strong>Gatekeeper Notice:</strong> On first launch macOS may show a security warning.
-                Right-click the binary → Open → click "Open". Alternatively:
-                <code>xattr -dr com.apple.quarantine linus-ai-macos-arm64</code>
-              </div>
-            </div>
-
-            <!-- Linux binary -->
-            <div class="tab-panel" id="tab-linux-bin">
-              <div class="terminal">
-                <div class="terminal-bar">
-                  <span class="terminal-dot dot-red"></span>
-                  <span class="terminal-dot dot-yellow"></span>
-                  <span class="terminal-dot dot-green"></span>
-                  <span class="terminal-title">Linux — bash (bare binary)</span>
-                </div>
-                <div><span class="prompt">$ </span><span class="cmd">chmod +x linus-ai-linux-x86_64</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">./linus-ai-linux-x86_64 --version</span></div>
-                <div class="out-accent">LINUS-AI <span class="term-version">v2.0.1</span> (linux-x86_64)</div>
-                <div>&nbsp;</div>
-                <div class="out"># Install system-wide:</div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo install -m 755 linus-ai-linux-x86_64 /usr/local/bin/linus-ai</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve   # Start API server on :8080</span></div>
-              </div>
-            </div>
-
-            <!-- Linux deb -->
-            <div class="tab-panel" id="tab-linux-deb">
-              <div class="terminal">
-                <div class="terminal-bar">
-                  <span class="terminal-dot dot-red"></span>
-                  <span class="terminal-dot dot-yellow"></span>
-                  <span class="terminal-dot dot-green"></span>
-                  <span class="terminal-title">Debian / Ubuntu / Mint — bash</span>
-                </div>
-                <div class="out"># Install via dpkg (replaces prior version automatically):</div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo dpkg -i linus-ai_<span class="term-version">2.0.1</span>_amd64.deb</span></div>
-                <div class="out-accent">Setting up linus-ai (<span class="term-version">2.0.1</span>) ...</div>
-                <div>&nbsp;</div>
-                <div><span class="prompt">$ </span><span class="cmd">linus-ai --version</span></div>
-                <div class="out-accent">LINUS-AI <span class="term-version">v2.0.1</span> (linux-x86_64)</div>
-                <div>&nbsp;</div>
-                <div><span class="prompt">$ </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve</span></div>
-                <div>&nbsp;</div>
-                <div class="out"># Uninstall:</div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo dpkg -r linus-ai</span></div>
-              </div>
-            </div>
-
-            <!-- Linux rpm -->
-            <div class="tab-panel" id="tab-linux-rpm">
-              <div class="terminal">
-                <div class="terminal-bar">
-                  <span class="terminal-dot dot-red"></span>
-                  <span class="terminal-dot dot-yellow"></span>
-                  <span class="terminal-dot dot-green"></span>
-                  <span class="terminal-title">RHEL / Fedora / CentOS / openSUSE — bash</span>
-                </div>
-                <div class="out"># Fedora / RHEL 8+:</div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo rpm -i linus-ai-<span class="term-version">2.0.1</span>-1.x86_64.rpm</span></div>
-                <div>&nbsp;</div>
-                <div class="out"># Or with dnf (handles deps):</div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo dnf install ./linus-ai-<span class="term-version">2.0.1</span>-1.x86_64.rpm</span></div>
-                <div class="out-accent">Installed: linus-ai-<span class="term-version">2.0.1</span>-1.x86_64</div>
-                <div>&nbsp;</div>
-                <div><span class="prompt">$ </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span></div>
-                <div><span class="prompt">$ </span><span class="cmd">linus-ai --serve</span></div>
-                <div>&nbsp;</div>
-                <div class="out"># Uninstall:</div>
-                <div><span class="prompt">$ </span><span class="cmd">sudo rpm -e linus-ai</span></div>
-              </div>
-            </div>
-
-            <!-- Windows -->
-            <div class="tab-panel" id="tab-windows">
-              <div class="terminal">
-                <div class="terminal-bar">
-                  <span class="terminal-dot dot-red"></span>
-                  <span class="terminal-dot dot-yellow"></span>
-                  <span class="terminal-dot dot-green"></span>
-                  <span class="terminal-title">Windows — PowerShell</span>
-                </div>
-                <div class="out"># Option A: MSI installer (recommended — adds to PATH automatically):</div>
-                <div class="out">  Double-click linus-ai-windows-x86_64.msi → Next → Install → Finish</div>
-                <div>&nbsp;</div>
-                <div class="out"># Option B: bare .exe via PowerShell:</div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">.\linus-ai-windows-x86_64.exe --version</span></div>
-                <div class="out-accent">LINUS-AI <span class="term-version">v2.0.1</span> (windows-x86_64)</div>
-                <div>&nbsp;</div>
-                <div class="out"># Add to PATH manually (run as Administrator):</div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">Move-Item .\linus-ai-windows-x86_64.exe C:\Windows\System32\linus-ai.exe</span></div>
-                <div>&nbsp;</div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">linus-ai --activate LNAI-XXXX-XXXX-XXXX-XXXX</span></div>
-                <div><span class="prompt">PS&gt; </span><span class="cmd">linus-ai --chat "Hello!"</span></div>
-              </div>
-              <div class="alert alert-warning" style="margin-top:16px;">
-                <strong>Windows Defender:</strong> SmartScreen may flag the binary on first run.
-                Click "More info" → "Run anyway". Verify the SHA256 checksum shown on each card above.
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- ── Checksum Verification ──────────────────────────── -->
-      <section class="section">
-        <div class="section-tag">Security</div>
-        <h2>Verify Your Download</h2>
-        <p class="section-sub">
-          Always verify the SHA256 checksum of downloaded binaries.
-          The complete <code>SHA256SUMS.txt</code> is attached to every release.
-        </p>
-
-        <div class="terminal">
-          <div class="terminal-bar">
-            <span class="terminal-dot dot-red"></span>
-            <span class="terminal-dot dot-yellow"></span>
-            <span class="terminal-dot dot-green"></span>
-            <span class="terminal-title">Checksum verification</span>
-          </div>
-          <div class="out"># Linux / macOS — verify a single file:</div>
-          <div><span class="prompt">$ </span><span class="cmd">sha256sum linus-ai-linux-x86_64</span></div>
-          <div>&nbsp;</div>
-          <div class="out"># macOS (shasum):</div>
-          <div><span class="prompt">$ </span><span class="cmd">shasum -a 256 linus-ai-macos-arm64</span></div>
-          <div>&nbsp;</div>
-          <div class="out"># Batch verify all downloaded files against SHA256SUMS.txt:</div>
-          <div><span class="prompt">$ </span><span class="cmd">sha256sum --check SHA256SUMS.txt</span></div>
-          <div class="out-accent">linus-ai-linux-x86_64: OK</div>
-          <div class="out-accent">linus-ai-macos-arm64: OK</div>
-          <div class="out-accent">...</div>
-          <div>&nbsp;</div>
-          <div class="out"># Windows PowerShell:</div>
-          <div><span class="prompt">PS&gt; </span><span class="cmd">Get-FileHash .\linus-ai-windows-x86_64.msi -Algorithm SHA256 | Select Hash</span></div>
-        </div>
-        <p class="sha-file-note">
-          SHA256SUMS.txt is attached to every release at
-          <a href="https://github.com/LINUS-AI-PRO/linus-ai/releases">github.com/LINUS-AI-PRO/linus-ai/releases</a>.
-          Individual checksums are also shown on each download card above (click "Show SHA256").
-        </p>
-      </section>
-
-      <!-- ── System Requirements ────────────────────────────── -->
-      <section class="section">
-        <div class="section-tag">Requirements</div>
-        <h2>System Requirements</h2>
-        <p class="section-sub">Minimum and recommended specifications for running LINUS-AI.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Component</th>
-                <th>Minimum</th>
-                <th>Recommended</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Operating System</strong></td>
-                <td>macOS 12, Ubuntu 20.04, Windows 10, Android 8.0</td>
-                <td>macOS 14+, Ubuntu 22.04+, Windows 11</td>
-                <td>ARM64 Linux requires kernel 5.4+</td>
-              </tr>
-              <tr>
-                <td><strong>CPU</strong></td>
-                <td>4 cores, 2.0 GHz</td>
-                <td>8+ cores, 3.0+ GHz (AVX2)</td>
-                <td>AVX2 / AVX-512 for faster CPU inference</td>
-              </tr>
-              <tr>
-                <td><strong>RAM</strong></td>
-                <td>8 GB</td>
-                <td>32 GB+</td>
-                <td>70B model ≈ 48 GB @ Q4; 7B model ≈ 6 GB @ Q4</td>
-              </tr>
-              <tr>
-                <td><strong>Storage</strong></td>
-                <td>2 GB (binary only)</td>
-                <td>50–200 GB (models)</td>
-                <td>SSD strongly recommended for model load speed</td>
-              </tr>
-              <tr>
-                <td><strong>GPU (Optional)</strong></td>
-                <td>NVIDIA GTX 1060 6 GB</td>
-                <td>NVIDIA RTX 3090 / A100</td>
-                <td>CUDA 11.8+. AMD ROCm (beta). Apple Metal via Core ML.</td>
-              </tr>
-              <tr>
-                <td><strong>Internet</strong></td>
-                <td>None (offline)</td>
-                <td>None (offline)</td>
-                <td>Required only for initial license activation and model pulls</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ── Release Notes ──────────────────────────────────── -->
-      <section class="section">
-        <div class="section-tag" id="rel-tag">v2.0.1</div>
-        <h2>Release Highlights</h2>
-        <p class="section-sub">What's new in LINUS-AI 2.0.1.</p>
-
-        <div class="release-note">
-          <h4>📦 Native Installers — DMG, MSI, .deb, .rpm <span class="tag tag-green">New</span></h4>
-          <p>
-            Install LINUS-AI like any native app. macOS DMG (drag &amp; drop),
-            Windows MSI (adds to PATH automatically), Debian/Ubuntu .deb (dpkg/apt),
-            and RHEL/Fedora .rpm (rpm/dnf) packages — all architectures, all distros.
-          </p>
-        </div>
-
-        <div class="release-note">
-          <h4>📱 Android &amp; iOS Builds <span class="tag tag-green">New</span></h4>
-          <p>
-            Official native binaries for Android arm64 (API 26+) and iOS arm64 / Simulator.
-            Embed the LINUS-AI inference engine directly in your mobile app.
-          </p>
-        </div>
-
-        <div class="release-note">
-          <h4>⚡ Tensor Parallelism Across Multiple GPUs <span class="tag">v1.4</span></h4>
-          <p>
-            Split large models across up to 8 GPUs with automatic tensor sharding.
-            70B parameter models run in real-time on 4× RTX 3090s.
-          </p>
-        </div>
-
-        <div class="release-note">
-          <h4>🕸 Mesh Networking Mode <span class="tag">v1.4</span></h4>
-          <p>
-            Distribute inference across multiple machines on your private network.
-            Nodes auto-discover each other using mDNS. No Kubernetes required.
-          </p>
-        </div>
-
-        <div class="release-note">
-          <h4>🔐 Vault — Encrypted Memory Layer <span class="tag">v1.4</span></h4>
-          <p>
-            All conversation history and embeddings stored AES-256-GCM encrypted at rest.
-            The vault key never leaves your machine.
-          </p>
-        </div>
-
-        <div style="margin-top:20px;">
-          <a href="https://github.com/LINUS-AI-PRO/linus-ai/releases" class="btn btn-secondary btn-sm">
-            View Full Changelog on GitHub →
-          </a>
-        </div>
-      </section>
-
-    </div><!-- /.container -->
-  </main>
-
-  <!-- ── Footer ────────────────────────────────────────────── -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <a href="index.html" class="footer-logo">LINUS-AI</a>
-          <p class="footer-desc">
-            Private AI inference engine. One binary, zero cloud, complete control.
-            Your data never leaves your hardware.
-          </p>
-          <div class="footer-social">
-            <a href="https://github.com/LINUS-AI-PRO/linus-ai" aria-label="GitHub">⌥</a>
-            <a href="https://twitter.com/linusai" aria-label="Twitter">𝕏</a>
-            <a href="https://discord.gg/linusai" aria-label="Discord">◈</a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Product</h4>
-          <ul class="footer-links">
-            <li><a href="index.html#features">Features</a></li>
-            <li><a href="index.html#pricing">Pricing</a></li>
-            <li><a href="download.html">Download</a></li>
-            <li><a href="support.html" style="color:#f59e0b;font-weight:600;">Support</a></li>
-        <li><a href="activate.html">Activate</a></li>
-            <li><a href="index.html#changelog">Changelog</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
-          <ul class="footer-links">
-            <li><a href="docs/index.html">Documentation</a></li>
-            <li><a href="docs/endpoints.html">API Reference</a></li>
-            <li><a href="https://github.com/LINUS-AI-PRO/linus-ai">GitHub</a></li>
-            <li><a href="https://github.com/LINUS-AI-PRO/linus-ai/issues">Issues</a></li>
-            <li><a href="https://discord.gg/linusai">Community</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <ul class="footer-links">
-            <li><a href="index.html#features">About</a></li>
-            <li><a href="mailto:support@linus-ai.com">Support</a></li>
-            <li><a href="mailto:support@linus-ai.com">Sales</a></li>
-            <li><a href="https://github.com/LINUS-AI-PRO/linus-ai/blob/main/LICENSE.md">Privacy Policy</a></li>
-            <li><a href="https://github.com/LINUS-AI-PRO/linus-ai/blob/main/LICENSE.md">Terms of Service</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>&copy; 2026 LINUS-AI&#8482;. All rights reserved. Patent Pending.</span>
-        <span>
-          <a href="https://github.com/LINUS-AI-PRO/linus-ai">Privacy</a> &nbsp;·&nbsp;
-          <a href="https://github.com/LINUS-AI-PRO/linus-ai/blob/main/LICENSE.md">Terms</a> &nbsp;·&nbsp;
-          <a href="https://github.com/LINUS-AI-PRO/linus-ai/blob/main/LICENSE.md">License Agreement</a>
-        </span>
-      </div>
-      <p class="trademark-notice">LINUS-AI&#8482; is a trademark. NVIDIA&reg; and CUDA&reg; are registered trademarks of NVIDIA Corporation. AMD&reg; and ROCm&#8482; are trademarks of Advanced Micro Devices, Inc. Apple&reg;, macOS&reg;, and Metal&reg; are registered trademarks of Apple Inc. Stripe&reg; is a registered trademark of Stripe, Inc. Microsoft&reg; and Windows&reg; are registered trademarks of Microsoft Corporation. LLaMA is a trademark of Meta Platforms, Inc. All other trademarks are the property of their respective owners.</p>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
-  <script>
-    // ── Tab switching ──────────────────────────────────────────────────────
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabContainer = document.getElementById('install-tabs');
-      if (tabContainer) {
-        tabContainer.querySelectorAll('.tab-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            tabContainer.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(btn.dataset.panel);
-            if (target) target.classList.add('active');
-          });
-        });
-      }
-
-      // ── SHA toggle buttons ───────────────────────────────────────────────
-      document.querySelectorAll('.toggle-sha').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const row = document.getElementById(btn.dataset.sha);
-          if (!row) return;
-          row.classList.toggle('visible');
-          btn.textContent = row.classList.contains('visible') ? 'Hide SHA256' : 'Show SHA256';
-        });
-      });
-
-      // ── Auto-detect platform ─────────────────────────────────────────────
-      const ua = navigator.userAgent;
-      let detectedCard = null;
-      if (/iPhone|iPad/.test(ua))           detectedCard = 'card-ios';
-      else if (/Android/.test(ua))          detectedCard = 'card-android';
-      else if (/Mac/.test(ua) && /ARM/.test(ua)) detectedCard = 'card-macos-arm64';
-      else if (/Mac/.test(ua))              detectedCard = 'card-macos-x86';
-      else if (/Win/.test(ua))              detectedCard = 'card-win-msi';
-      else if (/Linux/.test(ua))            detectedCard = 'card-linux-x86';
-      if (detectedCard) {
-        const el = document.getElementById(detectedCard);
-        if (el) {
-          el.classList.add('detected');
-          const btn = el.querySelector('.dl-btn');
-          if (btn) btn.classList.replace('btn-secondary', 'btn-primary');
-        }
-      }
+  setLoading('btn-step1', true);
+  try {
+    const r = await fetch(API + '/api/auth/request-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, license_key: key }),
     });
+    const d = await r.json();
+    if (!d.ok) { showErr('err-1', d.detail || 'Could not verify license. Check your key and email.'); return; }
 
-    // ── Live release data from GitHub API ─────────────────────────────────
-    (async () => {
-      const REPO = 'LINUS-AI-PRO/linus-ai';
-      const RELEASES_URL = `https://github.com/${REPO}/releases`;
+    _userEmail = email;
+    document.getElementById('otp-sub').textContent =
+      `A 6-digit code was sent to ${d.masked_email}. It expires in 10 minutes.`;
 
-      function fmtBytes(n) {
-        if (n < 1024 * 1024) return (n / 1024).toFixed(0) + ' KB';
-        return (n / (1024 * 1024)).toFixed(0) + ' MB';
-      }
+    if (!resend) {
+      document.getElementById('step-1').classList.remove('active');
+      document.getElementById('step-2').classList.add('active');
+    } else {
+      showErr('err-2', '');
+      document.getElementById('resend-link').textContent = 'Sent ✓';
+      setTimeout(() => { document.getElementById('resend-link').textContent = 'Resend code'; }, 3000);
+    }
+  } catch(e) {
+    showErr('err-1', 'Network error. Please try again.');
+  } finally {
+    setLoading('btn-step1', false);
+  }
+}
 
-      let release, assetMap = {}, checksums = {};
+async function verifyOtp() {
+  const otp = document.getElementById('inp-otp').value.trim();
+  showErr('err-2', '');
+  if (otp.length !== 6 || !/^\d{6}$/.test(otp)) { showErr('err-2', 'Enter the 6-digit code from your email.'); return; }
 
-      try {
-        const resp = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
-          headers: { Accept: 'application/vnd.github+json' }
-        });
-        if (!resp.ok) throw new Error('API error');
-        release = await resp.json();
-      } catch (_) {
-        // API unavailable — leave buttons pointing to releases page
-        return;
-      }
+  setLoading('btn-step2', true);
+  try {
+    const r = await fetch(API + '/api/auth/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: _userEmail, otp }),
+    });
+    const d = await r.json();
+    if (!d.ok) { showErr('err-2', d.detail || 'Invalid or expired code. Try again.'); return; }
 
-      const tag = release.tag_name;            // e.g. "v2.0.1"
-      const ver = tag.replace(/^v/, '');       // e.g. "2.0.1"
+    _sessionToken  = d.token;
+    _sessionExpiry = Date.now() + d.expires_in * 1000;
 
-      // Build asset map: exact name → {url, size}, suffix → same
-      release.assets.forEach(a => {
-        assetMap[a.name] = { url: a.browser_download_url, size: fmtBytes(a.size) };
-      });
+    document.getElementById('gate-wrap').style.display = 'none';
+    showDownloads(d);
+  } catch(e) {
+    showErr('err-2', 'Network error. Please try again.');
+  } finally {
+    setLoading('btn-step2', false);
+  }
+}
 
-      // Update version displays
-      document.getElementById('hero-version').textContent = tag;
-      document.getElementById('release-tag-inline').textContent = tag;
-      document.getElementById('release-loaded-note').style.display = '';
-      document.getElementById('rel-tag').textContent = tag;
-      document.querySelectorAll('.term-version').forEach(el => { el.textContent = ver; });
+function goBack() {
+  document.getElementById('step-2').classList.remove('active');
+  document.getElementById('step-1').classList.add('active');
+  showErr('err-2', '');
+}
 
-      // Update exact-name asset links + sizes
-      document.querySelectorAll('[data-asset]').forEach(el => {
-        const name = el.dataset.asset;
-        const info = assetMap[name];
-        if (!info) return;
-        if (el.tagName === 'A') el.href = info.url;
-        if (el.classList.contains('dl-size')) el.textContent = info.size;
-      });
+async function showDownloads(session) {
+  const sec = document.getElementById('dl-section');
+  sec.classList.add('visible');
 
-      // Update suffix-matched asset links + sizes
-      document.querySelectorAll('[data-asset-suffix]').forEach(el => {
-        const suffix = el.dataset.assetSuffix;
-        const match = Object.entries(assetMap).find(([k]) => k.endsWith(suffix));
-        if (!match) return;
-        const [, info] = match;
-        if (el.tagName === 'A') el.href = info.url;
-        if (el.classList.contains('dl-size')) el.textContent = info.size;
-      });
+  document.getElementById('welcome-bar').innerHTML =
+    `<strong>Welcome back${session.licensee ? ', ' + session.licensee : ''}.</strong> `
+    + `You are signed in as <strong>${_userEmail}</strong> · Plan: <strong>${session.plan}</strong>`;
 
-      // Fetch SHA256SUMS.txt and populate checksum rows
-      const sumsAsset = assetMap['SHA256SUMS.txt'];
-      if (sumsAsset) {
-        try {
-          const txt = await (await fetch(sumsAsset.url)).text();
-          txt.trim().split('\n').forEach(line => {
-            const [hash, ...nameParts] = line.trim().split(/\s+/);
-            const name = nameParts.join(' ');
-            checksums[name] = hash;
-          });
-        } catch (_) {}
-      }
+  startTimer();
 
-      // Map asset names → checksum div IDs
-      const shaMap = {
-        'linus-ai-macos-arm64':          'sha-macos-arm64',
-        'linus-ai-macos-x86_64':         'sha-macos-x86',
-        'linus-ai-macos-universal':      'sha-macos-uni',
-        'linus-ai-macos.dmg':            'sha-macos-dmg',
-        'linus-ai-linux-x86_64':         'sha-linux-x86',
-        'linus-ai-linux-arm64':          'sha-linux-arm64',
-        'linus-ai-windows-x86_64.exe':   'sha-win-exe',
-        'linus-ai-windows-x86_64.msi':   'sha-win-msi',
-        'linus-ai-android-arm64':        'sha-android',
-        'linus-ai-ios-arm64':            'sha-ios',
-        'linus-ai-ios-sim':              'sha-ios-sim',
-      };
-      // suffix-matched
-      const shaSuffixMap = [
-        ['_amd64.deb',   'sha-deb-amd64'],
-        ['_arm64.deb',   'sha-deb-arm64'],
-        ['.x86_64.rpm',  'sha-rpm-x86'],
-        ['.aarch64.rpm', 'sha-rpm-aarch64'],
-      ];
+  // Fetch manifest
+  try {
+    const r = await fetch(`${API}/api/downloads/${_sessionToken}/manifest`);
+    const d = await r.json();
+    if (!d.ok) { document.getElementById('dl-products').innerHTML = '<p style="color:#f87171">Could not load downloads. Please try again.</p>'; return; }
+    renderManifest(d);
+  } catch(e) {
+    document.getElementById('dl-products').innerHTML = '<p style="color:#f87171">Network error loading downloads.</p>';
+  }
+}
 
-      Object.entries(shaMap).forEach(([name, divId]) => {
-        const hash = checksums[name];
-        const el = document.getElementById(divId);
-        if (hash && el) el.textContent = hash + '  ' + name;
-      });
-      shaSuffixMap.forEach(([suffix, divId]) => {
-        const name = Object.keys(checksums).find(k => k.endsWith(suffix));
-        const el = document.getElementById(divId);
-        if (name && el) el.textContent = checksums[name] + '  ' + name;
-      });
-    })();
-  </script>
+function renderManifest(data) {
+  const container = document.getElementById('dl-products');
+  if (!data.products || data.products.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-muted)">No downloads available for your plan. Contact support@linus-ai.com.</p>';
+    return;
+  }
+
+  let html = '';
+  for (const prod of data.products) {
+    const assets = prod.assets || [];
+    html += `<div class="product-section">
+      <h3>${prod.product}</h3>
+      <p class="ptag">Release ${assets[0]?.tag || ''} &nbsp;&middot;&nbsp; ${assets.length} file${assets.length !== 1 ? 's' : ''}</p>
+      <div class="asset-grid">`;
+
+    if (assets.length === 0) {
+      html += `<p style="color:var(--text-muted);font-size:13px">No release assets found. Contact support@linus-ai.com.</p>`;
+    }
+
+    for (const a of assets) {
+      const sizeStr = a.size > 0 ? (a.size / 1048576).toFixed(1) + ' MB' : '';
+      const repoSlug = prod.repo.replace('/', '--');
+      const dlUrl = `${API}/api/downloads/${_sessionToken}/${repoSlug}/${a.id}`;
+      html += `<div class="asset-card">
+        <div class="asset-tag">${a.tag}</div>
+        <div class="asset-name">${a.name}</div>
+        ${sizeStr ? `<div class="asset-size">${sizeStr}</div>` : ''}
+        <a class="btn-dl" href="${dlUrl}" download="${a.name}">&#8595; Download</a>
+      </div>`;
+    }
+    html += `</div></div>`;
+  }
+  container.innerHTML = html;
+}
+
+function startTimer() {
+  const bar = document.getElementById('session-bar');
+  bar.style.display = 'block';
+  _timerInterval = setInterval(() => {
+    const left = Math.max(0, Math.floor((_sessionExpiry - Date.now()) / 1000));
+    const m = String(Math.floor(left / 60)).padStart(2,'0');
+    const s = String(left % 60).padStart(2,'0');
+    document.getElementById('session-timer').textContent = `${m}:${s}`;
+    if (left === 0) {
+      clearInterval(_timerInterval);
+      document.getElementById('dl-section').classList.remove('visible');
+      document.getElementById('gate-wrap').style.display = '';
+      document.getElementById('dl-section').style.display = 'none';
+      document.getElementById('dl-section').classList.remove('visible');
+      document.getElementById('step-2').classList.remove('active');
+      document.getElementById('step-1').classList.add('active');
+      bar.style.display = 'none';
+      alert('Your download session has expired. Please sign in again.');
+    }
+  }, 1000);
+}
+
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// Auto-format license key
+document.getElementById('inp-key').addEventListener('input', function() {
+  let v = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+  if (v.startsWith('LNAI')) v = v.slice(4);
+  let parts = [];
+  for (let i = 0; i < v.length && parts.length < 4; i += 4)
+    parts.push(v.slice(i, i + 4));
+  this.value = parts.length ? 'LNAI-' + parts.join('-') : v;
+});
+
+document.getElementById('inp-otp').addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').slice(0, 6);
+  if (this.value.length === 6) document.getElementById('btn-step2').focus();
+});
+
+// Allow Enter key submission
+document.getElementById('inp-key').addEventListener('keydown', e => { if(e.key==='Enter') requestOtp(); });
+document.getElementById('inp-otp').addEventListener('keydown', e => { if(e.key==='Enter') verifyOtp(); });
+</script>
 </body>
 </html>
