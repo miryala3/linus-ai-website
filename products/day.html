@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LINUS-Day — AI Daily Planner | LINUS-AI</title>
+  <meta name="description" content="LINUS-Day: AI-powered daily planning, task management and focus coaching. Runs locally, learns your rhythms, helps you do your best work. $99 one-time.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☀</text></svg>">
+  <style>
+    .prod-hero { padding: 120px 0 72px; text-align: center; }
+    .prod-hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; margin: 12px 0 20px; }
+    .prod-hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 560px; margin: 0 auto 36px; line-height: 1.7; }
+    .badge-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+    .badge { background: rgba(251,191,36,.1); color: #f59e0b; border: 1px solid rgba(251,191,36,.25); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; }
+    .section { padding: 64px 0; }
+    .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+    .section-sub { color: var(--text-muted); font-size: 14px; margin-bottom: 40px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+    .feature-icon { font-size: 1.6rem; margin-bottom: 12px; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+    /* Pricing card */
+    .pricing-center { display: flex; justify-content: center; padding: 40px 0; }
+    .plan-card { background: var(--surface); border: 1px solid rgba(251,191,36,.35); border-radius: 16px; padding: 40px; max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 16px; }
+    .plan-badge { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #f59e0b; }
+    .plan-name { font-size: 1.4rem; font-weight: 700; }
+    .plan-desc { color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+    .plan-price { font-size: 2.4rem; font-weight: 800; }
+    .plan-price span { font-size: 14px; font-weight: 400; color: var(--text-muted); }
+    .plan-price-sub { font-size: 13px; color: var(--text-muted); margin-top: -10px; }
+    .plan-includes { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .plan-includes li { font-size: 14px; color: var(--text-muted); }
+    .plan-includes li::before { content: "✓ "; color: #f59e0b; font-weight: 700; }
+    .pp-btn-wrap { margin-top: 8px; }
+    .divider { border: none; border-top: 1px solid var(--border); }
+    /* How it works */
+    .steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; counter-reset: step; }
+    .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; counter-increment: step; }
+    .step-num { font-size: 2rem; font-weight: 800; color: #f59e0b; margin-bottom: 12px; }
+    .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .step-card p { color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+    /* CTA */
+    .cta-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 48px; text-align: center; margin: 40px 0 80px; }
+    .cta-bar h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 12px; }
+    .cta-bar p { color: var(--text-muted); margin-bottom: 28px; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner container">
+    <a href="../index.html" class="logo">◈ LINUS-AI</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../pricing.html">Pricing</a></li>
+      <li><a href="../download.html">Download</a></li>
+      <li><a href="../docs/index.html">Docs</a></li>
+      <li><a href="../store/index.html">Store</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#buy" class="btn btn-primary btn-sm">Buy Now — $99</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="prod-hero">
+  <div class="container">
+    <div class="badge-row">
+      <span class="badge">Runs Locally</span>
+      <span class="badge">Perpetual License</span>
+      <span class="badge">macOS · Windows · Linux</span>
+      <span class="badge">Privacy-First</span>
+    </div>
+    <h1>☀ LINUS-Day<br>AI That Plans Your Day</h1>
+    <p>An intelligent daily planner that learns your work style, optimises your schedule, and keeps you in flow — without sending a single byte to the cloud.</p>
+    <a href="#buy" class="btn btn-primary" style="font-size:1rem;padding:14px 32px;background:#f59e0b;border-color:#f59e0b;color:#0a0e17">Get LINUS-Day — $99 →</a>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- ── Features ── -->
+  <section class="section">
+    <div class="section-title">Designed Around How You Actually Work</div>
+    <div class="section-sub">Smart scheduling, not rigid time-boxing.</div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>AI Daily Briefing</h3>
+        <p>Each morning, LINUS-Day reviews your calendar, tasks, and priorities and generates a plain-English plan for the day. No setup ritual needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Smart Task Prioritisation</h3>
+        <p>Deadlines, effort estimates, and energy levels combined. The AI recommends what to tackle first based on your personal productivity patterns.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔔</div>
+        <h3>Focus Blocks & Flow Protection</h3>
+        <p>Carves out deep-work windows and defends them. Suggests when to batch shallow tasks so your best hours stay protected.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Calendar Integration</h3>
+        <p>Reads iCal / CalDAV. Sees your meetings, travel time, and commitments. Schedules tasks around real availability, not theory.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3>End-of-Day Review</h3>
+        <p>A short debrief captures what got done, what rolled over, and what blocked you. Feeds back into tomorrow's plan automatically.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Weekly Productivity Insights</h3>
+        <p>Charts your focus time, completion rates, and energy rhythms over the week. All computed locally — your data stays on your machine.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── How it works ── -->
+  <section class="section">
+    <div class="section-title">How LINUS-Day Works</div>
+    <div class="section-sub">Set up in under 5 minutes. Gets smarter every day.</div>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <h3>Connect your calendar</h3>
+        <p>Point LINUS-Day at your iCal feed or CalDAV server. Reads events locally — never uploads to any cloud.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <h3>Capture your tasks</h3>
+        <p>Add tasks directly or pipe in from your favourite task manager. Each task gets an effort estimate and deadline.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <h3>Get your morning plan</h3>
+        <p>The AI generates an ordered daily plan factoring in meetings, energy, and priority. Review in 60 seconds, start working.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <h3>Work, review, improve</h3>
+        <p>End-of-day debrief takes 2 minutes. The AI learns from each day and keeps improving your scheduling over time.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Pricing ── -->
+  <section class="section" id="buy">
+    <div class="section-title">One Price. Yours Forever.</div>
+    <div class="section-sub">Quicken-style model: buy once, run forever. Optional annual update plan for new AI features and platform support.</div>
+    <div class="pricing-center">
+      <div class="plan-card">
+        <div class="plan-badge">Perpetual License</div>
+        <div class="plan-name">LINUS-Day</div>
+        <div class="plan-desc">Full-featured AI daily planner for macOS, Windows, and Linux. One license, one user, runs offline forever.</div>
+        <div class="plan-price">$99 <span>one-time</span></div>
+        <div class="plan-price-sub">+ $49/yr for updates &amp; support (optional)</div>
+        <ul class="plan-includes">
+          <li>Perpetual license — yours to keep</li>
+          <li>macOS, Windows, Linux</li>
+          <li>Local AI — no cloud required</li>
+          <li>Calendar integration (iCal/CalDAV)</li>
+          <li>AI daily briefing &amp; review</li>
+          <li>Focus block scheduling</li>
+          <li>Weekly productivity insights</li>
+          <li>Future updates with annual plan</li>
+        </ul>
+        <div class="pp-btn-wrap" id="pp-day-perp"></div>
+        <div style="text-align:center;font-size:12px;color:var(--text-muted);padding:4px 0">or add the annual update plan</div>
+        <div class="pp-btn-wrap" id="pp-day-year"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <div class="cta-bar">
+    <h2>Start planning smarter — today.</h2>
+    <p>LINUS-Day activates immediately after purchase. Download, install, and get your first AI briefing within minutes.</p>
+    <div class="cta-actions">
+      <a href="#buy" class="btn btn-primary" style="font-size:14px;padding:12px 28px;background:#f59e0b;border-color:#f59e0b;color:#0a0e17">Buy LINUS-Day — $99 →</a>
+      <a href="../store/index.html" class="btn btn-secondary" style="font-size:14px;padding:12px 28px">View All Products</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- PayPal Smart Buttons -->
+<script src="https://www.paypal.com/sdk/js?client-id=PAYPAL_CLIENT_ID_HERE&currency=USD"></script>
+<script>
+const API = 'https://license.linus-ai.com';
+function mountPayPal(containerId, plan) {
+  if (!document.getElementById(containerId)) return;
+  paypal.Buttons({
+    style: { layout: 'horizontal', color: 'gold', shape: 'rect', label: 'buynow', height: 40 },
+    createOrder: async () => {
+      const r = await fetch(`${API}/api/checkout`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ plan, email: '' })
+      });
+      const d = await r.json();
+      if (!d.ok) throw new Error(d.detail || 'Checkout error');
+      return d.order_id;
+    },
+    onApprove: async (data) => {
+      const r = await fetch(`${API}/api/capture`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ order_id: data.orderID })
+      });
+      const d = await r.json();
+      if (d.ok) { alert('Purchase complete! Check your email for the license key.'); }
+      else { alert('Capture error: ' + (d.detail || 'unknown')); }
+    },
+    onError: (err) => { console.error(err); alert('PayPal error — please try again.'); }
+  }).render('#' + containerId);
+}
+mountPayPal('pp-day-perp', 'day_perpetual');
+mountPayPal('pp-day-year', 'day_annual_updates');
+</script>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:10px">◈ LINUS-AI</div>
+        <p style="color:var(--text-muted);font-size:13px;max-width:220px">Private AI infrastructure for professionals.</p>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:10px;font-size:13px">Products</div>
+        <ul class="footer-links">
+          <li><a href="../pricing.html">LINUS-AI Pro</a></li>
+          <li><a href="bizcore.html">BizCore</a></li>
+          <li><a href="day.html">LINUS-Day</a></li>
+          <li><a href="med.html">aiMED</a></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:10px;font-size:13px">Company</div>
+        <ul class="footer-links">
+          <li><a href="../store/index.html">Store</a></li>
+          <li><a href="../docs/index.html">Docs</a></li>
+          <li><a href="../support.html">Support</a></li>
+          <li><a href="mailto:sales@linus-ai.com">Sales</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 LINUS-AI. All rights reserved.</span>
+      <span style="color:var(--text-muted);font-size:12px">Payments secured by PayPal.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>aiMED — HIPAA-Compliant Medical AI | LINUS-AI</title>
+  <meta name="description" content="aiMED: on-premises AI for healthcare. HIPAA-ready, no cloud, clinical decision support, radiology, pathology, patient summaries. Starts at $4,990/yr.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚕</text></svg>">
+  <style>
+    .prod-hero { padding: 120px 0 72px; text-align: center; }
+    .prod-hero .hero-tag { color: #34d399; }
+    .prod-hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; margin: 12px 0 20px; }
+    .prod-hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 560px; margin: 0 auto 36px; line-height: 1.7; }
+    .badge-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+    .badge { background: rgba(52,211,153,.1); color: #34d399; border: 1px solid rgba(52,211,153,.25); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; }
+    .section { padding: 64px 0; }
+    .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+    .section-sub { color: var(--text-muted); font-size: 14px; margin-bottom: 40px; }
+    /* Feature grid */
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+    .feature-icon { font-size: 1.6rem; margin-bottom: 12px; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+    /* Pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
+    .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 32px; display: flex; flex-direction: column; gap: 14px; }
+    .plan-card.featured { border-color: rgba(52,211,153,.5); }
+    .plan-badge { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #34d399; }
+    .plan-name { font-size: 1.2rem; font-weight: 700; }
+    .plan-desc { color: var(--text-muted); font-size: 13px; line-height: 1.6; flex: 1; }
+    .plan-price { font-size: 2rem; font-weight: 800; }
+    .plan-price span { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+    .plan-includes { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+    .plan-includes li { font-size: 13px; color: var(--text-muted); }
+    .plan-includes li::before { content: "✓ "; color: #34d399; font-weight: 700; }
+    .btn-sales { display: block; text-align: center; padding: 12px 20px; border-radius: var(--radius); background: #34d399; color: #0a0e17; font-weight: 700; font-size: 14px; text-decoration: none; transition: opacity .2s; }
+    .btn-sales:hover { opacity: .85; }
+    .btn-outline { display: block; text-align: center; padding: 12px 20px; border-radius: var(--radius); border: 1px solid var(--border); color: var(--text); font-weight: 600; font-size: 14px; text-decoration: none; transition: border-color .2s, color .2s; }
+    .btn-outline:hover { border-color: #34d399; color: #34d399; }
+    /* Roles */
+    .roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .role-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 13px; font-weight: 600; }
+    /* Compliance */
+    .compliance-row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .comp-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; font-size: 13px; font-weight: 600; text-align: center; }
+    .divider { border: none; border-top: 1px solid var(--border); }
+    /* CTA bar */
+    .cta-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 48px; text-align: center; margin: 40px 0 80px; }
+    .cta-bar h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 12px; }
+    .cta-bar p { color: var(--text-muted); margin-bottom: 28px; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner container">
+    <a href="../index.html" class="logo">◈ LINUS-AI</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../pricing.html">Pricing</a></li>
+      <li><a href="../download.html">Download</a></li>
+      <li><a href="../docs/index.html">Docs</a></li>
+      <li><a href="../store/index.html">Store</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="mailto:sales@linus-ai.com?subject=aiMED+Inquiry" class="btn btn-primary btn-sm">Contact Sales</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="prod-hero">
+  <div class="container">
+    <div class="badge-row">
+      <span class="badge">HIPAA-Ready</span>
+      <span class="badge">On-Premises</span>
+      <span class="badge">No Cloud Required</span>
+      <span class="badge">Air-Gap Capable</span>
+    </div>
+    <h1>⚕ aiMED<br>Medical AI for Clinicians</h1>
+    <p>Run enterprise-grade clinical AI entirely on your own hardware. Patient data never leaves your facility. HIPAA-compliant by architecture, not by contract.</p>
+    <a href="mailto:sales@linus-ai.com?subject=aiMED+Demo+Request" class="btn btn-primary" style="font-size:1rem;padding:14px 32px">Request a Demo →</a>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- ── Clinical Capabilities ── -->
+  <section class="section">
+    <div class="section-title">Clinical AI Capabilities</div>
+    <div class="section-sub">Purpose-trained models for real-world clinical workflows.</div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🩺</div>
+        <h3>Clinical Decision Support</h3>
+        <p>Evidence-based differential diagnosis, drug interaction alerts, dosing recommendations at the point of care.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Automated Documentation</h3>
+        <p>SOAP notes, discharge summaries, referral letters — generated from conversation in real time. Physician review before sign-off.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔬</div>
+        <h3>Lab & Pathology Interpretation</h3>
+        <p>Flags abnormal values, trends panels over time, contextualises results against the full patient history.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📷</div>
+        <h3>Radiology Assistance</h3>
+        <p>Preliminary reads for chest X-ray, CT, and MRI findings. Highlights regions of interest for radiologist review.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💊</div>
+        <h3>Medication Management</h3>
+        <p>Formulary compliance, allergy cross-checks, polypharmacy risk scoring, and smart refill workflows.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Population Health Analytics</h3>
+        <p>Risk stratification, readmission prediction, and care-gap identification across your patient panel.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3>EHR Integration</h3>
+        <p>HL7 FHIR R4 API. Connects to Epic, Cerner, Athena, and any standards-compliant EHR via REST or HL7 v2.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Audit Logging</h3>
+        <p>Immutable blockchain-anchored audit trail for every AI inference. Satisfies HIPAA access-log requirements automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Who Uses aiMED ── -->
+  <section class="section">
+    <div class="section-title">Built for Every Clinical Role</div>
+    <div class="section-sub">Role-aware UI and model specialisation for each discipline.</div>
+    <div class="roles-grid">
+      <div class="role-chip">👨‍⚕️ Primary Care</div>
+      <div class="role-chip">🏥 Hospitalist</div>
+      <div class="role-chip">🔬 Radiologist</div>
+      <div class="role-chip">🧬 Pathologist</div>
+      <div class="role-chip">💊 Pharmacist</div>
+      <div class="role-chip">🩻 Surgeon</div>
+      <div class="role-chip">🧠 Neurologist</div>
+      <div class="role-chip">❤️ Cardiologist</div>
+      <div class="role-chip">🏨 Hospital Admin</div>
+      <div class="role-chip">📈 CMO / CMIO</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Compliance ── -->
+  <section class="section">
+    <div class="section-title">Compliance by Architecture</div>
+    <div class="section-sub">Privacy isn't a setting — it's the deployment model.</div>
+    <div class="compliance-row">
+      <div class="comp-item">HIPAA<br><small style="color:var(--text-muted);font-weight:400">On-prem design</small></div>
+      <div class="comp-item">HITECH<br><small style="color:var(--text-muted);font-weight:400">Audit logging</small></div>
+      <div class="comp-item">HL7 FHIR R4<br><small style="color:var(--text-muted);font-weight:400">Standards API</small></div>
+      <div class="comp-item">Air-Gap<br><small style="color:var(--text-muted);font-weight:400">Optional mode</small></div>
+      <div class="comp-item">SOC 2 Ready<br><small style="color:var(--text-muted);font-weight:400">Evidence export</small></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Pricing ── -->
+  <section class="section">
+    <div class="section-title">Annual Plans — Medical Grade</div>
+    <div class="section-sub">Includes model updates, clinical content updates, priority support, and on-site deployment guidance.</div>
+    <div class="pricing-grid">
+
+      <div class="plan-card">
+        <div class="plan-badge">Clinic</div>
+        <div class="plan-name">aiMED Clinic</div>
+        <div class="plan-desc">Single-site deployment. Up to 10 concurrent clinical users. Ideal for independent practices and specialty clinics.</div>
+        <div class="plan-price">$4,990 <span>/ year</span></div>
+        <ul class="plan-includes">
+          <li>Up to 10 concurrent users</li>
+          <li>Core clinical modules</li>
+          <li>HL7 FHIR R4 API</li>
+          <li>Email support, 2-day SLA</li>
+          <li>Annual model updates</li>
+        </ul>
+        <a href="mailto:sales@linus-ai.com?subject=aiMED+Clinic+%244%2C990" class="btn-sales">Get Started →</a>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular · Hospital</div>
+        <div class="plan-name">aiMED Hospital</div>
+        <div class="plan-desc">Multi-department deployment. Up to 100 concurrent users. Radiology, pathology, pharmacy, and population health modules included.</div>
+        <div class="plan-price">$14,990 <span>/ year</span></div>
+        <ul class="plan-includes">
+          <li>Up to 100 concurrent users</li>
+          <li>All clinical modules</li>
+          <li>Radiology + pathology AI</li>
+          <li>EHR integration support</li>
+          <li>Phone support, 8-hour SLA</li>
+          <li>Quarterly model updates</li>
+        </ul>
+        <a href="mailto:sales@linus-ai.com?subject=aiMED+Hospital+%2414%2C990" class="btn-sales">Get Started →</a>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-badge">Health System</div>
+        <div class="plan-name">aiMED Enterprise</div>
+        <div class="plan-desc">Multi-facility health system. Unlimited users. Dedicated deployment team, custom fine-tuning on your clinical data, air-gap activation.</div>
+        <div class="plan-price">$49,990 <span>/ year</span></div>
+        <ul class="plan-includes">
+          <li>Unlimited users, unlimited sites</li>
+          <li>Custom model fine-tuning</li>
+          <li>Air-gap / offline activation</li>
+          <li>Dedicated CSM + on-site setup</li>
+          <li>24/7 support, 1-hour SLA</li>
+          <li>Monthly model updates</li>
+        </ul>
+        <a href="mailto:sales@linus-ai.com?subject=aiMED+Enterprise+%2449%2C990" class="btn-sales">Contact Sales →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <div class="cta-bar">
+    <h2>Ready to bring AI inside your facility?</h2>
+    <p>Our clinical engineers will walk you through deployment, integration, and compliance documentation in a 30-minute call.</p>
+    <div class="cta-actions">
+      <a href="mailto:sales@linus-ai.com?subject=aiMED+Demo+Request" class="btn btn-primary" style="font-size:14px;padding:12px 28px">Request Demo →</a>
+      <a href="../store/index.html" class="btn btn-secondary" style="font-size:14px;padding:12px 28px">View All Products</a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:10px">◈ LINUS-AI</div>
+        <p style="color:var(--text-muted);font-size:13px;max-width:220px">Private AI infrastructure for professionals.</p>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:10px;font-size:13px">Products</div>
+        <ul class="footer-links">
+          <li><a href="../pricing.html">LINUS-AI Pro</a></li>
+          <li><a href="bizcore.html">BizCore</a></li>
+          <li><a href="day.html">LINUS-Day</a></li>
+          <li><a href="med.html">aiMED</a></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:10px;font-size:13px">Company</div>
+        <ul class="footer-links">
+          <li><a href="../store/index.html">Store</a></li>
+          <li><a href="../docs/index.html">Docs</a></li>
+          <li><a href="../support.html">Support</a></li>
+          <li><a href="mailto:sales@linus-ai.com">Sales</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 LINUS-AI. All rights reserved.</span>
+      <span style="color:var(--text-muted);font-size:12px">aiMED is a clinical decision support tool. Always follow clinical judgment and institutional protocols.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
