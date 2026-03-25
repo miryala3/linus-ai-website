@@ -374,7 +374,7 @@ function initActivationForm() {
     alertEl.textContent = '';
 
     try {
-      const res = await fetch('https://license.linus-ai.com/activate', {
+      const res = await fetch('/activate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ license_key: licenseKey, email, machine_id: machineId }),
@@ -382,28 +382,28 @@ function initActivationForm() {
 
       const data = await res.json().catch(() => ({}));
 
-      if (res.ok && data.success !== false) {
+      if (res.ok && data.ok) {
         // Show success state
+        const lic = data.license || {};
         if (successState) {
           form.style.display = 'none';
           successState.style.display = '';
 
-          // Populate details
           const fill = (sel, val) => {
             const el = successState.querySelector(sel);
             if (el) el.textContent = val || '—';
           };
 
-          fill('[data-plan]',     data.plan     || 'Professional');
-          fill('[data-licensee]', data.name     || email);
-          fill('[data-seats]',    data.seats    || '1');
-          fill('[data-expires]',  data.expires  || 'Never');
+          fill('[data-plan]',     lic.plan);
+          fill('[data-licensee]', lic.licensee || email);
+          fill('[data-seats]',    lic.seats);
+          fill('[data-expires]',  lic.expires_at || 'Never');
           fill('[data-key]',      licenseKey);
         } else {
           showAlert('success', 'License activated successfully! Your installation is now licensed.');
         }
       } else {
-        const msg = data.error || data.message || 'Activation failed. Please check your license key and try again.';
+        const msg = data.detail || data.error || data.message || 'Activation failed. Please check your license key and try again.';
         showAlert('error', msg);
       }
     } catch (err) {
