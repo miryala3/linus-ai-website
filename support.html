@@ -781,14 +781,14 @@
       tags:["invalid key","format","lnai","typo","key format"]},
 
     {id:41, cat:'licensing', platform:['all'], title:"License server unreachable during activation",
-      symptoms:'"Error: failed to activate — could not connect to license.linus-ai.com: connection timed out"',
+      symptoms:'"Error: failed to activate — could not connect to linus-ai.com: connection timed out"',
       cause:"No internet connection, or the activation server is temporarily down",
       fix:"Check your internet connection and try again. For offline/air-gapped activation, contact sales for an offline token.",
       cmd:"",
       tags:["license server","unreachable","activation","timeout","connection","offline","air-gapped"]},
 
     {id:42, cat:'licensing', platform:['all'], title:"License server SSL certificate error",
-      symptoms:'"Error: SSL certificate verification failed for license.linus-ai.com"',
+      symptoms:'"Error: SSL certificate verification failed for linus-ai.com"',
       cause:"System clock is wrong (SSL certs are time-sensitive), or a proxy is intercepting HTTPS",
       fix:"Sync your system clock. If behind a corporate proxy, contact your IT team for SSL inspection exemption.",
       cmd:"# Sync clock on Linux:\nsudo timedatectl set-ntp true\n# Check current time:\ndate",
