@@ -522,14 +522,15 @@ function initOSDetection() {
   });
 }
 
-/* ── Stripe Checkout ─────────────────────────────────────── */
-function initStripeButtons() {
-  $$('[data-stripe-plan]').forEach(btn => {
+/* ── PayPal Checkout ─────────────────────────────────────── */
+function initPayPalButtons() {
+  $$('[data-paypal-plan]').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.preventDefault();
 
-      const plan    = btn.dataset.stripePlan;
-      const billing = btn.dataset.stripeBilling || 'annual';
+      const plan    = btn.dataset.paypalPlan;
+      const billing = btn.dataset.paypalBilling || 'annual';
+      const planKey = `${plan}_${billing}`;
 
       const originalHTML = btn.innerHTML;
       btn.innerHTML = '<span class="spinner"></span> Redirecting…';
@@ -539,7 +540,7 @@ function initStripeButtons() {
         const res = await fetch('/api/checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ plan, billing }),
+          body: JSON.stringify({ plan: planKey }),
         });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -551,14 +552,13 @@ function initStripeButtons() {
           throw new Error('No checkout URL returned');
         }
       } catch (err) {
-        console.error('Stripe checkout error:', err);
+        console.error('PayPal checkout error:', err);
         btn.innerHTML = originalHTML;
         btn.disabled = false;
 
-        // Show inline error
         const errEl = document.createElement('div');
         errEl.className = 'alert alert-error mt-8';
-        errEl.textContent = 'Checkout unavailable. Please contact sales@linus-ai.com.';
+        errEl.textContent = 'Checkout unavailable. Please contact support@linus-ai.com.';
         btn.parentNode.insertBefore(errEl, btn.nextSibling);
         setTimeout(() => errEl.remove(), 5000);
       }
@@ -649,7 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPlanSwitcher();
   initCopyButtons();
   initScrollReveal();
-  initStripeButtons();
+  initPayPalButtons();
   initNavShadow();
   initPage();
 });
