@@ -220,7 +220,7 @@ function initPlanSwitcher() {
 
 /* ── GitHub Releases Fetch ───────────────────────────────── */
 async function fetchLatestRelease() {
-  const REPO = 'LINUS-AI-PRO/linus-ai';
+  const REPO = 'miryala3/linus-ai';
   try {
     const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
       headers: { 'Accept': 'application/vnd.github.v3+json' },
@@ -228,7 +228,7 @@ async function fetchLatestRelease() {
     if (!res.ok) throw new Error(`GitHub API ${res.status}`);
 
     const release = await res.json();
-    const version = release.tag_name?.replace(/^v/, '') || '1.4.0';
+    const version = release.tag_name?.replace(/^v/, '') || '2.5.0';
 
     // Update version display elements
     $$('[data-gh-version]').forEach(el => {
