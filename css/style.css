@@ -3,30 +3,6 @@
    Production-quality dark theme
    ============================================================ */
 
-/* ── Sandbox / Test Banner ───────────────────────────────────
-   Remove the entire #sandbox-banner block (HTML + CSS) before
-   going live. Set PAYPAL_BASE_URL=https://api-m.paypal.com in
-   the server .env and swap the client ID to the live one.
-   ──────────────────────────────────────────────────────────── */
-#sandbox-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  background: #78350f;
-  border-top: 2px solid #f59e0b;
-  color: #fde68a;
-  font-size: 13px;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 500;
-  text-align: center;
-  padding: 8px 16px;
-  letter-spacing: .03em;
-}
-#sandbox-banner strong { color: #fbbf24; }
-#sandbox-banner a { color: #fbbf24; text-decoration: underline; }
-/* ── End sandbox banner ─────────────────────────────────────── */
 
 /* ── CSS Variables ───────────────────────────────────────── */
 :root {

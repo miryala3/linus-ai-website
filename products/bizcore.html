@@ -54,7 +54,7 @@
     .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
   </style>
 </head>
-<body><div id="sandbox-banner"><strong><body>#9888; TEST MODE</strong> — PayPal Sandbox active. No real charges. Switch to live credentials before launch. <a href="mailto:support@linus-ai.com">Contact us</a> if you see this in production.</div>
+<body>
 
 <nav class="nav">
   <div class="nav-inner container">
@@ -239,7 +239,7 @@
 </div>
 
 <!-- PayPal Smart Buttons -->
-<script src="https://www.paypal.com/sdk/js?client-id=AViTQeoKyXzGBOYEQMZZ62C2IYlvsL32MCI0Ynm-8S0A3Gn-udbFPsZxJ8rFs2dyDt4ozzFcxe8uWjH5&currency=USD"></script>
+<script src="/js/paypal-loader.js" data-query="currency=USD"></script>
 <script>
 const API = 'https://license.linus-ai.com';
 function mountPayPal(containerId, plan) {
@@ -267,9 +267,11 @@ function mountPayPal(containerId, plan) {
     onError: (err) => { console.error(err); alert('PayPal error — please try again.'); }
   }).render('#' + containerId);
 }
-mountPayPal('pp-biz-starter',   'bizcore_starter_perpetual');
-mountPayPal('pp-biz-business',  'bizcore_business_perpetual');
-mountPayPal('pp-biz-unlimited', 'bizcore_unlimited_perpetual');
+window.__paypal_ready = function() {
+  mountPayPal('pp-biz-starter',   'bizcore_starter_perpetual');
+  mountPayPal('pp-biz-business',  'bizcore_business_perpetual');
+  mountPayPal('pp-biz-unlimited', 'bizcore_unlimited_perpetual');
+};
 </script>
 
 <footer class="footer">

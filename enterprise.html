@@ -84,7 +84,7 @@
     }
   </style>
 </head>
-<body><div id="sandbox-banner"><strong><body>#9888; TEST MODE</strong> — PayPal Sandbox active. No real charges. Switch to live credentials before launch. <a href="mailto:support@linus-ai.com">Contact us</a> if you see this in production.</div>
+<body>
 
 <nav class="nav">
   <div class="nav-inner container">
@@ -401,7 +401,7 @@
   </div>
 </footer>
 
-<script src="https://www.paypal.com/sdk/js?client-id=AViTQeoKyXzGBOYEQMZZ62C2IYlvsL32MCI0Ynm-8S0A3Gn-udbFPsZxJ8rFs2dyDt4ozzFcxe8uWjH5&currency=USD&intent=capture&disable-funding=credit,card"></script>
+<script src="/js/paypal-loader.js" data-query="currency=USD&intent=capture&disable-funding=credit,card"></script>
 <script>
   const API = 'https://license.linus-ai.com';
 
@@ -454,7 +454,7 @@
     }).render('#' + containerId);
   }
 
-  window.addEventListener('load', () => {
+  window.__paypal_ready = function() {
     if (typeof paypal !== 'undefined') {
       mountPayPal('ent-pp-btn',      'enterprise');
       mountPayPal('ent-plus-pp-btn', 'enterprise-plus');
@@ -463,7 +463,7 @@
         el.textContent = 'Checkout unavailable — email support@linus-ai.com to purchase.';
       });
     }
-  });
+  };
 
   function toggleMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
