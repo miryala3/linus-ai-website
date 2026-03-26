@@ -92,7 +92,7 @@
       + 'Email <a href="mailto:support@linus-ai.com" style="color:#0a0e17;font-weight:700;text-decoration:underline">support@linus-ai.com</a> to buy now — we\'ll process manually.';
     bar.style.cssText =
       'background:#f59e0b;color:#0a0e17;text-align:center;padding:11px 16px;'
-      + 'font-size:13px;font-weight:600;position:sticky;top:0;z-index:10000;line-height:1.5;';
+      + 'font-size:13px;font-weight:600;position:fixed;bottom:0;left:0;right:0;z-index:10000;line-height:1.5;';
     document.body.insertBefore(bar, document.body.firstChild);
   }
 
