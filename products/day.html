@@ -226,9 +226,33 @@ function mountPayPal(containerId, plan) {
 }
 window.__paypal_ready = function() {
   mountPayPal('pp-day-perp', 'day_perpetual');
-  mountPayPal('pp-day-year', 'day_annual_updates');
+  mountPayPal('pp-day-year', 'day_annual');
 };
 </script>
+
+<!-- Cross-promo -->
+<section class="xpromo">
+  <div class="container">
+    <div class="xpromo-title">More from LINUS-AI</div>
+    <div class="xpromo-grid">
+      <a href="../index.html" class="xpromo-card" style="border-color:rgba(56,189,248,.3)">
+        <div class="xpromo-card-icon">◈</div>
+        <div class="xpromo-card-name" style="color:#38bdf8">LINUS-AI</div>
+        <div class="xpromo-card-desc">Private AI inference — mesh networking, agentic mode, RAG pipeline</div>
+      </a>
+      <a href="bizcore.html" class="xpromo-card" style="border-color:rgba(129,140,248,.3)">
+        <div class="xpromo-card-icon">⬡</div>
+        <div class="xpromo-card-name" style="color:#818cf8">BizCore</div>
+        <div class="xpromo-card-desc">Local-first business OS — CRM, HR, finance, no SaaS fees</div>
+      </a>
+      <a href="med.html" class="xpromo-card" style="border-color:rgba(52,211,153,.3)">
+        <div class="xpromo-card-icon">⚕</div>
+        <div class="xpromo-card-name" style="color:#34d399">aiMED</div>
+        <div class="xpromo-card-desc">HIPAA-ready clinical AI for healthcare providers</div>
+      </a>
+    </div>
+  </div>
+</section>
 
 <footer class="footer">
   <div class="container">
@@ -263,5 +287,6 @@ window.__paypal_ready = function() {
   </div>
 </footer>
 
+<script src="/js/master-menu.js"></script>
 </body>
 </html>

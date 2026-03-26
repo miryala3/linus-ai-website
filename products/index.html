@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products — The LINUS-AI Suite</title>
+  <meta name="description" content="Private AI infrastructure for every part of your work. LINUS-AI, BizCore, LINUS-Day, aiMED — runs entirely on your hardware. No cloud, no subscriptions, no telemetry.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
+  <style>
+    .hub-hero {
+      padding: 120px 0 72px;
+      text-align: center;
+    }
+    .hub-hero .hero-tag {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .hub-hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    .hub-hero p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Product cards */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      padding: 16px 0 80px;
+    }
+    @media (max-width: 720px) {
+      .products-grid { grid-template-columns: 1fr; }
+    }
+
+    .prod-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .prod-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .prod-card-header {
+      padding: 32px 32px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .prod-card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .prod-card-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+    .prod-card-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .prod-card-body { padding: 0 32px 24px; flex: 1; }
+    .prod-card-desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .prod-card-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+    .prod-card-features li {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 8px;
+    }
+    .prod-card-features li::before {
+      content: "✓";
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .prod-card-footer {
+      padding: 20px 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .prod-card-price { font-size: 14px; color: var(--text-muted); }
+    .prod-card-price strong { color: var(--text); font-size: 16px; }
+
+    /* Color themes per product */
+    .card-ai    { border-top: 3px solid #38bdf8; }
+    .card-ai    .prod-card-icon  { background: rgba(56,189,248,.12); color: #38bdf8; }
+    .card-ai    .prod-card-tag   { color: #38bdf8; }
+    .card-ai    .prod-card-features li::before { color: #38bdf8; }
+    .card-ai:hover { border-color: #38bdf8; }
+
+    .card-biz   { border-top: 3px solid #818cf8; }
+    .card-biz   .prod-card-icon  { background: rgba(129,140,248,.12); color: #818cf8; }
+    .card-biz   .prod-card-tag   { color: #818cf8; }
+    .card-biz   .prod-card-features li::before { color: #818cf8; }
+    .card-biz:hover { border-color: #818cf8; }
+
+    .card-day   { border-top: 3px solid #f59e0b; }
+    .card-day   .prod-card-icon  { background: rgba(251,191,36,.12); color: #f59e0b; }
+    .card-day   .prod-card-tag   { color: #f59e0b; }
+    .card-day   .prod-card-features li::before { color: #f59e0b; }
+    .card-day:hover { border-color: #f59e0b; }
+
+    .card-med   { border-top: 3px solid #34d399; }
+    .card-med   .prod-card-icon  { background: rgba(52,211,153,.12); color: #34d399; }
+    .card-med   .prod-card-tag   { color: #34d399; }
+    .card-med   .prod-card-features li::before { color: #34d399; }
+    .card-med:hover { border-color: #34d399; }
+
+    /* Shared principle strip */
+    .principle-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 0;
+      margin-bottom: 0;
+    }
+    .principle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 32px;
+      text-align: center;
+    }
+    .principle-icon { font-size: 22px; margin-bottom: 10px; }
+    .principle-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .principle-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner container">
+    <a href="../index.html" class="logo">◈ LINUS-AI</a>
+    <ul class="nav-links">
+      <li><a href="../pricing.html">Pricing</a></li>
+      <li><a href="../download.html">Download</a></li>
+      <li><a href="../docs/index.html">Docs</a></li>
+      <li><a href="../store/index.html">Store</a></li>
+      <li><a href="../support.html">Support</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="../download.html" class="btn btn-primary btn-sm">Download Free</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hub-hero">
+  <div class="container">
+    <div class="hero-tag">The LINUS-AI Suite</div>
+    <h1>Private AI for Every<br>Part of Your Work</h1>
+    <p>One family of products. All local. All private. No cloud, no telemetry, no per-seat SaaS fees — just software that runs on hardware you own.</p>
+  </div>
+</section>
+
+<!-- Shared principles -->
+<section class="principle-strip">
+  <div class="container">
+    <div class="principle-grid">
+      <div>
+        <div class="principle-icon">🔒</div>
+        <div class="principle-title">Data never leaves your hardware</div>
+        <div class="principle-desc">No cloud routing, no external API calls for your content</div>
+      </div>
+      <div>
+        <div class="principle-icon">♾️</div>
+        <div class="principle-title">Perpetual licenses available</div>
+        <div class="principle-desc">Buy once, own forever — updates are optional, not forced</div>
+      </div>
+      <div>
+        <div class="principle-icon">⚡</div>
+        <div class="principle-title">Full hardware utilization</div>
+        <div class="principle-desc">Optimized for Metal, CUDA, ROCm — your GPU, your speed</div>
+      </div>
+      <div>
+        <div class="principle-icon">🧩</div>
+        <div class="principle-title">No lock-in</div>
+        <div class="principle-desc">Open model formats (GGUF). Cancel updates anytime.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Product cards -->
+<div class="container">
+  <div class="products-grid">
+
+    <!-- LINUS-AI -->
+    <a href="../index.html" class="prod-card card-ai">
+      <div class="prod-card-header">
+        <div class="prod-card-icon">◈</div>
+        <div>
+          <div class="prod-card-title">LINUS-AI</div>
+          <div class="prod-card-tag">AI Inference · Desktop + Server</div>
+        </div>
+      </div>
+      <div class="prod-card-body">
+        <div class="prod-card-desc">
+          The core product. Private AI inference engine with a full GUI, agentic mode, RAG pipeline, mesh networking, and blockchain audit log — all on your own hardware.
+        </div>
+        <ul class="prod-card-features">
+          <li>Multi-node mesh inference with thermal routing</li>
+          <li>Vault encrypted memory &amp; agentic tool calling</li>
+          <li>Runs any GGUF model — Llama 3, Mistral, Phi-3</li>
+          <li>macOS · Linux · Windows · headless server mode</li>
+        </ul>
+      </div>
+      <div class="prod-card-footer">
+        <div class="prod-card-price">From <strong>$59/yr</strong> · $149 perpetual</div>
+        <span class="btn btn-primary btn-sm">Learn More →</span>
+      </div>
+    </a>
+
+    <!-- BizCore -->
+    <a href="bizcore.html" class="prod-card card-biz">
+      <div class="prod-card-header">
+        <div class="prod-card-icon">⬡</div>
+        <div>
+          <div class="prod-card-title">BizCore</div>
+          <div class="prod-card-tag">Business OS · On-Premises</div>
+        </div>
+      </div>
+      <div class="prod-card-body">
+        <div class="prod-card-desc">
+          Replace your SaaS stack with a single AI-augmented business platform. CRM, HR, invoicing, project management, and analytics — all local, all private, one-time fee.
+        </div>
+        <ul class="prod-card-features">
+          <li>AI CRM, HR, invoicing, and project management</li>
+          <li>No per-seat fees — one license, unlimited use</li>
+          <li>Works offline, behind a firewall, air-gapped</li>
+          <li>Starter · Business · Unlimited tiers</li>
+        </ul>
+      </div>
+      <div class="prod-card-footer">
+        <div class="prod-card-price">From <strong>$79</strong> one-time</div>
+        <span class="btn btn-primary btn-sm" style="background:#818cf8;border-color:#818cf8;color:#fff">Learn More →</span>
+      </div>
+    </a>
+
+    <!-- LINUS-Day -->
+    <a href="day.html" class="prod-card card-day">
+      <div class="prod-card-header">
+        <div class="prod-card-icon">☀</div>
+        <div>
+          <div class="prod-card-title">LINUS-Day</div>
+          <div class="prod-card-tag">Daily Planner · Personal Productivity</div>
+        </div>
+      </div>
+      <div class="prod-card-body">
+        <div class="prod-card-desc">
+          An intelligent daily planner that learns your work style, optimizes your schedule, and keeps you in flow — without sending a single byte to the cloud.
+        </div>
+        <ul class="prod-card-features">
+          <li>AI-generated daily schedules from your task list</li>
+          <li>Focus blocks, energy tracking, flow protection</li>
+          <li>Fully offline — your calendar never leaves your device</li>
+          <li>macOS · Windows · Linux</li>
+        </ul>
+      </div>
+      <div class="prod-card-footer">
+        <div class="prod-card-price"><strong>$99</strong> one-time · $49/yr updates</div>
+        <span class="btn btn-primary btn-sm" style="background:#f59e0b;border-color:#f59e0b;color:#0a0e17">Learn More →</span>
+      </div>
+    </a>
+
+    <!-- aiMED -->
+    <a href="med.html" class="prod-card card-med">
+      <div class="prod-card-header">
+        <div class="prod-card-icon">⚕</div>
+        <div>
+          <div class="prod-card-title">aiMED</div>
+          <div class="prod-card-tag">Clinical AI · HIPAA-Ready</div>
+        </div>
+      </div>
+      <div class="prod-card-body">
+        <div class="prod-card-desc">
+          Enterprise-grade clinical AI for healthcare providers. Patient data never leaves your facility. HIPAA-compliant by architecture, not by contract.
+        </div>
+        <ul class="prod-card-features">
+          <li>Clinical documentation, coding assist, summarization</li>
+          <li>PHI detection and on-premises audit logging</li>
+          <li>Air-gap activation for high-security facilities</li>
+          <li>Clinic · Hospital · Health System tiers</li>
+        </ul>
+      </div>
+      <div class="prod-card-footer">
+        <div class="prod-card-price">From <strong>$4,990/yr</strong> · contact sales</div>
+        <span class="btn btn-primary btn-sm" style="background:#34d399;border-color:#34d399;color:#0a0e17">Learn More →</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:10px">◈ LINUS-AI</div>
+        <p style="color:var(--text-muted);font-size:13px;max-width:220px">Private AI infrastructure for professionals.</p>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:10px;font-size:13px">Products</div>
+        <ul class="footer-links">
+          <li><a href="../index.html">LINUS-AI</a></li>
+          <li><a href="bizcore.html">BizCore</a></li>
+          <li><a href="day.html">LINUS-Day</a></li>
+          <li><a href="med.html">aiMED</a></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:10px;font-size:13px">Company</div>
+        <ul class="footer-links">
+          <li><a href="../pricing.html">Pricing</a></li>
+          <li><a href="../store/index.html">Store</a></li>
+          <li><a href="../docs/index.html">Docs</a></li>
+          <li><a href="../support.html">Support</a></li>
+          <li><a href="mailto:support@linus-ai.com">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LINUS-AI. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/master-menu.js"></script>
+</body>
+</html>

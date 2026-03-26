@@ -268,11 +268,35 @@ function mountPayPal(containerId, plan) {
   }).render('#' + containerId);
 }
 window.__paypal_ready = function() {
-  mountPayPal('pp-biz-starter',   'bizcore_starter_perpetual');
-  mountPayPal('pp-biz-business',  'bizcore_business_perpetual');
-  mountPayPal('pp-biz-unlimited', 'bizcore_unlimited_perpetual');
+  mountPayPal('pp-biz-starter',   'bizcore_starter');
+  mountPayPal('pp-biz-business',  'bizcore_business');
+  mountPayPal('pp-biz-unlimited', 'bizcore_unlimited');
 };
 </script>
+
+<!-- Cross-promo -->
+<section class="xpromo">
+  <div class="container">
+    <div class="xpromo-title">More from LINUS-AI</div>
+    <div class="xpromo-grid">
+      <a href="../index.html" class="xpromo-card" style="border-color:rgba(56,189,248,.3)">
+        <div class="xpromo-card-icon">◈</div>
+        <div class="xpromo-card-name" style="color:#38bdf8">LINUS-AI</div>
+        <div class="xpromo-card-desc">Private AI inference — mesh networking, agentic mode, RAG pipeline</div>
+      </a>
+      <a href="day.html" class="xpromo-card" style="border-color:rgba(245,158,11,.3)">
+        <div class="xpromo-card-icon">☀</div>
+        <div class="xpromo-card-name" style="color:#f59e0b">LINUS-Day</div>
+        <div class="xpromo-card-desc">AI daily planner that learns your work style — $99 one-time</div>
+      </a>
+      <a href="med.html" class="xpromo-card" style="border-color:rgba(52,211,153,.3)">
+        <div class="xpromo-card-icon">⚕</div>
+        <div class="xpromo-card-name" style="color:#34d399">aiMED</div>
+        <div class="xpromo-card-desc">HIPAA-ready clinical AI for healthcare providers</div>
+      </a>
+    </div>
+  </div>
+</section>
 
 <footer class="footer">
   <div class="container">
@@ -307,5 +331,6 @@ window.__paypal_ready = function() {
   </div>
 </footer>
 
+<script src="/js/master-menu.js"></script>
 </body>
 </html>
