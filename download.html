@@ -153,18 +153,12 @@
       <div class="email-capture-inner">
         <h3>📬 Get release notifications</h3>
         <p>Drop your email and we'll notify you of new releases and security updates. No marketing, no spam.</p>
-        <form id="notify-form"
-              action="https://formsubmit.co/support@linus-ai.com"
-              method="POST"
-              onsubmit="handleNotify(event)">
-          <input type="hidden" name="_subject" value="LINUS-AI: New download subscriber">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="">
+        <form id="notify-form" onsubmit="handleNotify(event)">
           <div class="email-row">
             <input type="email" name="email" id="notify-email" placeholder="you@example.com" autocomplete="email" required>
             <button type="submit">Notify me</button>
           </div>
-          <p class="email-note">Sent to support@linus-ai.com — unsubscribe any time by replying.</p>
+          <p class="email-note">Sent via SES to support@linus-ai.com — unsubscribe any time by replying.</p>
         </form>
         <p class="capture-thanks" id="notify-thanks">✓ You're on the list!</p>
       </div>
@@ -344,11 +338,11 @@
       var form  = document.getElementById('notify-form');
       var email = document.getElementById('notify-email').value.trim();
       if (!email) return;
-      // Post to formsubmit.co — delivers email to support@linus-ai.com
-      fetch('https://formsubmit.co/ajax/support@linus-ai.com', {
+      // POST to license server — forwarded via SES (sandbox-safe: only verified addresses)
+      fetch('https://api.linus-ai.com/api/notify-signup', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body:    JSON.stringify({ email: email, _subject: 'LINUS-AI: New download subscriber', _captcha: 'false' })
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email: email })
       }).catch(function(){});
       form.style.display = 'none';
       document.getElementById('notify-thanks').style.display = 'block';

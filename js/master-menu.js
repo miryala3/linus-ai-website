@@ -81,7 +81,7 @@
   }
 
   // ── Purchases active ──────────────────────────────────────────────────────
-  var PURCHASES_PAUSED = false;
+  var PURCHASES_PAUSED = true;
   var PAUSE_MSG = 'Purchases temporarily paused — email support@linus-ai.com to buy now.';
 
   function applyPauseBanner() {
