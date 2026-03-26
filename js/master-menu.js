@@ -80,9 +80,48 @@
     });
   }
 
+  // ── Temporary: purchases paused while email delivery is being configured ──
+  var PURCHASES_PAUSED = true;
+  var PAUSE_MSG = 'Purchases temporarily paused — email support@linus-ai.com to buy now.';
+
+  function applyPauseBanner() {
+    var bar = document.createElement('div');
+    bar.id = 'pause-bar';
+    bar.innerHTML =
+      '⚠\uFE0F&nbsp;&nbsp;Purchases are temporarily paused (< 24 hrs). '
+      + 'Email <a href="mailto:support@linus-ai.com" style="color:#0a0e17;font-weight:700;text-decoration:underline">support@linus-ai.com</a> to buy now — we\'ll process manually.';
+    bar.style.cssText =
+      'background:#f59e0b;color:#0a0e17;text-align:center;padding:11px 16px;'
+      + 'font-size:13px;font-weight:600;position:sticky;top:0;z-index:10000;line-height:1.5;';
+    document.body.insertBefore(bar, document.body.firstChild);
+  }
+
+  function disableBuyButtons() {
+    // Disable pp-pay-btn and cfg-buy-btn; leave Download and Contact Sales alone
+    document.querySelectorAll('.pp-pay-btn, .cfg-buy-btn').forEach(function (btn) {
+      btn.disabled = true;
+      btn.title = PAUSE_MSG;
+      btn.style.opacity = '0.45';
+      btn.style.cursor = 'not-allowed';
+      btn.onclick = function (e) {
+        e.preventDefault(); e.stopImmediatePropagation();
+        alert(PAUSE_MSG);
+      };
+    });
+  }
+
+  function initPause() {
+    if (!PURCHASES_PAUSED) return;
+    applyPauseBanner();
+    disableBuyButtons();
+    // Re-apply after any dynamic rendering (e.g. configurator plan changes)
+    var observer = new MutationObserver(disableBuyButtons);
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', function () { init(); initPause(); });
   } else {
-    init();
+    init(); initPause();
   }
 })();
