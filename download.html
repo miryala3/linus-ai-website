@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download — LINUS-AI</title>
-  <meta name="description" content="Download LINUS-AI. Licensed users only. Enter your license key and email to access your builds.">
+  <title>Download — LINUS-AI Suite</title>
+  <meta name="description" content="Download LINUS-AI, BizCore, LINUS-Day and other suite products. Community edition free. Enter license key to access all purchased builds.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
@@ -121,11 +121,56 @@
 <!-- Hero -->
 <section class="dl-hero">
   <div class="container">
-    <div class="hero-tag">Licensed downloads</div>
-    <h1>Download LINUS-AI</h1>
-    <p>Builds are available to licensed users only. Enter your license key and email to access your downloads.</p>
+    <div class="hero-tag">LINUS-AI Suite Downloads</div>
+    <h1>Download Any Suite Product</h1>
+    <p>LINUS-AI · BizCore · LINUS-Day — all in one place. Community is free. Licensed users get builds for everything they've purchased.</p>
   </div>
 </section>
+
+<!-- Community free key section -->
+<div class="container" style="max-width:900px;margin-bottom:48px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:32px">
+
+    <!-- LINUS-AI Community -->
+    <div style="background:var(--surface);border:1px solid rgba(56,189,248,.3);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:22px">◈</div>
+      <div style="font-weight:700;font-size:14px">LINUS-AI <span style="color:#38bdf8">Community</span></div>
+      <div style="font-size:12px;color:var(--text-muted);flex:1">Free forever · 7B models · 6 profiles · OpenAI API · GUI</div>
+      <div style="font-size:11px;color:var(--text-dim)">Personal use &amp; orgs under $100K/yr</div>
+      <button class="pp-pay-btn" id="comm-btn" style="font-size:13px;padding:10px 16px" onclick="getCommunityKey()">Get Free Key &amp; Download</button>
+      <div id="comm-result" style="font-size:12px;color:#34d399;display:none"></div>
+    </div>
+
+    <!-- BizCore -->
+    <div style="background:var(--surface);border:1px solid rgba(129,140,248,.3);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:22px">⬡</div>
+      <div style="font-weight:700;font-size:14px">BizCore <span style="color:#818cf8">v2.2.2</span></div>
+      <div style="font-size:12px;color:var(--text-muted);flex:1">macOS · Linux — included with any BizCore license. 30-day trial on purchase.</div>
+      <div style="font-size:11px;color:var(--text-dim)">Enter BizCore key below to download</div>
+      <a href="#gate-wrap" class="pp-pay-btn" style="font-size:13px;padding:10px 16px;text-align:center;text-decoration:none;display:block">Sign In to Download</a>
+    </div>
+
+    <!-- LINUS-Day -->
+    <div style="background:var(--surface);border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:22px">☀</div>
+      <div style="font-weight:700;font-size:14px">LINUS-Day <span style="color:#f59e0b">Beta</span></div>
+      <div style="font-size:12px;color:var(--text-muted);flex:1">macOS · Windows · Linux — release build in progress. Enter your key when available.</div>
+      <div style="font-size:11px;color:var(--text-dim)">First build coming soon</div>
+      <a href="/products/day.html#buy" class="pp-pay-btn" style="font-size:13px;padding:10px 16px;text-align:center;text-decoration:none;display:block;background:#e8c000;color:#2c2e2f">Pre-order — $99</a>
+    </div>
+
+    <!-- aiMED -->
+    <div style="background:var(--surface);border:1px solid rgba(52,211,153,.3);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:22px">⚕</div>
+      <div style="font-weight:700;font-size:14px">aiMED <span style="color:#34d399">Enterprise</span></div>
+      <div style="font-size:12px;color:var(--text-muted);flex:1">On-premises clinical AI for healthcare. Deployed by contract — no self-serve download.</div>
+      <div style="font-size:11px;color:var(--text-dim)">From $4,990/yr · 30-day evaluation</div>
+      <a href="mailto:support@linus-ai.com?subject=aiMED+Demo" class="pp-pay-btn" style="font-size:13px;padding:10px 16px;text-align:center;text-decoration:none;display:block;background:#34d399;color:#0a0e17">Request Demo</a>
+    </div>
+
+  </div>
+  <p style="font-size:12px;color:var(--text-dim);text-align:center">Licensed users: sign in below with your email + license key to download all purchased products at once.</p>
+</div>
 
 <!-- Gate card -->
 <div class="container" id="gate-wrap">
@@ -134,7 +179,7 @@
     <!-- Step 1: email + license key -->
     <div class="gate-step active" id="step-1">
       <h2>Sign in to download</h2>
-      <p class="sub">Enter the email address and license key used at purchase. A verification code will be sent to your email.</p>
+      <p class="sub">Enter the email and license key from your purchase. Works for LINUS-AI, BizCore, and LINUS-Day. A verification code will be sent to confirm.</p>
       <div class="field">
         <label for="inp-email">Purchase email</label>
         <input type="email" id="inp-email" placeholder="you@company.com" autocomplete="email">
@@ -188,7 +233,7 @@
 <footer style="border-top:1px solid var(--border);padding:28px 0;text-align:center;margin-top:auto">
   <div class="container">
     <p style="color:var(--text-muted);font-size:13px">
-      &copy; 2026 LINUS-AI. Downloads require a valid license.
+      &copy; 2026 LINUS-AI&#8482;. All rights reserved. &nbsp;&middot;&nbsp; Proudly designed &amp; developed in New Jersey, United States.
       &nbsp;&middot;&nbsp;
       <a href="pricing.html" style="color:var(--accent)">Get a license</a>
       &nbsp;&middot;&nbsp;
@@ -388,6 +433,37 @@ document.getElementById('inp-otp').addEventListener('input', function() {
 // Allow Enter key submission
 document.getElementById('inp-key').addEventListener('keydown', e => { if(e.key==='Enter') requestOtp(); });
 document.getElementById('inp-otp').addEventListener('keydown', e => { if(e.key==='Enter') verifyOtp(); });
+
+// Community self-service
+async function getCommunityKey() {
+  const email = prompt('Enter your email address to receive a free LINUS-AI Community key:');
+  if (!email || email.indexOf('@') < 1) return;
+  const btn = document.getElementById('comm-btn');
+  const res = document.getElementById('comm-result');
+  const orig = btn.textContent;
+  btn.textContent = 'Generating…'; btn.disabled = true;
+  try {
+    const r = await fetch('/api/community/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      btn.textContent = 'Key sent ✓'; btn.style.background = '#34d399'; btn.style.color = '#0a0e17';
+      res.textContent = 'Key: ' + d.key + ' — check your email, then sign in below to download.';
+      res.style.display = 'block';
+      document.getElementById('inp-email').value = email;
+      document.getElementById('inp-key').value = d.key;
+    } else {
+      btn.textContent = orig; btn.disabled = false;
+      alert(d.detail || 'Could not generate key. Email support@linus-ai.com');
+    }
+  } catch(e) {
+    btn.textContent = orig; btn.disabled = false;
+    alert('Network error. Please try again.');
+  }
+}
 </script>
 <script src="/js/master-menu.js"></script>
 </body>

@@ -1777,15 +1777,17 @@ pre code {
 
 /* ── Inline PayPal checkout ─────────────────────────────── */
 .pp-checkout { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-.pp-email-input { width: 100%; box-sizing: border-box; padding: 11px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit; transition: border-color .15s; }
-.pp-email-input:focus { outline: none; border-color: #0070ba; }
+.pp-checkout::before { content: "Enter your email — license key delivered to your inbox"; display: block; font-size: 11.5px; color: var(--text-muted); opacity: .8; margin-bottom: -2px; }
+.pp-email-input { width: 100%; box-sizing: border-box; padding: 11px 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit; transition: border-color .15s, box-shadow .15s; }
+.pp-email-input:focus { outline: none; border-color: #FFD140; box-shadow: 0 0 0 3px rgba(255,209,64,.12); }
 .pp-email-input.error { border-color: #ef4444; animation: pp-shake .25s; }
 @keyframes pp-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
-.pp-pay-btn { width: 100%; padding: 12px 20px; background: #0070ba; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; letter-spacing: .01em; font-family: inherit; }
-.pp-pay-btn:hover:not(:disabled) { background: #005ea6; }
+/* PayPal Gold — official brand color */
+.pp-pay-btn { width: 100%; padding: 12px 20px; background: #FFD140; color: #2c2e2f; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; letter-spacing: .01em; font-family: inherit; }
+.pp-pay-btn:hover:not(:disabled) { background: #f0c616; }
 .pp-pay-btn:disabled { opacity: .55; cursor: not-allowed; }
-.pp-pay-btn.pp-alt { font-size: 13px; padding: 9px 16px; background: #005ea6; }
-.pp-pay-btn.pp-alt:hover:not(:disabled) { background: #004a87; }
+.pp-pay-btn.pp-alt { font-size: 13px; padding: 9px 16px; background: #e8c000; color: #2c2e2f; }
+.pp-pay-btn.pp-alt:hover:not(:disabled) { background: #d4af00; }
 /* prod-card as div (hub page) */
 .prod-card-inner { display: block; text-decoration: none; color: var(--text); }
 .prod-card-inner:hover { color: var(--text); }
