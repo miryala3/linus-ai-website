@@ -156,32 +156,60 @@
   <hr class="divider">
 
   <!-- ── Pricing ── -->
-  <section class="section" id="buy">
-    <div class="section-title">One Price. Yours Forever.</div>
-    <div class="section-sub">Quicken-style model: buy once, run forever. Optional annual update plan for new AI features and platform support.</div>
-    <div class="pricing-center">
-      <div class="plan-card">
-        <div class="plan-badge">Perpetual License</div>
-        <div class="plan-name">LINUS-Day</div>
-        <div class="plan-desc">Full-featured AI daily planner for macOS, Windows, and Linux. One license, one user, runs offline forever.</div>
-        <div class="plan-price">$99 <span>one-time</span></div>
-        <div class="plan-price-sub">+ $49/yr for updates &amp; support (optional)</div>
-        <ul class="plan-includes">
-          <li>Perpetual license — yours to keep</li>
-          <li>macOS, Windows, Linux</li>
-          <li>Local AI — no cloud required</li>
-          <li>Calendar integration (iCal/CalDAV)</li>
-          <li>AI daily briefing &amp; review</li>
-          <li>Focus block scheduling</li>
-          <li>Weekly productivity insights</li>
-          <li>Future updates with annual plan</li>
-        </ul>
-        <div class="pp-btn-wrap" id="pp-day-perp"></div>
-        <div style="text-align:center;font-size:12px;color:var(--text-muted);padding:4px 0">or add the annual update plan</div>
-        <div class="pp-btn-wrap" id="pp-day-year"></div>
+  <section class="cfg-section" id="buy" style="--cfg-color:#f59e0b">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:32px">
+        <div class="section-title">Get LINUS-Day</div>
+        <div class="section-sub">Buy once, own forever. Add annual updates to keep getting new features.</div>
+      </div>
+      <div class="cfg-wrap">
+        <div class="cfg-label">How would you like to buy?</div>
+        <div class="cfg-plans" id="cfg-day-plans">
+          <div class="cfg-plan active" data-plan="perpetual" data-price="$99" data-key="day_perpetual">
+            <div class="cfg-plan-radio"></div>
+            <div class="cfg-plan-info">
+              <div class="cfg-plan-name">Perpetual License — $99</div>
+              <div class="cfg-plan-desc">Own it forever · macOS, Windows, Linux · local AI · no cloud</div>
+            </div>
+            <div class="cfg-plan-price">$99</div>
+          </div>
+          <div class="cfg-plan" data-plan="annual" data-price="$49/yr" data-key="day_annual">
+            <div class="cfg-plan-radio"></div>
+            <div class="cfg-plan-info">
+              <div class="cfg-plan-name">Annual Updates — $49/yr</div>
+              <div class="cfg-plan-desc">New AI features, platform updates &amp; support for 12 months</div>
+            </div>
+            <div class="cfg-plan-price">$49/yr</div>
+          </div>
+        </div>
+
+        <button class="cfg-buy-btn" id="cfg-day-buy">Buy LINUS-Day — $99</button>
+        <div class="cfg-note">Secure checkout via PayPal &nbsp;·&nbsp; Instant activation</div>
       </div>
     </div>
   </section>
+
+  <script>
+  (function(){
+    var sel=document.querySelector('#cfg-day-plans .cfg-plan.active');
+    document.querySelectorAll('#cfg-day-plans .cfg-plan').forEach(function(p){
+      p.addEventListener('click',function(){
+        document.querySelectorAll('#cfg-day-plans .cfg-plan').forEach(function(x){x.classList.remove('active');});
+        p.classList.add('active'); sel=p;
+        document.getElementById('cfg-day-buy').textContent='Buy LINUS-Day — '+p.dataset.price;
+      });
+    });
+    document.getElementById('cfg-day-buy').addEventListener('click',async function(){
+      var btn=this; var orig=btn.textContent;
+      btn.textContent='Redirecting…'; btn.disabled=true;
+      try{
+        var r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:sel.dataset.key})});
+        var d=await r.json();
+        if(d.url)window.location.href=d.url; else throw 0;
+      }catch(e){btn.textContent=orig;btn.disabled=false;alert('Checkout unavailable — email support@linus-ai.com');}
+    });
+  })();
+  </script>
 
   <!-- ── CTA ── -->
   <div class="cta-bar">
@@ -194,41 +222,6 @@
   </div>
 
 </div>
-
-<!-- PayPal Smart Buttons -->
-<script src="/js/paypal-loader.js" data-query="currency=USD"></script>
-<script>
-const API = '';
-function mountPayPal(containerId, plan) {
-  if (!document.getElementById(containerId)) return;
-  paypal.Buttons({
-    style: { layout: 'horizontal', color: 'gold', shape: 'rect', label: 'buynow', height: 40 },
-    createOrder: async () => {
-      const r = await fetch(`${API}/api/checkout`, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ plan, email: '' })
-      });
-      const d = await r.json();
-      if (!d.ok) throw new Error(d.detail || 'Checkout error');
-      return d.order_id;
-    },
-    onApprove: async (data) => {
-      const r = await fetch(`${API}/api/capture`, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ order_id: data.orderID })
-      });
-      const d = await r.json();
-      if (d.ok) { alert('Purchase complete! Check your email for the license key.'); }
-      else { alert('Capture error: ' + (d.detail || 'unknown')); }
-    },
-    onError: (err) => { console.error(err); alert('PayPal error — please try again.'); }
-  }).render('#' + containerId);
-}
-window.__paypal_ready = function() {
-  mountPayPal('pp-day-perp', 'day_perpetual');
-  mountPayPal('pp-day-year', 'day_annual');
-};
-</script>
 
 <!-- Cross-promo -->
 <section class="xpromo">
@@ -281,7 +274,7 @@ window.__paypal_ready = function() {
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 LINUS-AI. All rights reserved.</span>
+      <span>© 2026 LINUS-AI™. All rights reserved. · Proudly designed &amp; developed in New Jersey, United States.</span>
       <span style="color:var(--text-muted);font-size:12px">Payments secured by PayPal.</span>
     </div>
   </div>

@@ -140,63 +140,91 @@
   <hr class="divider">
 
   <!-- ── Pricing ── -->
-  <section class="section" id="bizcore-pricing">
-    <div class="section-title">Simple, Perpetual Pricing</div>
-    <div class="section-sub">Buy once, run forever. Annual update plans optional.</div>
-    <div class="pricing-grid">
-
-      <div class="plan-card">
-        <div class="plan-badge">Starter</div>
-        <div class="plan-name">BizCore Starter</div>
-        <div class="plan-desc">Solo operators and micro-businesses. Core CRM, HR, invoicing and project management. Up to 3 users.</div>
-        <div class="plan-price">$79 <span>one-time</span></div>
-        <div class="plan-price-sub">+ $29/yr updates (optional)</div>
-        <ul class="plan-includes">
-          <li>Up to 3 users</li>
-          <li>CRM, HR, invoicing</li>
-          <li>Project management</li>
-          <li>Basic analytics</li>
-          <li>Community support</li>
-        </ul>
-        <div class="pp-btn-wrap" id="pp-biz-starter"></div>
+  <section class="cfg-section" id="buy" style="--cfg-color:#818cf8">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:32px">
+        <div class="section-title">Choose your BizCore license</div>
+        <div class="section-sub">Buy once, own forever. Annual update plans are optional.</div>
       </div>
+      <div class="cfg-wrap">
+        <div class="cfg-label">Select a plan</div>
+        <div class="cfg-plans" id="cfg-biz-plans">
+          <div class="cfg-plan active"
+               data-plan="starter" data-price="$79" data-key="bizcore_starter"
+               data-update-price="$29/yr updates" data-update-key="bizcore_starter_year">
+            <div class="cfg-plan-radio"></div>
+            <div class="cfg-plan-info">
+              <div class="cfg-plan-name">Starter</div>
+              <div class="cfg-plan-desc">Up to 3 users · CRM, HR, invoicing, project management</div>
+            </div>
+            <div class="cfg-plan-price">$79</div>
+          </div>
+          <div class="cfg-plan"
+               data-plan="business" data-price="$149" data-key="bizcore_business"
+               data-update-price="$49/yr updates" data-update-key="bizcore_business_year">
+            <div class="cfg-plan-radio"></div>
+            <div class="cfg-plan-info">
+              <div class="cfg-plan-name">Business <span style="font-size:11px;color:#818cf8;font-weight:700;margin-left:6px">Most Popular</span></div>
+              <div class="cfg-plan-desc">Up to 15 users · AI assistant, analytics, integrations</div>
+            </div>
+            <div class="cfg-plan-price">$149</div>
+          </div>
+          <div class="cfg-plan"
+               data-plan="unlimited" data-price="$299" data-key="bizcore_unlimited"
+               data-update-price="$99/yr updates" data-update-key="bizcore_unlimited_year">
+            <div class="cfg-plan-radio"></div>
+            <div class="cfg-plan-info">
+              <div class="cfg-plan-name">Unlimited</div>
+              <div class="cfg-plan-desc">Unlimited users · multi-location, REST API, priority support</div>
+            </div>
+            <div class="cfg-plan-price">$299</div>
+          </div>
+        </div>
 
-      <div class="plan-card featured">
-        <div class="plan-badge">Most Popular · Business</div>
-        <div class="plan-name">BizCore Business</div>
-        <div class="plan-desc">Growing teams up to 15 users. Full module suite, AI assistant, advanced analytics, and third-party integrations.</div>
-        <div class="plan-price">$149 <span>one-time</span></div>
-        <div class="plan-price-sub">+ $49/yr updates (optional)</div>
-        <ul class="plan-includes">
-          <li>Up to 15 users</li>
-          <li>All Starter modules</li>
-          <li>AI assistant (full)</li>
-          <li>Advanced analytics + reports</li>
-          <li>Third-party integrations</li>
-          <li>Email support</li>
-        </ul>
-        <div class="pp-btn-wrap" id="pp-biz-business"></div>
+        <!-- Annual updates toggle -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px">
+          <input type="checkbox" id="biz-updates" style="width:16px;height:16px;accent-color:#818cf8;cursor:pointer">
+          <label for="biz-updates" style="font-size:13px;color:var(--text-muted);cursor:pointer">
+            Add annual update plan <span id="biz-update-price" style="color:var(--text)">($29/yr)</span> — new features &amp; platform support
+          </label>
+        </div>
+
+        <button class="cfg-buy-btn" id="cfg-biz-buy">Buy BizCore Starter — $79</button>
+        <div class="cfg-note">Secure checkout via PayPal &nbsp;·&nbsp; One-time payment &nbsp;·&nbsp; No subscription</div>
       </div>
-
-      <div class="plan-card">
-        <div class="plan-badge">Unlimited</div>
-        <div class="plan-name">BizCore Unlimited</div>
-        <div class="plan-desc">Unlimited users, multi-location support, custom modules, API access, and priority support. For established operations.</div>
-        <div class="plan-price">$299 <span>one-time</span></div>
-        <div class="plan-price-sub">+ $99/yr updates (optional)</div>
-        <ul class="plan-includes">
-          <li>Unlimited users</li>
-          <li>All Business modules</li>
-          <li>Multi-location / multi-entity</li>
-          <li>Full REST API access</li>
-          <li>Custom module support</li>
-          <li>Priority support, 24-hour SLA</li>
-        </ul>
-        <div class="pp-btn-wrap" id="pp-biz-unlimited"></div>
-      </div>
-
     </div>
   </section>
+
+  <script>
+  (function(){
+    var sel=document.querySelector('#cfg-biz-plans .cfg-plan.active');
+    var withUpdates=false;
+    function sync(){
+      var name=sel.querySelector('.cfg-plan-name').textContent.trim().replace(/Most Popular/,'').trim();
+      var price=sel.querySelector('.cfg-plan-price').textContent;
+      document.getElementById('cfg-biz-buy').textContent='Buy BizCore '+name+' — '+price+(withUpdates?' + '+sel.dataset.updatePrice:'');
+      document.getElementById('biz-update-price').textContent='('+sel.dataset.updatePrice+')';
+    }
+    document.querySelectorAll('#cfg-biz-plans .cfg-plan').forEach(function(p){
+      p.addEventListener('click',function(){
+        document.querySelectorAll('#cfg-biz-plans .cfg-plan').forEach(function(x){x.classList.remove('active');});
+        p.classList.add('active'); sel=p; sync();
+      });
+    });
+    document.getElementById('biz-updates').addEventListener('change',function(){withUpdates=this.checked;sync();});
+    document.getElementById('cfg-biz-buy').addEventListener('click',async function(){
+      var key=withUpdates?sel.dataset.updateKey:sel.dataset.key;
+      var btn=this; var orig=btn.textContent;
+      btn.textContent='Redirecting…'; btn.disabled=true;
+      try{
+        var r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:key})});
+        var d=await r.json();
+        if(d.url)window.location.href=d.url; else throw 0;
+      }catch(e){btn.textContent=orig;btn.disabled=false;alert('Checkout unavailable — email support@linus-ai.com');}
+    });
+    sync();
+  })();
+  </script>
 
   <hr class="divider">
 
@@ -237,42 +265,6 @@
   </div>
 
 </div>
-
-<!-- PayPal Smart Buttons -->
-<script src="/js/paypal-loader.js" data-query="currency=USD"></script>
-<script>
-const API = '';
-function mountPayPal(containerId, plan) {
-  if (!document.getElementById(containerId)) return;
-  paypal.Buttons({
-    style: { layout: 'horizontal', color: 'gold', shape: 'rect', label: 'buynow', height: 40 },
-    createOrder: async () => {
-      const r = await fetch(`${API}/api/checkout`, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ plan, email: '' })
-      });
-      const d = await r.json();
-      if (!d.ok) throw new Error(d.detail || 'Checkout error');
-      return d.order_id;
-    },
-    onApprove: async (data) => {
-      const r = await fetch(`${API}/api/capture`, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ order_id: data.orderID })
-      });
-      const d = await r.json();
-      if (d.ok) { alert('Purchase complete! Check your email for the license key.'); }
-      else { alert('Capture error: ' + (d.detail || 'unknown')); }
-    },
-    onError: (err) => { console.error(err); alert('PayPal error — please try again.'); }
-  }).render('#' + containerId);
-}
-window.__paypal_ready = function() {
-  mountPayPal('pp-biz-starter',   'bizcore_starter');
-  mountPayPal('pp-biz-business',  'bizcore_business');
-  mountPayPal('pp-biz-unlimited', 'bizcore_unlimited');
-};
-</script>
 
 <!-- Cross-promo -->
 <section class="xpromo">
@@ -325,7 +317,7 @@ window.__paypal_ready = function() {
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 LINUS-AI. All rights reserved.</span>
+      <span>© 2026 LINUS-AI™. All rights reserved. · Proudly designed &amp; developed in New Jersey, United States.</span>
       <span style="color:var(--text-muted);font-size:12px">Payments secured by PayPal.</span>
     </div>
   </div>

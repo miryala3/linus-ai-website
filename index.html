@@ -177,7 +177,7 @@
 
         <div class="nav-cta">
           <a href="https://github.com/miryala3/linus-ai" class="btn btn-secondary btn-sm">⌥ GitHub</a>
-          <a href="download.html" class="btn btn-primary btn-sm">Download Free</a>
+          <a href="download.html" class="btn btn-primary btn-sm">Download</a>
         </div>
 
         <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
@@ -198,7 +198,7 @@
       </ul>
       <div class="mobile-cta">
         <a href="https://github.com/miryala3/linus-ai" class="btn btn-secondary btn-sm">GitHub</a>
-        <a href="download.html" class="btn btn-primary btn-sm">Download Free</a>
+        <a href="download.html" class="btn btn-primary btn-sm">Download</a>
       </div>
     </div>
   </nav>
@@ -225,7 +225,7 @@
         </p>
 
         <div class="hero-btns">
-          <a href="download.html" class="btn btn-primary btn-lg">⬇ Download Free</a>
+          <a href="download.html" class="btn btn-primary btn-lg">⬇ Download</a>
           <a href="docs/index.html" class="btn btn-secondary btn-lg">Read the Docs</a>
           <a href="https://github.com/miryala3/linus-ai" class="btn btn-secondary btn-lg">⌥ GitHub</a>
         </div>
@@ -445,129 +445,109 @@
     <div class="container">
       <div class="section-tag">Pricing</div>
       <h2>Simple, honest pricing</h2>
-      <p class="section-sub">
-        Free forever for individuals. One-time perpetual or annual subscriptions for teams.
-        No per-token charges, ever.
-      </p>
+      <p class="section-sub">Free forever for individuals. No per-token charges, ever.</p>
 
-      <div class="switcher-wrapper" style="margin-bottom:32px;">
-        <div class="plan-switcher">
-          <button class="active" data-billing="annual">Annual</button>
-          <button data-billing="perpetual">Perpetual</button>
-        </div>
-        <span class="save-badge">Save up to 63% annually</span>
-      </div>
-
-      <div class="pricing-grid">
-
-        <div class="plan-card" data-plan="community">
-          <div class="plan-name">Community</div>
-          <div class="plan-price">Free</div>
-          <div class="plan-period">free forever</div>
-          <div class="plan-annual" style="display:none;"></div>
-          <hr class="plan-divider" />
-          <ul class="plan-features">
-            <li>Single user, single machine</li>
-            <li>All inference backends (CPU, GPU)</li>
-            <li>50+ model support</li>
-            <li>OpenAI-compatible API</li>
-            <li>Basic chat &amp; CLI interface</li>
-            <li class="na">Vault encryption</li>
-            <li class="na">Mesh networking</li>
-            <li class="na">Tensor parallelism</li>
-            <li class="na">Priority support</li>
-          </ul>
-          <a href="download.html" class="btn btn-secondary" style="width:100%; justify-content:center;">Download Free</a>
+      <div class="cfg-wrap">
+        <!-- Community free row -->
+        <div class="cfg-community">
+          <div>
+            <div class="cfg-community-name">Community — Free forever</div>
+            <div class="cfg-community-desc">Single user · all inference backends · 50+ models · OpenAI-compatible API</div>
+          </div>
+          <a href="download.html" class="btn btn-secondary btn-sm" style="white-space:nowrap">Download</a>
         </div>
 
-        <div class="plan-card featured" data-plan="professional">
-          <div class="plan-badge">Most Popular</div>
-          <div class="plan-name">Professional</div>
-          <div class="plan-price"><sup>$</sup>59</div>
-          <div class="plan-period">per year</div>
-          <div class="plan-annual">Or $149 one-time perpetual</div>
-          <hr class="plan-divider" />
-          <ul class="plan-features">
-            <li>1 user, 1 seat</li>
-            <li>Everything in Community</li>
-            <li>Vault encrypted memory</li>
-            <li>Agentic mode &amp; tool calling</li>
-            <li>RAG pipeline</li>
-            <li>API key authentication</li>
-            <li>12 months of updates</li>
-            <li>Email support — typically 3–5 business days</li>
-            <li class="na">Mesh networking</li>
-            <li class="na">Tensor parallelism</li>
-          </ul>
-          <button class="btn btn-primary" style="width:100%; justify-content:center;"
-            data-paypal-plan="professional" data-paypal-billing="annual">
-            Buy Professional
+        <div class="cfg-label">Choose a paid plan</div>
+
+        <!-- Billing toggle -->
+        <div class="cfg-billing">
+          <button class="cfg-billing-opt active" data-billing="annual">
+            <div class="cfg-billing-opt-name">Annual</div>
+            <div class="cfg-billing-opt-price">from $59/yr · updates included</div>
           </button>
-          <p style="font-size:11px; color:var(--text-dim); text-align:center; margin-top:10px;">Secure checkout via PayPal</p>
-        </div>
-
-        <div class="plan-card" data-plan="team">
-          <div class="plan-name">Team</div>
-          <div class="plan-price"><sup>$</sup>99</div>
-          <div class="plan-period">per year</div>
-          <div class="plan-annual">Or $299 one-time perpetual</div>
-          <hr class="plan-divider" />
-          <ul class="plan-features">
-            <li>Up to 5 seats</li>
-            <li>Everything in Professional</li>
-            <li>Mesh networking (multi-node)</li>
-            <li>Tensor &amp; pipeline parallelism</li>
-            <li>Prometheus metrics + dashboards</li>
-            <li>Team license management</li>
-            <li>12 months of updates</li>
-            <li>Priority email support — typically 1–3 business days</li>
-            <li>Slack / Teams integration guide</li>
-          </ul>
-          <button class="btn btn-primary" style="width:100%; justify-content:center;"
-            data-paypal-plan="team" data-paypal-billing="annual">
-            Buy Team
+          <button class="cfg-billing-opt" data-billing="perpetual">
+            <div class="cfg-billing-opt-name">Perpetual</div>
+            <div class="cfg-billing-opt-price">from $149 one-time · own forever</div>
           </button>
-          <p style="font-size:11px; color:var(--text-dim); text-align:center; margin-top:10px;">Secure checkout via PayPal</p>
         </div>
 
-        <div class="plan-card" data-plan="enterprise">
-          <div class="plan-name">Enterprise</div>
-          <div class="plan-price" style="font-size:1.8rem;">Custom</div>
-          <div class="plan-period">annual contract</div>
-          <div class="plan-annual" style="display:none;"></div>
-          <hr class="plan-divider" />
-          <ul class="plan-features">
-            <li>Unlimited seats</li>
-            <li>Everything in Team</li>
-            <li>Offline activation tokens</li>
-            <li>LDAP / SSO integration</li>
-            <li>Custom model fine-tuning support</li>
-            <li>Direct founder support</li>
-            <li>Response SLA negotiated per contract</li>
-            <li>Private email / Slack thread</li>
-            <li>Air-gapped deployment support</li>
-            <li>Custom contract &amp; invoicing</li>
-          </ul>
-          <a href="mailto:support@linus-ai.com?subject=Enterprise Inquiry" class="btn btn-secondary" style="width:100%; justify-content:center;">
-            Contact Sales
-          </a>
+        <!-- Plans -->
+        <div class="cfg-plans" id="cfg-plans">
+          <div class="cfg-plan active"
+               data-plan="professional"
+               data-annual-price="$59/yr" data-perp-price="$149"
+               data-annual-key="professional_annual" data-perp-key="professional_perpetual">
+            <div class="cfg-plan-radio"></div>
+            <div class="cfg-plan-info">
+              <div class="cfg-plan-name">Professional</div>
+              <div class="cfg-plan-desc">1 seat · Vault, agentic mode, RAG pipeline, API auth</div>
+            </div>
+            <div class="cfg-plan-price">$59/yr</div>
+          </div>
+          <div class="cfg-plan"
+               data-plan="team"
+               data-annual-price="$99/yr" data-perp-price="$299"
+               data-annual-key="team_annual" data-perp-key="team_perpetual">
+            <div class="cfg-plan-radio"></div>
+            <div class="cfg-plan-info">
+              <div class="cfg-plan-name">Team</div>
+              <div class="cfg-plan-desc">5 seats · mesh networking, tensor &amp; pipeline parallelism</div>
+            </div>
+            <div class="cfg-plan-price">$99/yr</div>
+          </div>
         </div>
 
+        <!-- Buy CTA -->
+        <button class="cfg-buy-btn" id="cfg-ai-buy">Buy Professional — $59/yr</button>
+        <div class="cfg-note">Secure checkout via PayPal &nbsp;·&nbsp; 30-day money-back &nbsp;·&nbsp; Cancel updates anytime</div>
+        <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--text-muted)">
+          Need more seats or custom SLA? <a href="enterprise.html" style="color:var(--accent)">Enterprise from $4,999/yr →</a>
+        </div>
       </div>
 
-      <div class="alert alert-info" style="max-width:700px; margin:32px auto 0;">
-        <strong>All plans include:</strong> source-available engine (<a href="LICENSE.md" style="color:var(--accent)">LINUS-AI License v2.0</a>), no per-token costs,
-        full offline operation after activation, and updates for the duration of your license period.
-        Perpetual licenses include 12 months of updates from purchase date.
+      <div class="alert alert-info" style="max-width:600px; margin:28px auto 0;">
+        <strong>All paid plans include:</strong> no per-token costs, full offline operation after activation, and 12 months of updates from purchase. Perpetual licenses run forever — updates are optional.
       </div>
-
-      <p style="max-width:700px; margin:16px auto 0; font-size:13px; color:var(--text-muted); text-align:center;">
-        Support is provided directly by the founder. Response times are best-effort and
-        reflect a solo operation — not a staffed help desk. Enterprise SLAs are negotiable;
-        <a href="mailto:support@linus-ai.com" style="color:var(--accent);">email to discuss</a>.
-      </p>
     </div>
   </section>
+
+  <script>
+  (function(){
+    var billing='annual', sel=document.querySelector('.cfg-plan.active');
+    function sync(){
+      var n=sel.querySelector('.cfg-plan-name').textContent;
+      var p=sel.querySelector('.cfg-plan-price').textContent;
+      document.getElementById('cfg-ai-buy').textContent='Buy '+n+' — '+p;
+    }
+    document.querySelectorAll('.cfg-billing-opt').forEach(function(b){
+      b.addEventListener('click',function(){
+        billing=b.dataset.billing;
+        document.querySelectorAll('.cfg-billing-opt').forEach(function(x){x.classList.remove('active');});
+        b.classList.add('active');
+        document.querySelectorAll('.cfg-plan').forEach(function(p){
+          p.querySelector('.cfg-plan-price').textContent=billing==='annual'?p.dataset.annualPrice:p.dataset.perpPrice;
+        });
+        sync();
+      });
+    });
+    document.querySelectorAll('.cfg-plan').forEach(function(p){
+      p.addEventListener('click',function(){
+        document.querySelectorAll('.cfg-plan').forEach(function(x){x.classList.remove('active');});
+        p.classList.add('active'); sel=p; sync();
+      });
+    });
+    document.getElementById('cfg-ai-buy').addEventListener('click',async function(){
+      var key=billing==='annual'?sel.dataset.annualKey:sel.dataset.perpKey;
+      var btn=this; var orig=btn.textContent;
+      btn.textContent='Redirecting…'; btn.disabled=true;
+      try{
+        var r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:key})});
+        var d=await r.json();
+        if(d.url)window.location.href=d.url; else throw 0;
+      }catch(e){btn.textContent=orig;btn.disabled=false;alert('Checkout unavailable — email support@linus-ai.com');}
+    });
+  })();
+  </script>
 
   <!-- ── Changelog ──────────────────────────────────────────── -->
   <section class="section section-alt" id="changelog">
@@ -664,7 +644,7 @@
           in under 5 minutes. No account required. No credit card. No telemetry.
         </p>
         <div class="hero-btns" style="justify-content:center;">
-          <a href="download.html" class="btn btn-primary btn-lg">⬇ Download Free</a>
+          <a href="download.html" class="btn btn-primary btn-lg">⬇ Download</a>
           <a href="#pricing" class="btn btn-secondary btn-lg">View Pricing</a>
         </div>
         <p style="font-size:12px; color:var(--text-dim); margin-top:20px;">
