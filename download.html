@@ -373,6 +373,12 @@ function renderManifest(data) {
       html += `<p style="color:var(--text-muted);font-size:13px">No release assets found. Contact support@linus-ai.com.</p>`;
     }
 
+    const unixFiles = assets.filter(a =>
+      !a.name.endsWith('.exe') && !a.name.endsWith('.msix') &&
+      !a.name.endsWith('.dmg') && !a.name.endsWith('.deb') &&
+      !a.name.endsWith('.txt')
+    );
+
     for (const a of assets) {
       const sizeStr = a.size > 0 ? (a.size / 1048576).toFixed(1) + ' MB' : '';
       const repoSlug = prod.repo.replace('/', '--');
@@ -384,7 +390,16 @@ function renderManifest(data) {
         <a class="btn-dl" href="${dlUrl}" download="${a.name}">&#8595; Download</a>
       </div>`;
     }
-    html += `</div></div>`;
+    html += `</div>`;
+
+    if (unixFiles.length > 0) {
+      html += `<div style="margin-top:14px;padding:12px 14px;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.18);border-radius:8px;font-size:12px;color:var(--text-muted);line-height:1.7">
+        <strong style="color:#38bdf8">macOS &amp; Linux binaries</strong> — after downloading, make executable before running:<br>
+        <code style="font-family:monospace;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px">chmod +x &lt;filename&gt; &amp;&amp; ./ &lt;filename&gt;</code>
+        <span style="display:inline-block;margin-top:4px;opacity:.7">macOS DMG: open the .dmg, drag LINUS&#8209;AI to Applications, then right-click &rsaquo; Open if Gatekeeper prompts.</span>
+      </div>`;
+    }
+    html += `</div>`;
   }
   container.innerHTML = html;
 }
