@@ -1775,6 +1775,21 @@ pre code {
 .cfg-community-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
 .cfg-community-desc { font-size: 12px; color: var(--text-muted); }
 
+/* ── Inline PayPal checkout ─────────────────────────────── */
+.pp-checkout { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.pp-email-input { width: 100%; box-sizing: border-box; padding: 11px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit; transition: border-color .15s; }
+.pp-email-input:focus { outline: none; border-color: #0070ba; }
+.pp-email-input.error { border-color: #ef4444; animation: pp-shake .25s; }
+@keyframes pp-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+.pp-pay-btn { width: 100%; padding: 12px 20px; background: #0070ba; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; letter-spacing: .01em; font-family: inherit; }
+.pp-pay-btn:hover:not(:disabled) { background: #005ea6; }
+.pp-pay-btn:disabled { opacity: .55; cursor: not-allowed; }
+.pp-pay-btn.pp-alt { font-size: 13px; padding: 9px 16px; background: #005ea6; }
+.pp-pay-btn.pp-alt:hover:not(:disabled) { background: #004a87; }
+/* prod-card as div (hub page) */
+.prod-card-inner { display: block; text-decoration: none; color: var(--text); }
+.prod-card-inner:hover { color: var(--text); }
+
 /* ── Trademark / Legal notice ───────────────────────────── */
 .trademark-notice {
   font-size: 10.5px;

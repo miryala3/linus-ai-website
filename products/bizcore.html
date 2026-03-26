@@ -189,6 +189,7 @@
           </label>
         </div>
 
+        <input class="pp-email-input" type="email" id="cfg-biz-email" placeholder="Email address — your license key will be sent here">
         <button class="cfg-buy-btn" id="cfg-biz-buy">Buy BizCore Starter — $79</button>
         <div class="cfg-note">Secure checkout via PayPal &nbsp;·&nbsp; One-time payment &nbsp;·&nbsp; No subscription</div>
       </div>
@@ -213,14 +214,17 @@
     });
     document.getElementById('biz-updates').addEventListener('change',function(){withUpdates=this.checked;sync();});
     document.getElementById('cfg-biz-buy').addEventListener('click',async function(){
+      var inp=document.getElementById('cfg-biz-email');
+      var email=inp.value.trim();
+      if(!email||email.indexOf('@')<1){inp.classList.add('error');inp.focus();setTimeout(function(){inp.classList.remove('error');},2500);return;}
       var key=withUpdates?sel.dataset.updateKey:sel.dataset.key;
       var btn=this; var orig=btn.textContent;
       btn.textContent='Redirecting…'; btn.disabled=true;
       try{
-        var r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:key})});
+        var r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:key,email:email})});
         var d=await r.json();
-        if(d.url)window.location.href=d.url; else throw 0;
-      }catch(e){btn.textContent=orig;btn.disabled=false;alert('Checkout unavailable — email support@linus-ai.com');}
+        if(d.url)window.location.href=d.url; else throw d.detail||0;
+      }catch(e){btn.textContent=orig;btn.disabled=false;alert(typeof e==='string'?e:'Checkout unavailable — email support@linus-ai.com');}
     });
     sync();
   })();

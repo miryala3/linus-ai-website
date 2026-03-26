@@ -111,7 +111,10 @@
           <li class="na">Multi-seat management</li>
           <li class="na">Air-gap activation</li>
         </ul>
-        <div id="professional-pp-btn" style="margin-top:8px"></div>
+        <div class="pp-checkout" style="margin-top:8px">
+          <input class="pp-email-input" type="email" id="pp-pro-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" id="pp-pro-btn" onclick="ppPay(window.__proPlanKey||'professional_perpetual','pp-pro-email',this)">Pay with PayPal</button>
+        </div>
       </div>
 
       <!-- Team -->
@@ -136,7 +139,10 @@
           <li class="na">Air-gap activation</li>
           <li class="na">SLA</li>
         </ul>
-        <div id="team-pp-btn" style="margin-top:8px"></div>
+        <div class="pp-checkout" style="margin-top:8px">
+          <input class="pp-email-input" type="email" id="pp-team-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" id="pp-team-btn" onclick="ppPay(window.__teamPlanKey||'team_perpetual','pp-team-email',this)">Pay with PayPal</button>
+        </div>
       </div>
 
       <!-- Enterprise -->
@@ -250,61 +256,31 @@
   </div>
 </footer>
 
-<script src="/js/paypal-loader.js" data-query="currency=USD"></script>
+<script src="/js/pp-checkout.js"></script>
 <script src="js/main.js"></script>
 <script>
-let currentBilling = 'perpetual';
-const API = '';
 const prices = {
   professional: { perpetual: { price: '$149', period: 'one-time · perpetual', plan_key: 'professional_perpetual' },
                   annual:    { price: '$59',  period: 'per year · updates',    plan_key: 'professional_annual'    } },
   team:         { perpetual: { price: '$299', period: 'one-time · perpetual', plan_key: 'team_perpetual' },
                   annual:    { price: '$99',  period: 'per year · updates',    plan_key: 'team_annual'    } },
 };
+window.__proPlanKey  = prices.professional.perpetual.plan_key;
+window.__teamPlanKey = prices.team.perpetual.plan_key;
 function setBilling(b) {
-  currentBilling = b;
   document.getElementById('togglePerp').style.cssText   = b === 'perpetual' ? 'padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:var(--accent);color:#000' : 'padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:transparent;color:var(--text-muted)';
   document.getElementById('toggleAnnual').style.cssText = b === 'annual'    ? 'padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:var(--accent);color:#000' : 'padding:8px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;background:transparent;color:var(--text-muted)';
   document.getElementById('proPriceEl').textContent  = prices.professional[b].price;
   document.getElementById('proPeriodEl').textContent = prices.professional[b].period;
   document.getElementById('teamPriceEl').textContent  = prices.team[b].price;
   document.getElementById('teamPeriodEl').textContent = prices.team[b].period;
-  // Re-mount PayPal buttons for new plan keys
-  ['professional','team'].forEach(p => mountPayPal(p + '-pp-btn', prices[p][b].plan_key));
+  window.__proPlanKey  = prices.professional[b].plan_key;
+  window.__teamPlanKey = prices.team[b].plan_key;
+  var proBtn  = document.getElementById('pp-pro-btn');
+  var teamBtn = document.getElementById('pp-team-btn');
+  if (proBtn)  proBtn.textContent  = 'Pay with PayPal — ' + prices.professional[b].price;
+  if (teamBtn) teamBtn.textContent = 'Pay with PayPal — ' + prices.team[b].price;
 }
-
-// PayPal
-function mountPayPal(containerId, planKey) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = '';
-  if (typeof paypal === 'undefined') return;
-  paypal.Buttons({
-    style: { layout: 'horizontal', color: 'gold', shape: 'rect', label: 'pay', height: 40 },
-    createOrder: async () => {
-      const r = await fetch(API + '/api/checkout', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ plan: planKey, email: '' })
-      });
-      const d = await r.json();
-      if (!d.ok) throw new Error(d.detail || 'Checkout failed');
-      return d.order_id;
-    },
-    onApprove: async (data) => {
-      const r = await fetch(API + '/api/capture', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ order_id: data.orderID, email: '' })
-      });
-      const d = await r.json();
-      if (d.ok) { window.location.href = '/activate?key=' + d.license_key; }
-      else { alert('Payment received. Check email for your license key, or contact support@linus-ai.com'); }
-    },
-    onError: () => { alert('Payment error. Please try again or email support@linus-ai.com'); }
-  }).render('#' + containerId);
-}
-window.addEventListener('load', () => {
-  ['professional','team'].forEach(p => mountPayPal(p + '-pp-btn', prices[p]['perpetual'].plan_key));
-});
 </script>
 <script src="/js/master-menu.js"></script>
 </body>

@@ -227,108 +227,127 @@
   <div class="products-grid">
 
     <!-- aiMED -->
-    <a href="med.html" class="prod-card card-med">
-      <div class="prod-card-header">
-        <div class="prod-card-icon">⚕</div>
-        <div>
-          <div class="prod-card-title">aiMED</div>
-          <div class="prod-card-tag">Clinical AI · HIPAA-Ready</div>
+    <div class="prod-card card-med">
+      <a href="med.html" class="prod-card-inner">
+        <div class="prod-card-header">
+          <div class="prod-card-icon">⚕</div>
+          <div>
+            <div class="prod-card-title">aiMED</div>
+            <div class="prod-card-tag">Clinical AI · HIPAA-Ready</div>
+          </div>
         </div>
-      </div>
-      <div class="prod-card-body">
-        <div class="prod-card-desc">
-          Enterprise-grade clinical AI for healthcare providers. Patient data never leaves your facility. HIPAA-compliant by architecture, not by contract.
+        <div class="prod-card-body">
+          <div class="prod-card-desc">
+            Enterprise-grade clinical AI for healthcare providers. Patient data never leaves your facility. HIPAA-compliant by architecture, not by contract.
+          </div>
+          <ul class="prod-card-features">
+            <li>Clinical documentation, coding assist, summarization</li>
+            <li>PHI detection and on-premises audit logging</li>
+            <li>Air-gap activation for high-security facilities</li>
+            <li>Clinic · Practice · Health System tiers</li>
+          </ul>
         </div>
-        <ul class="prod-card-features">
-          <li>Clinical documentation, coding assist, summarization</li>
-          <li>PHI detection and on-premises audit logging</li>
-          <li>Air-gap activation for high-security facilities</li>
-          <li>Clinic · Hospital · Health System tiers</li>
-        </ul>
-      </div>
+      </a>
       <div class="prod-card-footer">
-        <div class="prod-card-price">From <strong>$4,990/yr</strong> · contact sales</div>
-        <span class="btn btn-primary btn-sm" style="background:#34d399;border-color:#34d399;color:#0a0e17">Learn More →</span>
+        <div class="prod-card-price">From <strong>$4,990/yr</strong> · Clinic edition</div>
+        <a href="mailto:support@linus-ai.com?subject=aiMED+Inquiry" class="btn btn-primary btn-sm" style="background:#34d399;border-color:#34d399;color:#0a0e17">Contact Sales →</a>
       </div>
-    </a>
+    </div>
 
     <!-- LINUS-AI -->
-    <a href="../index.html" class="prod-card card-ai">
-      <div class="prod-card-header">
-        <div class="prod-card-icon">◈</div>
-        <div>
-          <div class="prod-card-title">LINUS-AI</div>
-          <div class="prod-card-tag">AI Inference · Desktop + Server</div>
+    <div class="prod-card card-ai">
+      <a href="../index.html" class="prod-card-inner">
+        <div class="prod-card-header">
+          <div class="prod-card-icon">◈</div>
+          <div>
+            <div class="prod-card-title">LINUS-AI</div>
+            <div class="prod-card-tag">AI Inference · Desktop + Server</div>
+          </div>
         </div>
-      </div>
-      <div class="prod-card-body">
-        <div class="prod-card-desc">
-          The core product. Private AI inference engine with a full GUI, agentic mode, RAG pipeline, mesh networking, and blockchain audit log — all on your own hardware.
+        <div class="prod-card-body">
+          <div class="prod-card-desc">
+            Private AI inference engine with full GUI, agentic mode, RAG pipeline, mesh networking, and blockchain audit log — on your own hardware.
+          </div>
+          <ul class="prod-card-features">
+            <li>70B+ models, 14 AI profiles, tensor parallelism</li>
+            <li>Vault encrypted memory &amp; agentic tool calling</li>
+            <li>Runs any GGUF model — Llama 3, Mistral, Phi-3</li>
+            <li>macOS · Linux · Windows · headless server mode</li>
+          </ul>
         </div>
-        <ul class="prod-card-features">
-          <li>Multi-node mesh inference with thermal routing</li>
-          <li>Vault encrypted memory &amp; agentic tool calling</li>
-          <li>Runs any GGUF model — Llama 3, Mistral, Phi-3</li>
-          <li>macOS · Linux · Windows · headless server mode</li>
-        </ul>
-      </div>
+      </a>
       <div class="prod-card-footer">
         <div class="prod-card-price">From <strong>$59/yr</strong> · $149 perpetual</div>
-        <span class="btn btn-primary btn-sm">Learn More →</span>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-hub-ai" placeholder="Email for license key">
+          <button class="pp-pay-btn" onclick="ppPay('professional_annual','pp-hub-ai',this)">Pay with PayPal — $59/yr</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('professional_perpetual','pp-hub-ai',this)">Or buy perpetual — $149</button>
+        </div>
       </div>
-    </a>
+    </div>
 
     <!-- BizCore -->
-    <a href="bizcore.html" class="prod-card card-biz">
-      <div class="prod-card-header">
-        <div class="prod-card-icon">⬡</div>
-        <div>
-          <div class="prod-card-title">BizCore</div>
-          <div class="prod-card-tag">Business OS · On-Premises</div>
+    <div class="prod-card card-biz">
+      <a href="bizcore.html" class="prod-card-inner">
+        <div class="prod-card-header">
+          <div class="prod-card-icon">⬡</div>
+          <div>
+            <div class="prod-card-title">BizCore</div>
+            <div class="prod-card-tag">Business OS · On-Premises</div>
+          </div>
         </div>
-      </div>
-      <div class="prod-card-body">
-        <div class="prod-card-desc">
-          Replace your SaaS stack with a single AI-augmented business platform. CRM, HR, invoicing, project management, and analytics — all local, all private, one-time fee.
+        <div class="prod-card-body">
+          <div class="prod-card-desc">
+            Replace your SaaS stack with a single AI-augmented business platform. Invoicing, tasks, CRM, HR, and analytics — local, private, one-time fee.
+          </div>
+          <ul class="prod-card-features">
+            <li>Invoicing, tasks, contacts &amp; documents — 6 core modules</li>
+            <li>AI Smart Fill for proposals and form drafting</li>
+            <li>No per-seat fees — one license, unlimited use</li>
+            <li>Works offline, behind a firewall, air-gapped</li>
+          </ul>
         </div>
-        <ul class="prod-card-features">
-          <li>AI CRM, HR, invoicing, and project management</li>
-          <li>No per-seat fees — one license, unlimited use</li>
-          <li>Works offline, behind a firewall, air-gapped</li>
-          <li>Starter · Business · Unlimited tiers</li>
-        </ul>
-      </div>
+      </a>
       <div class="prod-card-footer">
         <div class="prod-card-price">From <strong>$79</strong> one-time</div>
-        <span class="btn btn-primary btn-sm" style="background:#818cf8;border-color:#818cf8;color:#fff">Learn More →</span>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-hub-biz" placeholder="Email for license key">
+          <button class="pp-pay-btn" style="background:#818cf8" onclick="ppPay('bizcore_starter','pp-hub-biz',this)">Pay with PayPal — $79</button>
+        </div>
       </div>
-    </a>
+    </div>
 
     <!-- LINUS-Day -->
-    <a href="day.html" class="prod-card card-day">
-      <div class="prod-card-header">
-        <div class="prod-card-icon">☀</div>
-        <div>
-          <div class="prod-card-title">LINUS-Day</div>
-          <div class="prod-card-tag">Daily Planner · Personal Productivity</div>
+    <div class="prod-card card-day">
+      <a href="day.html" class="prod-card-inner">
+        <div class="prod-card-header">
+          <div class="prod-card-icon">☀</div>
+          <div>
+            <div class="prod-card-title">LINUS-Day</div>
+            <div class="prod-card-tag">Daily Planner · Personal Productivity</div>
+          </div>
         </div>
-      </div>
-      <div class="prod-card-body">
-        <div class="prod-card-desc">
-          An intelligent daily planner that learns your work style, optimizes your schedule, and keeps you in flow — without sending a single byte to the cloud.
+        <div class="prod-card-body">
+          <div class="prod-card-desc">
+            An intelligent daily planner that learns your work style, optimizes your schedule, and keeps you in flow — without sending a single byte to the cloud.
+          </div>
+          <ul class="prod-card-features">
+            <li>AI-generated daily schedules from your task list</li>
+            <li>Focus blocks, energy tracking, flow protection</li>
+            <li>Fully offline — your calendar never leaves your device</li>
+            <li>macOS · Windows · Linux</li>
+          </ul>
         </div>
-        <ul class="prod-card-features">
-          <li>AI-generated daily schedules from your task list</li>
-          <li>Focus blocks, energy tracking, flow protection</li>
-          <li>Fully offline — your calendar never leaves your device</li>
-          <li>macOS · Windows · Linux</li>
-        </ul>
-      </div>
+      </a>
       <div class="prod-card-footer">
         <div class="prod-card-price"><strong>$99</strong> one-time · $49/yr updates</div>
-        <span class="btn btn-primary btn-sm" style="background:#f59e0b;border-color:#f59e0b;color:#0a0e17">Learn More →</span>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-hub-day" placeholder="Email for license key">
+          <button class="pp-pay-btn" style="background:#f59e0b;color:#0a0e17" onclick="ppPay('day_perpetual','pp-hub-day',this)">Pay with PayPal — $99</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('day_annual','pp-hub-day',this)">Or annual updates — $49/yr</button>
+        </div>
       </div>
-    </a>
+    </div>
 
   </div>
 </div>
@@ -366,6 +385,7 @@
   </div>
 </footer>
 
+<script src="/js/pp-checkout.js"></script>
 <script src="/js/master-menu.js"></script>
 </body>
 </html>

@@ -167,8 +167,9 @@
           <li>Remove "Powered by LINUS-AI" attribution (optional)</li>
           <li>14-day renewal reminder before every charge</li>
         </ul>
-        <div class="pp-wrap" id="ent-pp-btn">
-          <p class="pp-loading">Loading checkout…</p>
+        <div class="pp-checkout" style="margin-top:4px">
+          <input class="pp-email-input" type="email" id="pp-ent-email" placeholder="Business email — license key sent here">
+          <button class="pp-pay-btn" onclick="ppPay('enterprise','pp-ent-email',this)">Subscribe with PayPal — $4,999/yr</button>
         </div>
         <div style="margin-top:12px;text-align:center">
           <a href="mailto:support@linus-ai.com?subject=Enterprise%20Purchase%20%E2%80%94%20Invoicing"
@@ -195,8 +196,9 @@
           <li class="plus">Custom build flags &amp; feature toggles on request</li>
           <li class="plus">Named account manager</li>
         </ul>
-        <div class="pp-wrap" id="ent-plus-pp-btn">
-          <p class="pp-loading">Loading checkout…</p>
+        <div class="pp-checkout" style="margin-top:4px">
+          <input class="pp-email-input" type="email" id="pp-ent-plus-email" placeholder="Business email — license key sent here">
+          <button class="pp-pay-btn" onclick="ppPay('enterprise-plus','pp-ent-plus-email',this)">Subscribe with PayPal — $9,999/yr</button>
         </div>
         <div style="margin-top:12px;text-align:center">
           <a href="mailto:support@linus-ai.com?subject=Enterprise%20Plus%20Inquiry"
@@ -401,70 +403,8 @@
   </div>
 </footer>
 
-<script src="/js/paypal-loader.js" data-query="currency=USD&intent=capture&disable-funding=credit,card"></script>
+<script src="/js/pp-checkout.js"></script>
 <script>
-  const API = '';
-
-  function mountPayPal(containerId, plan) {
-    const wrap = document.getElementById(containerId);
-    if (!wrap) return;
-    wrap.innerHTML = '';
-
-    paypal.Buttons({
-      style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay', height: 44 },
-
-      createOrder: async () => {
-        const email = prompt('Enter your business email address to receive the license key:');
-        if (!email || !email.includes('@')) {
-          alert('A valid email is required.');
-          throw new Error('email_missing');
-        }
-        sessionStorage.setItem('ent_email', email);
-        const r = await fetch(API + '/api/checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ plan, email })
-        });
-        const d = await r.json();
-        if (!d.ok) throw new Error(d.error || 'Checkout failed');
-        return d.order_id;
-      },
-
-      onApprove: async (data) => {
-        const email = sessionStorage.getItem('ent_email') || '';
-        const r = await fetch(API + '/api/capture', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order_id: data.orderID, email })
-        });
-        const d = await r.json();
-        if (d.ok) {
-          sessionStorage.removeItem('ent_email');
-          window.location.href = 'activate.html?plan=' + encodeURIComponent(plan)
-            + '&key=' + encodeURIComponent(d.license_key || '');
-        } else {
-          alert('Payment captured but license issuance failed.\nEmail support@linus-ai.com with PayPal order ID: ' + data.orderID);
-        }
-      },
-
-      onError: (err) => {
-        console.error('PayPal error', err);
-        alert('Payment could not be completed. Please try again or email support@linus-ai.com');
-      }
-    }).render('#' + containerId);
-  }
-
-  window.__paypal_ready = function() {
-    if (typeof paypal !== 'undefined') {
-      mountPayPal('ent-pp-btn',      'enterprise');
-      mountPayPal('ent-plus-pp-btn', 'enterprise-plus');
-    } else {
-      document.querySelectorAll('.pp-loading').forEach(el => {
-        el.textContent = 'Checkout unavailable — email support@linus-ai.com to purchase.';
-      });
-    }
-  };
-
   function toggleMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
   }

@@ -77,9 +77,11 @@
         <div class="product-tagline">Full feature set for individual professionals. 70B models, 14 profiles, tensor parallelism, mesh, full API.</div>
         <div class="product-price">$149 <span>one-time</span></div>
         <div class="product-price-sub">+ $59/yr for updates (optional)</div>
-        <div class="pp-btn-wrap" id="pp-pro-perp"></div>
-        <div style="text-align:center;font-size:12px;color:var(--text-muted);margin:4px 0">or buy annual updates</div>
-        <div class="pp-btn-wrap" id="pp-pro-year"></div>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-pro-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" onclick="ppPay('professional_perpetual','pp-pro-email',this)">Buy Perpetual — $149</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('professional_annual','pp-pro-email',this)">Add Annual Updates — $59/yr</button>
+        </div>
       </div>
 
       <div class="product-card">
@@ -87,9 +89,11 @@
         <div class="product-tagline">Up to 5 seats. Federated learning, blockchain audit, multi-node tensor clusters, centralised licence management.</div>
         <div class="product-price">$299 <span>one-time</span></div>
         <div class="product-price-sub">+ $99/yr for updates (optional)</div>
-        <div class="pp-btn-wrap" id="pp-team-perp"></div>
-        <div style="text-align:center;font-size:12px;color:var(--text-muted);margin:4px 0">or buy annual updates</div>
-        <div class="pp-btn-wrap" id="pp-team-year"></div>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-team-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" onclick="ppPay('team_perpetual','pp-team-email',this)">Buy Perpetual — $299</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('team_annual','pp-team-email',this)">Add Annual Updates — $99/yr</button>
+        </div>
       </div>
 
       <div class="product-card">
@@ -115,9 +119,11 @@
         <div class="product-tagline">6 core modules for freelancers. Dashboard, Invoicing, Contacts, Tasks, Calendar, Documents + AI Smart Fill.</div>
         <div class="product-price">$79 <span>one-time</span></div>
         <div class="product-price-sub">+ $49/yr for updates</div>
-        <div class="pp-btn-wrap" id="pp-biz-starter"></div>
-        <div style="text-align:center;font-size:12px;color:var(--text-muted);margin:4px 0">or buy annual updates</div>
-        <div class="pp-btn-wrap" id="pp-biz-starter-yr"></div>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-biz-s-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" onclick="ppPay('bizcore_starter','pp-biz-s-email',this)">Buy Starter — $79</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('bizcore_starter_year','pp-biz-s-email',this)">Add Annual Updates — $49/yr</button>
+        </div>
       </div>
 
       <div class="product-card featured">
@@ -126,9 +132,11 @@
         <div class="product-tagline">All 13 modules for growing teams. Adds CRM, Marketing, Inventory, E-Commerce, Analytics. Up to 5 users.</div>
         <div class="product-price">$149 <span>one-time</span></div>
         <div class="product-price-sub">+ $79/yr for updates</div>
-        <div class="pp-btn-wrap" id="pp-biz-business"></div>
-        <div style="text-align:center;font-size:12px;color:var(--text-muted);margin:4px 0">or buy annual updates</div>
-        <div class="pp-btn-wrap" id="pp-biz-business-yr"></div>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-biz-b-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" onclick="ppPay('bizcore_business','pp-biz-b-email',this)">Buy Business — $149</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('bizcore_business_year','pp-biz-b-email',this)">Add Annual Updates — $79/yr</button>
+        </div>
       </div>
 
       <div class="product-card">
@@ -136,9 +144,11 @@
         <div class="product-tagline">All 16 modules, unlimited users, lifetime updates. Adds Payroll, HR, Reporting + AI Proposal Agent.</div>
         <div class="product-price">$299 <span>one-time</span></div>
         <div class="product-price-sub">+ $99/yr for updates</div>
-        <div class="pp-btn-wrap" id="pp-biz-unlimited"></div>
-        <div style="text-align:center;font-size:12px;color:var(--text-muted);margin:4px 0">or buy annual updates</div>
-        <div class="pp-btn-wrap" id="pp-biz-unlimited-yr"></div>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-biz-u-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" onclick="ppPay('bizcore_unlimited','pp-biz-u-email',this)">Buy Unlimited — $299</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('bizcore_unlimited_year','pp-biz-u-email',this)">Add Annual Updates — $99/yr</button>
+        </div>
       </div>
 
     </div>
@@ -157,9 +167,11 @@
         <div class="product-tagline">Time clock, scheduling, payroll, audit log, RBAC, and AI assistant. Up to 5 seats. All data stays local.</div>
         <div class="product-price">$99 <span>one-time</span></div>
         <div class="product-price-sub">+ $49/yr for updates</div>
-        <div class="pp-btn-wrap" id="pp-day-perp"></div>
-        <div style="text-align:center;font-size:12px;color:var(--text-muted);margin:4px 0">or buy annual updates</div>
-        <div class="pp-btn-wrap" id="pp-day-year"></div>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-day-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" onclick="ppPay('day_perpetual','pp-day-email',this)">Buy Perpetual — $99</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('day_annual','pp-day-email',this)">Add Annual Updates — $49/yr</button>
+        </div>
       </div>
 
       <div class="product-card">
@@ -186,9 +198,11 @@
         <div class="product-tagline">Hosted sync, job history, higher AI plan volume. Multi-device access and priority support.</div>
         <div class="product-price">$89 <span>/year</span></div>
         <div class="product-price-sub">or $12/month</div>
-        <div class="pp-btn-wrap" id="pp-trips-year"></div>
-        <div style="text-align:center;font-size:12px;color:var(--text-muted);margin:4px 0">or pay monthly</div>
-        <div class="pp-btn-wrap" id="pp-trips-month"></div>
+        <div class="pp-checkout">
+          <input class="pp-email-input" type="email" id="pp-trips-email" placeholder="Email for license key">
+          <button class="pp-pay-btn" onclick="ppPay('trips_pro_year','pp-trips-email',this)">Buy Annual — $89/yr</button>
+          <button class="pp-pay-btn pp-alt" onclick="ppPay('trips_pro_month','pp-trips-email',this)">Pay Monthly — $12/mo</button>
+        </div>
       </div>
 
       <div class="product-card">
@@ -272,61 +286,7 @@
   </div>
 </footer>
 
-<script src="/js/paypal-loader.js" data-query="currency=USD"></script>
-<script>
-const API = '';
-
-const BUTTONS = [
-  { id: 'pp-pro-perp',       plan: 'professional_perpetual' },
-  { id: 'pp-pro-year',       plan: 'professional_annual'    },
-  { id: 'pp-team-perp',      plan: 'team_perpetual'         },
-  { id: 'pp-team-year',      plan: 'team_annual'            },
-  { id: 'pp-biz-starter',    plan: 'bizcore_starter'        },
-  { id: 'pp-biz-starter-yr', plan: 'bizcore_starter_year'   },
-  { id: 'pp-biz-business',   plan: 'bizcore_business'       },
-  { id: 'pp-biz-business-yr',plan: 'bizcore_business_year'  },
-  { id: 'pp-biz-unlimited',  plan: 'bizcore_unlimited'      },
-  { id: 'pp-biz-unlimited-yr',plan:'bizcore_unlimited_year' },
-  { id: 'pp-day-perp',       plan: 'day_perpetual'          },
-  { id: 'pp-day-year',       plan: 'day_annual'             },
-  { id: 'pp-trips-year',     plan: 'trips_pro_year'         },
-  { id: 'pp-trips-month',    plan: 'trips_pro_month'        },
-];
-
-function mountButton(id, planKey) {
-  const el = document.getElementById(id);
-  if (!el || typeof paypal === 'undefined') return;
-  paypal.Buttons({
-    style: { layout: 'horizontal', color: 'gold', shape: 'rect', label: 'pay', height: 36, tagline: false },
-    createOrder: async () => {
-      const r = await fetch(API + '/api/checkout', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: planKey, email: '' })
-      });
-      const d = await r.json();
-      if (!d.ok) throw new Error(d.detail || 'Checkout failed');
-      return d.order_id;
-    },
-    onApprove: async (data) => {
-      const r = await fetch(API + '/api/capture', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id: data.orderID, email: '' })
-      });
-      const d = await r.json();
-      if (d.ok) {
-        window.location.href = '../activate?key=' + d.license_key;
-      } else {
-        alert('Payment received. Your license key will arrive by email. Contact support@linus-ai.com if not received within 5 minutes.');
-      }
-    },
-    onError: () => { alert('Payment error. Please try again or email support@linus-ai.com'); }
-  }).render('#' + id);
-}
-
-window.addEventListener('load', () => {
-  BUTTONS.forEach(b => mountButton(b.id, b.plan));
-});
-</script>
+<script src="/js/pp-checkout.js"></script>
 <script src="/js/master-menu.js"></script>
 </body>
 </html>
