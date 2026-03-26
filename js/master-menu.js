@@ -80,8 +80,8 @@
     });
   }
 
-  // ── Temporary: purchases paused while email delivery is being configured ──
-  var PURCHASES_PAUSED = true;
+  // ── Purchases active ──────────────────────────────────────────────────────
+  var PURCHASES_PAUSED = false;
   var PAUSE_MSG = 'Purchases temporarily paused — email support@linus-ai.com to buy now.';
 
   function applyPauseBanner() {

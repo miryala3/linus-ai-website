@@ -4,482 +4,413 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download — LINUS-AI Suite</title>
-  <meta name="description" content="Download LINUS-AI, BizCore, LINUS-Day and other suite products. Community edition free. Enter license key to access all purchased builds.">
+  <meta name="description" content="Download LINUS-AI, BizCore, and LINUS-Day. No account required. Free community tier. All inference runs on your hardware.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
   <style>
-    .dl-wrap { min-height: 100vh; display: flex; flex-direction: column; }
-    .dl-hero  { padding: 110px 0 40px; text-align: center; }
+    .dl-hero { padding: 110px 0 48px; text-align: center; }
     .dl-hero h1 { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; margin-bottom: 12px; }
-    .dl-hero p  { color: var(--text-muted); font-size: 1rem; max-width: 480px; margin: 0 auto; }
+    .dl-hero p  { color: var(--text-muted); font-size: 1rem; max-width: 520px; margin: 0 auto 28px; }
+    .dl-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(52,211,153,.1); border: 1px solid rgba(52,211,153,.25); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 700; color: #34d399; margin-bottom: 28px; }
 
-    /* Gate card */
-    .gate-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-      padding: 36px 40px; max-width: 460px; margin: 0 auto 60px; width: 100%;
+    /* Email capture */
+    .email-capture { max-width: 460px; margin: 0 auto 64px; }
+    .email-capture-inner {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px 32px;
     }
-    .gate-step { display: none; }
-    .gate-step.active { display: block; }
-    .gate-card h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
-    .gate-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; line-height: 1.6; }
-    .field { margin-bottom: 16px; }
-    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
-    .field input {
-      width: 100%; box-sizing: border-box;
-      background: var(--bg); border: 1px solid var(--border); color: var(--text);
-      border-radius: 8px; padding: 11px 14px; font-size: 14px; font-family: inherit;
-      transition: border-color .15s;
+    .email-capture h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .email-capture p  { color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.5; }
+    .email-row { display: flex; gap: 8px; }
+    .email-row input {
+      flex: 1; background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); border-radius: 8px; padding: 10px 14px;
+      font-size: 14px; font-family: inherit; transition: border-color .15s;
     }
-    .field input:focus { outline: none; border-color: var(--accent); }
-    .field input.mono { font-family: 'JetBrains Mono', monospace; letter-spacing: .05em; }
-    .btn-gate {
-      width: 100%; padding: 12px; border: none; border-radius: 8px;
-      background: var(--accent); color: #000; font-weight: 700; font-size: 15px;
-      cursor: pointer; transition: opacity .15s; margin-top: 8px;
+    .email-row input:focus { outline: none; border-color: var(--accent); }
+    .email-row button {
+      background: var(--accent); color: #000; border: none; border-radius: 8px;
+      padding: 10px 18px; font-weight: 700; font-size: 14px; cursor: pointer;
+      white-space: nowrap; transition: opacity .15s;
     }
-    .btn-gate:disabled { opacity: .5; cursor: not-allowed; }
-    .btn-gate:not(:disabled):hover { opacity: .88; }
-    .gate-err { color: #f87171; font-size: 13px; margin-top: 10px; display: none; }
-    .gate-info { color: var(--text-muted); font-size: 13px; margin-top: 10px; }
-    .gate-link { color: var(--accent); text-decoration: none; font-size: 13px; }
-    .gate-link:hover { text-decoration: underline; }
-    .otp-field input { font-size: 1.8rem; text-align: center; letter-spacing: .4em; font-family: 'JetBrains Mono', monospace; }
-    .resend-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+    .email-row button:hover { opacity: .88; }
+    .email-note { color: var(--text-dim); font-size: 11px; margin-top: 10px; }
+    .capture-thanks { text-align: center; color: var(--green); font-size: 14px; font-weight: 600; display: none; }
 
-    /* Download section */
-    #dl-section { display: none; }
-    #dl-section.visible { display: block; }
-    .dl-section-inner { max-width: 860px; margin: 0 auto; padding: 0 16px 80px; }
-    .welcome-bar {
-      background: rgba(52,211,153,.07); border: 1px solid rgba(52,211,153,.25);
-      border-radius: 10px; padding: 14px 20px; margin-bottom: 36px;
-      font-size: 14px; color: var(--text-muted);
+    /* Products */
+    .products-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px; max-width: 1060px; margin: 0 auto 80px;
     }
-    .welcome-bar strong { color: var(--green, #34d399); }
-    .product-section { margin-bottom: 48px; }
-    .product-section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
-    .product-section .ptag { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
-    .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-    .asset-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-      padding: 16px 18px; display: flex; flex-direction: column; gap: 8px;
-      transition: border-color .15s;
+    .product-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
     }
-    .asset-card:hover { border-color: var(--accent); }
-    .asset-name { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); word-break: break-all; }
-    .asset-size { font-size: 11px; color: var(--text-dim, #64748b); }
-    .asset-tag  { font-size: 11px; color: var(--accent); font-weight: 600; }
+    .product-card:hover { border-color: var(--accent); }
+    .product-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .product-icon { font-size: 22px; }
+    .product-name { font-size: 1.05rem; font-weight: 800; }
+    .product-version { font-size: 12px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+    .product-desc { color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+
+    /* Platform list */
+    .platform-list { list-style: none; margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
+    .platform-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 12px; gap: 8px;
+    }
+    .platform-label { font-size: 13px; color: var(--text-muted); min-width: 0; flex: 1; }
+    .platform-label strong { color: var(--text); display: block; }
     .btn-dl {
-      display: block; text-align: center; padding: 9px 14px;
+      display: inline-flex; align-items: center; gap: 5px;
       background: var(--accent); color: #000; border-radius: 6px;
-      font-weight: 700; font-size: 13px; text-decoration: none;
-      transition: opacity .15s; margin-top: 4px;
+      padding: 6px 12px; font-weight: 700; font-size: 12px;
+      text-decoration: none; white-space: nowrap; transition: opacity .15s;
+      flex-shrink: 0;
     }
     .btn-dl:hover { opacity: .85; }
-    .dl-loading { color: var(--text-muted); font-size: 14px; padding: 24px 0; text-align: center; }
-    .session-bar {
-      background: var(--surface); border-top: 1px solid var(--border);
-      padding: 10px 0; text-align: center; font-size: 12px; color: var(--text-dim);
-      position: sticky; bottom: 0;
+    .btn-dl-ghost {
+      display: inline-flex; align-items: center; gap: 5px;
+      border: 1px solid var(--border); color: var(--text-muted);
+      border-radius: 6px; padding: 6px 12px; font-weight: 600;
+      font-size: 12px; text-decoration: none; white-space: nowrap;
+      transition: border-color .15s, color .15s; flex-shrink: 0;
     }
-    #session-timer { color: var(--accent); font-weight: 600; }
+    .btn-dl-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-releases {
+      display: block; text-align: center; padding: 10px;
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text-muted); font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: border-color .15s, color .15s;
+    }
+    .btn-releases:hover { border-color: var(--accent); color: var(--accent); }
 
-    @media (max-width: 520px) {
-      .gate-card { padding: 28px 20px; }
+    /* Contact card */
+    .contact-card {
+      background: rgba(56,189,248,.04); border: 1px solid rgba(56,189,248,.15);
+      border-radius: 14px; padding: 28px; text-align: center;
+    }
+    .contact-card .contact-icon { font-size: 28px; margin-bottom: 10px; }
+    .contact-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
+    .contact-card p { color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.6; }
+    .btn-email {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent); color: #000; border-radius: 8px;
+      padding: 10px 20px; font-weight: 700; font-size: 14px;
+      text-decoration: none; transition: opacity .15s;
+    }
+    .btn-email:hover { opacity: .88; }
+
+    /* Instructions */
+    .install-note {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 18px; margin-top: 14px;
+      font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+      line-height: 1.8;
+    }
+    .install-note strong { color: var(--text-dim); }
+
+    /* Loading state */
+    .loading-pulse { color: var(--text-dim); font-size: 13px; text-align: center; padding: 24px 0; }
+
+    @media (max-width: 640px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .email-row { flex-direction: column; }
     }
   </style>
 </head>
-<body class="dl-wrap">
+<body>
 
-<nav class="nav">
-  <div class="nav-inner container">
-    <a href="index.html" class="logo">◈ LINUS-AI</a>
-    <ul class="nav-links">
-      <li><a href="index.html#features">Features</a></li>
-      <li><a href="pricing.html">Pricing</a></li>
-      <li><a href="download.html" style="color:var(--accent)">Download</a></li>
-      <li><a href="docs/index.html">Docs</a></li>
-      <li><a href="support.html" style="color:#f59e0b;font-weight:600">Support</a></li>
-    </ul>
-    <div class="nav-right">
-      <a href="pricing.html" class="btn btn-primary btn-sm">Get a License</a>
-      <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <!-- ── Navigation ── -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="/" class="logo">LINUS&#8209;AI&#8482;</a>
+      <div class="nav-links">
+        <a href="/pricing.html">Pricing</a>
+        <a href="/download.html" style="color:var(--accent)">Download</a>
+        <a href="/store/">Store</a>
+        <a href="/docs/index.html">Docs</a>
+        <a href="/activate.html" class="btn btn-sm">Activate</a>
+      </div>
     </div>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html#features">Features</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="download.html">Download</a>
-    <a href="docs/index.html">Docs</a>
-    <a href="support.html" style="color:#f59e0b;font-weight:600">Support</a>
-    <a href="activate.html">Activate</a>
-  </div>
-</nav>
+  </nav>
 
-<!-- Hero -->
-<section class="dl-hero">
+  <!-- ── Hero ── -->
+  <section class="dl-hero">
+    <div class="container">
+      <span class="dl-badge">✓ No account required</span>
+      <h1>Download LINUS&#8209;AI Suite</h1>
+      <p>Free to download. All inference runs on your hardware. Community tier is free forever — first 30 days include full Professional features.</p>
+    </div>
+  </section>
+
+  <!-- ── Email capture ── -->
   <div class="container">
-    <div class="hero-tag">LINUS-AI Suite Downloads</div>
-    <h1>Download Any Suite Product</h1>
-    <p>LINUS-AI · BizCore · LINUS-Day — all in one place. Community is free. Licensed users get builds for everything they've purchased.</p>
-  </div>
-</section>
-
-<!-- Community free key section -->
-<div class="container" style="max-width:900px;margin-bottom:48px">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:32px">
-
-    <!-- LINUS-AI Community -->
-    <div style="background:var(--surface);border:1px solid rgba(56,189,248,.3);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
-      <div style="font-size:22px">◈</div>
-      <div style="font-weight:700;font-size:14px">LINUS-AI <span style="color:#38bdf8">Community</span></div>
-      <div style="font-size:12px;color:var(--text-muted);flex:1">Free forever · 7B models · 6 profiles · OpenAI API · GUI</div>
-      <div style="font-size:11px;color:var(--text-dim)">Personal use &amp; orgs under $100K/yr</div>
-      <button class="pp-pay-btn" id="comm-btn" style="font-size:13px;padding:10px 16px" onclick="getCommunityKey()">Get Free Key &amp; Download</button>
-      <div id="comm-result" style="font-size:12px;color:#34d399;display:none"></div>
-    </div>
-
-    <!-- BizCore -->
-    <div style="background:var(--surface);border:1px solid rgba(129,140,248,.3);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
-      <div style="font-size:22px">⬡</div>
-      <div style="font-weight:700;font-size:14px">BizCore <span style="color:#818cf8">v2.2.2</span></div>
-      <div style="font-size:12px;color:var(--text-muted);flex:1">macOS · Linux — included with any BizCore license. 30-day trial on purchase.</div>
-      <div style="font-size:11px;color:var(--text-dim)">Enter BizCore key below to download</div>
-      <a href="#gate-wrap" class="pp-pay-btn" style="font-size:13px;padding:10px 16px;text-align:center;text-decoration:none;display:block">Sign In to Download</a>
-    </div>
-
-    <!-- LINUS-Day -->
-    <div style="background:var(--surface);border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
-      <div style="font-size:22px">☀</div>
-      <div style="font-weight:700;font-size:14px">LINUS-Day <span style="color:#f59e0b">Beta</span></div>
-      <div style="font-size:12px;color:var(--text-muted);flex:1">macOS · Windows · Linux — release build in progress. Enter your key when available.</div>
-      <div style="font-size:11px;color:var(--text-dim)">First build coming soon</div>
-      <a href="/products/day.html#buy" class="pp-pay-btn" style="font-size:13px;padding:10px 16px;text-align:center;text-decoration:none;display:block;background:#e8c000;color:#2c2e2f">Pre-order — $99</a>
-    </div>
-
-    <!-- aiMED -->
-    <div style="background:var(--surface);border:1px solid rgba(52,211,153,.3);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
-      <div style="font-size:22px">⚕</div>
-      <div style="font-weight:700;font-size:14px">aiMED <span style="color:#34d399">Enterprise</span></div>
-      <div style="font-size:12px;color:var(--text-muted);flex:1">On-premises clinical AI for healthcare. Deployed by contract — no self-serve download.</div>
-      <div style="font-size:11px;color:var(--text-dim)">From $4,990/yr · 30-day evaluation</div>
-      <a href="mailto:support@linus-ai.com?subject=aiMED+Demo" class="pp-pay-btn" style="font-size:13px;padding:10px 16px;text-align:center;text-decoration:none;display:block;background:#34d399;color:#0a0e17">Request Demo</a>
-    </div>
-
-  </div>
-  <p style="font-size:12px;color:var(--text-dim);text-align:center">Licensed users: sign in below with your email + license key to download all purchased products at once.</p>
-</div>
-
-<!-- Gate card -->
-<div class="container" id="gate-wrap">
-  <div class="gate-card">
-
-    <!-- Step 1: email + license key -->
-    <div class="gate-step active" id="step-1">
-      <h2>Sign in to download</h2>
-      <p class="sub">Enter the email and license key from your purchase. Works for LINUS-AI, BizCore, and LINUS-Day. A verification code will be sent to confirm.</p>
-      <div class="field">
-        <label for="inp-email">Purchase email</label>
-        <input type="email" id="inp-email" placeholder="you@company.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label for="inp-key">License key</label>
-        <input type="text" id="inp-key" class="mono" placeholder="LNAI-XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
-      </div>
-      <button class="btn-gate" id="btn-step1" onclick="requestOtp()">Send verification code</button>
-      <div class="gate-err" id="err-1"></div>
-      <div style="margin-top:20px;text-align:center">
-        <a href="reset.html" class="gate-link">Forgot your license key?</a>
-        &nbsp;·&nbsp;
-        <a href="pricing.html" class="gate-link">Buy a license</a>
+    <div class="email-capture">
+      <div class="email-capture-inner">
+        <h3>📬 Get release notifications</h3>
+        <p>Drop your email and we'll notify you of new releases and security updates. No marketing, no spam.</p>
+        <form id="notify-form"
+              action="https://formsubmit.co/support@linus-ai.com"
+              method="POST"
+              onsubmit="handleNotify(event)">
+          <input type="hidden" name="_subject" value="LINUS-AI: New download subscriber">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="">
+          <div class="email-row">
+            <input type="email" name="email" id="notify-email" placeholder="you@example.com" autocomplete="email" required>
+            <button type="submit">Notify me</button>
+          </div>
+          <p class="email-note">Sent to support@linus-ai.com — unsubscribe any time by replying.</p>
+        </form>
+        <p class="capture-thanks" id="notify-thanks">✓ You're on the list!</p>
       </div>
     </div>
 
-    <!-- Step 2: OTP -->
-    <div class="gate-step" id="step-2">
-      <h2>Enter verification code</h2>
-      <p class="sub" id="otp-sub">A 6-digit code was sent to your email. It expires in 10 minutes.</p>
-      <div class="field otp-field">
-        <label for="inp-otp">Verification code</label>
-        <input type="text" id="inp-otp" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+    <!-- ── Products ── -->
+    <div class="products-grid" id="products-grid">
+
+      <!-- LINUS-AI -->
+      <div class="product-card">
+        <div class="product-header">
+          <span class="product-icon">◈</span>
+          <div>
+            <div class="product-name">LINUS-AI</div>
+            <div class="product-version" id="lnai-ver">fetching latest…</div>
+          </div>
+        </div>
+        <p class="product-desc">Private AI inference on your hardware. GUI + headless. macOS, Linux, Windows. Community tier free — 30-day Professional trial on first launch.</p>
+
+        <ul class="platform-list" id="lnai-platforms">
+          <li class="platform-item">
+            <div class="platform-label"><strong>macOS</strong> arm64 + x86_64 (Universal DMG)</div>
+            <a class="btn-dl" id="lnai-dmg" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ DMG</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Linux</strong> x86_64 (.deb)</div>
+            <a class="btn-dl" id="lnai-deb" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ .deb</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Linux</strong> x86_64 binary</div>
+            <a class="btn-dl" id="lnai-linux" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ Binary</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Linux</strong> arm64 headless</div>
+            <a class="btn-dl" id="lnai-arm64" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ Binary</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Windows</strong> x86_64 (.msix)</div>
+            <a class="btn-dl" id="lnai-msix" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ MSIX</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Windows</strong> x86_64 binary</div>
+            <a class="btn-dl" id="lnai-win" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ .exe</a>
+          </li>
+        </ul>
+
+        <a class="btn-releases" href="https://github.com/miryala3/linus-ai-public/releases" target="_blank">
+          All releases + SHA256SUMS →
+        </a>
+
+        <div class="install-note">
+          <strong># macOS</strong><br>
+          open DMG → drag to Applications<br>
+          <strong># Linux</strong><br>
+          chmod +x linus-ai-* &amp;&amp; ./linus-ai-*<br>
+          <strong># Linux GUI deps</strong><br>
+          apt install libwebkit2gtk-4.1-0 libgtk-3-0
+        </div>
       </div>
-      <button class="btn-gate" id="btn-step2" onclick="verifyOtp()">Verify &amp; access downloads</button>
-      <div class="gate-err" id="err-2"></div>
-      <div class="resend-row">
-        <a href="#" class="gate-link" onclick="goBack();return false;">&#8592; Back</a>
-        <a href="#" class="gate-link" id="resend-link" onclick="requestOtp(true);return false;">Resend code</a>
+
+      <!-- BizCore -->
+      <div class="product-card">
+        <div class="product-header">
+          <span class="product-icon">⬡</span>
+          <div>
+            <div class="product-name">LINUS BizCore</div>
+            <div class="product-version" id="biz-ver">fetching latest…</div>
+          </div>
+        </div>
+        <p class="product-desc">Local-first business OS — invoicing, CRM, HR, accounting, AI assistant. One-time purchase. 14-day free trial on first launch.</p>
+
+        <ul class="platform-list">
+          <li class="platform-item">
+            <div class="platform-label"><strong>macOS</strong> arm64 (Apple Silicon)</div>
+            <a class="btn-dl" id="biz-dmg" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ DMG</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Linux</strong> x86_64 (.deb)</div>
+            <a class="btn-dl" id="biz-deb" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ .deb</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Linux</strong> x86_64 (.AppImage)</div>
+            <a class="btn-dl-ghost" id="biz-appimage" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ AppImage</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Windows</strong> x86_64 installer</div>
+            <a class="btn-dl" id="biz-win" href="https://github.com/miryala3/linus-ai-public/releases/latest" target="_blank">↓ .exe</a>
+          </li>
+        </ul>
+
+        <a class="btn-releases" id="biz-releases" href="https://github.com/miryala3/linus-ai-public/releases" target="_blank">
+          All BizCore releases + SHA256SUMS →
+        </a>
+
+        <div class="install-note">
+          <strong># 14-day trial</strong> — no key required on first launch<br>
+          <strong># Purchase</strong><br>
+          linus-ai.com/products/bizcore<br>
+          Starter $79 · Business $199 · Unlimited $499
+        </div>
       </div>
+
+      <!-- LINUS-Day -->
+      <div class="product-card">
+        <div class="product-header">
+          <span class="product-icon" style="color:#f59e0b">☀</span>
+          <div>
+            <div class="product-name">LINUS-Day</div>
+            <div class="product-version">v2.2.2 · Beta</div>
+          </div>
+        </div>
+        <p class="product-desc">AI-powered workforce management — daily planning, scheduling, time tracking, payroll. Free during beta. Connects to LINUS-AI or Ollama on your LAN.</p>
+
+        <ul class="platform-list">
+          <li class="platform-item">
+            <div class="platform-label"><strong>macOS</strong> arm64</div>
+            <a class="btn-dl" href="https://github.com/miryala3/linus-day/releases/latest" target="_blank">↓ DMG</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Linux</strong> x86_64</div>
+            <a class="btn-dl" href="https://github.com/miryala3/linus-day/releases/latest" target="_blank">↓ .deb</a>
+          </li>
+          <li class="platform-item">
+            <div class="platform-label"><strong>Windows</strong> x86_64</div>
+            <a class="btn-dl" href="https://github.com/miryala3/linus-day/releases/latest" target="_blank">↓ .exe</a>
+          </li>
+        </ul>
+
+        <a class="btn-releases" href="https://github.com/miryala3/linus-day/releases" target="_blank">
+          All LINUS-Day releases →
+        </a>
+
+        <div class="install-note">
+          <strong># Beta — free to use</strong><br>
+          AI: connect LINUS-AI (port 9480)<br>
+          or Ollama (port 11434) on your LAN
+        </div>
+      </div>
+
+      <!-- aiMED -->
+      <div class="product-card contact-card">
+        <div class="contact-icon">⚕</div>
+        <h3>LINUS-AI Medical</h3>
+        <p>HIPAA-compliant clinical AI server for hospitals and clinics. Enterprise deployment — binaries delivered directly to your team after license agreement.</p>
+        <a class="btn-email" href="mailto:support@linus-ai.com?subject=aiMED%20Download%20Request&body=Organisation%3A%0ADeployment%20size%3A%0APlatform%3A%0A">
+          ✉ Request aiMED download
+        </a>
+        <div class="install-note" style="margin-top:18px;text-align:left">
+          <strong># 30-day trial</strong> — auto-activates on first launch<br>
+          <strong># Pricing</strong> — from $4,990/yr (clinic edition)<br>
+          contact sales@linus-ai.com for a quote
+        </div>
+      </div>
+
+    </div><!-- /products-grid -->
+
+    <!-- Verify -->
+    <div style="max-width:680px;margin:0 auto 80px;text-align:center">
+      <p style="color:var(--text-muted);font-size:13px">
+        All releases include <code style="font-family:'JetBrains Mono',monospace;color:var(--accent)">SHA256SUMS.txt</code>.
+        Verify: <code style="font-family:'JetBrains Mono',monospace;color:var(--text-dim)">sha256sum -c SHA256SUMS.txt</code>
+      </p>
+      <p style="color:var(--text-dim);font-size:12px;margin-top:8px">
+        Questions? <a href="mailto:support@linus-ai.com" style="color:var(--accent)">support@linus-ai.com</a>
+        &nbsp;·&nbsp; <a href="/activate.html" style="color:var(--text-muted)">Activate license</a>
+        &nbsp;·&nbsp; <a href="/docs/index.html" style="color:var(--text-muted)">Documentation</a>
+      </p>
     </div>
 
-  </div><!-- /gate-card -->
-</div><!-- /gate-wrap -->
+  </div><!-- /container -->
 
-<!-- Download section (revealed after auth) -->
-<div id="dl-section">
-  <div class="dl-section-inner">
-    <div class="welcome-bar" id="welcome-bar"></div>
-    <div id="dl-products"><p class="dl-loading">Loading your downloads&hellip;</p></div>
-  </div>
-</div>
-
-<!-- Session timer bar -->
-<div class="session-bar" id="session-bar" style="display:none">
-  Download session expires in <span id="session-timer">--:--</span> &nbsp;·&nbsp;
-  <a href="download.html" class="gate-link">Sign in again</a>
-</div>
-
-<footer style="border-top:1px solid var(--border);padding:28px 0;text-align:center;margin-top:auto">
-  <div class="container">
-    <p style="color:var(--text-muted);font-size:13px">
-      &copy; 2026 LINUS-AI&#8482;. All rights reserved. &nbsp;&middot;&nbsp; Proudly designed &amp; developed in New Jersey, United States.
-      &nbsp;&middot;&nbsp;
-      <a href="pricing.html" style="color:var(--accent)">Get a license</a>
-      &nbsp;&middot;&nbsp;
-      <a href="mailto:support@linus-ai.com" style="color:var(--text-muted)">support@linus-ai.com</a>
-    </p>
-  </div>
-</footer>
-
-<script>
-const API = '';
-let _sessionToken = null;
-let _sessionExpiry = 0;
-let _timerInterval = null;
-let _userEmail = '';
-
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.style.display = msg ? 'block' : 'none';
-}
-
-function setLoading(btnId, loading) {
-  const btn = document.getElementById(btnId);
-  btn.disabled = loading;
-  btn.textContent = loading
-    ? (btnId === 'btn-step1' ? 'Sending…' : 'Verifying…')
-    : (btnId === 'btn-step1' ? 'Send verification code' : 'Verify & access downloads');
-}
-
-async function requestOtp(resend = false) {
-  const email = document.getElementById('inp-email').value.trim();
-  const key   = document.getElementById('inp-key').value.trim().toUpperCase();
-  showErr('err-1', '');
-
-  if (!email || !email.includes('@')) { showErr('err-1', 'Enter a valid email address.'); return; }
-  if (!key.startsWith('LNAI-') || key.length < 20) { showErr('err-1', 'Enter a valid LNAI-XXXX-XXXX-XXXX-XXXX license key.'); return; }
-
-  setLoading('btn-step1', true);
-  try {
-    const r = await fetch(API + '/api/auth/request-otp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, license_key: key }),
-    });
-    const d = await r.json();
-    if (!d.ok) { showErr('err-1', d.detail || 'Could not verify license. Check your key and email.'); return; }
-
-    _userEmail = email;
-    document.getElementById('otp-sub').textContent =
-      `A 6-digit code was sent to ${d.masked_email}. It expires in 10 minutes.`;
-
-    if (!resend) {
-      document.getElementById('step-1').classList.remove('active');
-      document.getElementById('step-2').classList.add('active');
-    } else {
-      showErr('err-2', '');
-      document.getElementById('resend-link').textContent = 'Sent ✓';
-      setTimeout(() => { document.getElementById('resend-link').textContent = 'Resend code'; }, 3000);
-    }
-  } catch(e) {
-    showErr('err-1', 'Network error. Please try again.');
-  } finally {
-    setLoading('btn-step1', false);
-  }
-}
-
-async function verifyOtp() {
-  const otp = document.getElementById('inp-otp').value.trim();
-  showErr('err-2', '');
-  if (otp.length !== 6 || !/^\d{6}$/.test(otp)) { showErr('err-2', 'Enter the 6-digit code from your email.'); return; }
-
-  setLoading('btn-step2', true);
-  try {
-    const r = await fetch(API + '/api/auth/verify-otp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: _userEmail, otp }),
-    });
-    const d = await r.json();
-    if (!d.ok) { showErr('err-2', d.detail || 'Invalid or expired code. Try again.'); return; }
-
-    _sessionToken  = d.token;
-    _sessionExpiry = Date.now() + d.expires_in * 1000;
-
-    document.getElementById('gate-wrap').style.display = 'none';
-    showDownloads(d);
-  } catch(e) {
-    showErr('err-2', 'Network error. Please try again.');
-  } finally {
-    setLoading('btn-step2', false);
-  }
-}
-
-function goBack() {
-  document.getElementById('step-2').classList.remove('active');
-  document.getElementById('step-1').classList.add('active');
-  showErr('err-2', '');
-}
-
-async function showDownloads(session) {
-  const sec = document.getElementById('dl-section');
-  sec.classList.add('visible');
-
-  document.getElementById('welcome-bar').innerHTML =
-    `<strong>Welcome back${session.licensee ? ', ' + session.licensee : ''}.</strong> `
-    + `You are signed in as <strong>${_userEmail}</strong> · Plan: <strong>${session.plan}</strong>`;
-
-  startTimer();
-
-  // Fetch manifest
-  try {
-    const r = await fetch(`${API}/api/downloads/${_sessionToken}/manifest`);
-    const d = await r.json();
-    if (!d.ok) { document.getElementById('dl-products').innerHTML = '<p style="color:#f87171">Could not load downloads. Please try again.</p>'; return; }
-    renderManifest(d);
-  } catch(e) {
-    document.getElementById('dl-products').innerHTML = '<p style="color:#f87171">Network error loading downloads.</p>';
-  }
-}
-
-function renderManifest(data) {
-  const container = document.getElementById('dl-products');
-  if (!data.products || data.products.length === 0) {
-    container.innerHTML = '<p style="color:var(--text-muted)">No downloads available for your plan. Contact support@linus-ai.com.</p>';
-    return;
-  }
-
-  let html = '';
-  for (const prod of data.products) {
-    const assets = prod.assets || [];
-    html += `<div class="product-section">
-      <h3>${prod.product}</h3>
-      <p class="ptag">Release ${assets[0]?.tag || ''} &nbsp;&middot;&nbsp; ${assets.length} file${assets.length !== 1 ? 's' : ''}</p>
-      <div class="asset-grid">`;
-
-    if (assets.length === 0) {
-      html += `<p style="color:var(--text-muted);font-size:13px">No release assets found. Contact support@linus-ai.com.</p>`;
+  <script src="js/master-menu.js"></script>
+  <script>
+    // ── Email capture ────────────────────────────────────────────────────
+    function handleNotify(e) {
+      e.preventDefault();
+      var form  = document.getElementById('notify-form');
+      var email = document.getElementById('notify-email').value.trim();
+      if (!email) return;
+      // Post to formsubmit.co — delivers email to support@linus-ai.com
+      fetch('https://formsubmit.co/ajax/support@linus-ai.com', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body:    JSON.stringify({ email: email, _subject: 'LINUS-AI: New download subscriber', _captcha: 'false' })
+      }).catch(function(){});
+      form.style.display = 'none';
+      document.getElementById('notify-thanks').style.display = 'block';
     }
 
-    const unixFiles = assets.filter(a =>
-      !a.name.endsWith('.exe') && !a.name.endsWith('.msix') &&
-      !a.name.endsWith('.dmg') && !a.name.endsWith('.deb') &&
-      !a.name.endsWith('.txt')
-    );
+    // ── GitHub Releases API — populate direct asset links ────────────────
+    var PUBLIC_REPO = 'miryala3/linus-ai-public';
+    var GH_API      = 'https://api.github.com/repos/' + PUBLIC_REPO + '/releases';
 
-    for (const a of assets) {
-      const sizeStr = a.size > 0 ? (a.size / 1048576).toFixed(1) + ' MB' : '';
-      const repoSlug = prod.repo.replace('/', '--');
-      const dlUrl = `${API}/api/downloads/${_sessionToken}/${repoSlug}/${a.id}`;
-      html += `<div class="asset-card">
-        <div class="asset-tag">${a.tag}</div>
-        <div class="asset-name">${a.name}</div>
-        ${sizeStr ? `<div class="asset-size">${sizeStr}</div>` : ''}
-        <a class="btn-dl" href="${dlUrl}" download="${a.name}">&#8595; Download</a>
-      </div>`;
+    function linkFor(assets, pattern) {
+      var re = new RegExp(pattern);
+      for (var i = 0; i < assets.length; i++) {
+        if (re.test(assets[i].name)) return assets[i].browser_download_url;
+      }
+      return null;
     }
-    html += `</div>`;
 
-    if (unixFiles.length > 0) {
-      html += `<div style="margin-top:14px;padding:12px 14px;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.18);border-radius:8px;font-size:12px;color:var(--text-muted);line-height:1.7">
-        <strong style="color:#38bdf8">macOS &amp; Linux binaries</strong> — after downloading, make executable before running:<br>
-        <code style="font-family:monospace;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px">chmod +x &lt;filename&gt; &amp;&amp; ./ &lt;filename&gt;</code>
-        <span style="display:inline-block;margin-top:4px;opacity:.7">macOS DMG: open the .dmg, drag LINUS&#8209;AI to Applications, then right-click &rsaquo; Open if Gatekeeper prompts.</span>
-      </div>`;
+    function setLink(id, url) {
+      if (!url) return;
+      var el = document.getElementById(id);
+      if (el) el.href = url;
     }
-    html += `</div>`;
-  }
-  container.innerHTML = html;
-}
 
-function startTimer() {
-  const bar = document.getElementById('session-bar');
-  bar.style.display = 'block';
-  _timerInterval = setInterval(() => {
-    const left = Math.max(0, Math.floor((_sessionExpiry - Date.now()) / 1000));
-    const m = String(Math.floor(left / 60)).padStart(2,'0');
-    const s = String(left % 60).padStart(2,'0');
-    document.getElementById('session-timer').textContent = `${m}:${s}`;
-    if (left === 0) {
-      clearInterval(_timerInterval);
-      document.getElementById('dl-section').classList.remove('visible');
-      document.getElementById('gate-wrap').style.display = '';
-      document.getElementById('dl-section').style.display = 'none';
-      document.getElementById('dl-section').classList.remove('visible');
-      document.getElementById('step-2').classList.remove('active');
-      document.getElementById('step-1').classList.add('active');
-      bar.style.display = 'none';
-      alert('Your download session has expired. Please sign in again.');
-    }
-  }, 1000);
-}
+    fetch(GH_API + '?per_page=20')
+      .then(function(r) { return r.json(); })
+      .then(function(releases) {
+        // Find latest LINUS-AI release (tag: v*)
+        var lnai = releases.find(function(r) { return /^v\d/.test(r.tag_name); });
+        // Find latest BizCore release (tag: bizcore-v*)
+        var biz  = releases.find(function(r) { return /^bizcore-v/.test(r.tag_name); });
+        // Find latest aiMED release (tag: med-v*)
+        var med  = releases.find(function(r) { return /^med-v/.test(r.tag_name); });
 
-function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-}
+        if (lnai) {
+          var ver = lnai.tag_name;
+          document.getElementById('lnai-ver').textContent = ver;
+          var a = lnai.assets;
+          setLink('lnai-dmg',   linkFor(a, '\\.dmg$'));
+          setLink('lnai-deb',   linkFor(a, '\\.deb$'));
+          setLink('lnai-linux', linkFor(a, 'linus-ai-.*-linux-x86_64$'));
+          setLink('lnai-arm64', linkFor(a, 'headless-linux-arm64$'));
+          setLink('lnai-msix',  linkFor(a, '\\.msix$'));
+          setLink('lnai-win',   linkFor(a, 'windows-x86_64\\.exe$'));
+        }
 
-// Auto-format license key
-document.getElementById('inp-key').addEventListener('input', function() {
-  let v = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-  if (v.startsWith('LNAI')) v = v.slice(4);
-  let parts = [];
-  for (let i = 0; i < v.length && parts.length < 4; i += 4)
-    parts.push(v.slice(i, i + 4));
-  this.value = parts.length ? 'LNAI-' + parts.join('-') : v;
-});
-
-document.getElementById('inp-otp').addEventListener('input', function() {
-  this.value = this.value.replace(/\D/g, '').slice(0, 6);
-  if (this.value.length === 6) document.getElementById('btn-step2').focus();
-});
-
-// Allow Enter key submission
-document.getElementById('inp-key').addEventListener('keydown', e => { if(e.key==='Enter') requestOtp(); });
-document.getElementById('inp-otp').addEventListener('keydown', e => { if(e.key==='Enter') verifyOtp(); });
-
-// Community self-service
-async function getCommunityKey() {
-  const email = prompt('Enter your email address to receive a free LINUS-AI Community key:');
-  if (!email || email.indexOf('@') < 1) return;
-  const btn = document.getElementById('comm-btn');
-  const res = document.getElementById('comm-result');
-  const orig = btn.textContent;
-  btn.textContent = 'Generating…'; btn.disabled = true;
-  try {
-    const r = await fetch('/api/community/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    });
-    const d = await r.json();
-    if (d.ok) {
-      btn.textContent = 'Key sent ✓'; btn.style.background = '#34d399'; btn.style.color = '#0a0e17';
-      res.textContent = 'Key: ' + d.key + ' — check your email, then sign in below to download.';
-      res.style.display = 'block';
-      document.getElementById('inp-email').value = email;
-      document.getElementById('inp-key').value = d.key;
-    } else {
-      btn.textContent = orig; btn.disabled = false;
-      alert(d.detail || 'Could not generate key. Email support@linus-ai.com');
-    }
-  } catch(e) {
-    btn.textContent = orig; btn.disabled = false;
-    alert('Network error. Please try again.');
-  }
-}
-</script>
-<script src="/js/master-menu.js"></script>
+        if (biz) {
+          var bver = biz.tag_name.replace('bizcore-', '');
+          document.getElementById('biz-ver').textContent = bver;
+          document.getElementById('biz-releases').href =
+            'https://github.com/' + PUBLIC_REPO + '/releases/tag/' + biz.tag_name;
+          var ba = biz.assets;
+          setLink('biz-dmg',      linkFor(ba, '\\.dmg$'));
+          setLink('biz-deb',      linkFor(ba, '\\.deb$'));
+          setLink('biz-appimage', linkFor(ba, '\\.AppImage$'));
+          setLink('biz-win',      linkFor(ba, '\\.exe$'));
+        }
+      })
+      .catch(function() {
+        // API unavailable — links already point to /releases/latest as fallback
+        document.getElementById('lnai-ver').textContent = 'v2.6.0';
+        document.getElementById('biz-ver').textContent  = 'v2.6.0';
+      });
+  </script>
 </body>
 </html>
